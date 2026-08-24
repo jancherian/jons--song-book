@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import type { Song } from '../types/song';
 import { MAJOR_KEYS, convertNashvilleToLetter } from '../utils/nashville';
+import { LogoMark } from './LogoMark';
 
 interface PerformanceModeProps {
   song: Song;
@@ -70,6 +71,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
             >
               <ArrowLeft size={16} />
             </button>
+            <LogoMark size={28} theme="dark" className="hidden sm:inline-block" />
             <div className="min-w-0">
               <h1 className="text-base sm:text-xl font-black text-white truncate uppercase tracking-tight font-sans">
                 {song.title}
