@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import { 
   Search, 
   Plus, 
-  Menu, 
   Music, 
-  Layers, 
-  Edit3, 
-  Play
+  Trash2
 } from 'lucide-react';
 import type { Song } from '../types/song';
 import { NewSongModal } from './NewSongModal';
@@ -19,7 +16,6 @@ interface HomeScreenProps {
   onToggleFavorite: (songId: string) => void;
   onCreateSong: (title: string, artist: string, key: string, bpm: number) => void;
   onDeleteSong: (songId: string) => void;
-  onNavigateTab?: (tab: 'songs' | 'editor' | 'stage') => void;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
@@ -44,102 +40,102 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   });
 
   return (
-    <div className="min-h-screen bg-[#121212] text-[#e5e2e1] font-sans pb-36 relative selection:bg-[#d4af37]/30">
+    <div className="min-h-screen bg-white text-black font-sans swiss-grid pb-32 relative">
       
-      {/* Background Atmospheric Blur Orbs from Stitch */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#d4af37]/5 blur-[120px] mix-blend-screen" />
-        <div className="absolute bottom-[20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[#393939]/20 blur-[150px] mix-blend-screen" />
-      </div>
+      {/* Top Header Rule */}
+      <header className="sticky top-0 z-40 bg-white border-b-2 border-black px-6 h-16 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-4 h-4 bg-[#FF3000]" />
+          <h1 className="text-xl font-black tracking-tight text-black uppercase font-sans">
+            CHORDSET
+          </h1>
+          <span className="hidden sm:inline text-xs font-mono font-bold text-neutral-500 uppercase tracking-widest pl-2 border-l border-neutral-300">
+            Nashville Number System
+          </span>
+        </div>
 
-      {/* TopAppBar (Shared Stitch Component) */}
-      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-black/40 backdrop-blur-xl border-b border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-        <button 
-          aria-label="Menu" 
-          className="text-[#f2ca50] hover:bg-white/10 transition-colors p-2 rounded-full active:scale-95 duration-200"
-        >
-          <Menu size={22} />
-        </button>
-
-        <h1 className="text-lg sm:text-xl font-extrabold text-[#f2ca50] tracking-tight truncate px-2 font-sans">
-          CHORDSET
-        </h1>
-
-        <div className="flex items-center gap-1">
-          <button 
+        <div className="flex items-center gap-2">
+          <button
             onClick={() => setIsNewSongModalOpen(true)}
-            aria-label="New Song" 
-            className="text-[#f2ca50] hover:bg-white/10 transition-colors p-2 rounded-full active:scale-95 duration-200"
-            title="Create Song"
+            className="swiss-btn px-4 py-2 text-xs"
           >
-            <Plus size={22} />
+            <Plus size={14} className="mr-1.5" />
+            <span>New Song</span>
           </button>
         </div>
       </header>
 
-      {/* Main Content Canvas */}
-      <main className="relative z-10 pt-24 px-5 sm:px-8 flex flex-col gap-6 max-w-3xl mx-auto">
+      {/* Main Content Area */}
+      <main className="max-w-4xl mx-auto px-5 sm:px-8 pt-10 flex flex-col gap-8">
         
-        {/* Hero Title Section */}
-        <div className="flex flex-col items-center text-center mt-4 mb-2">
-          <h2 className="text-[46px] sm:text-[54px] leading-[1.05] font-black text-white tracking-tighter">
-            CHORD<span className="text-[#f2ca50]">SET</span>
-          </h2>
-          <h3 className="text-xs sm:text-sm font-extrabold text-[#d4af37] tracking-[0.35em] mt-1.5 text-glow-gold uppercase">
-            NASHVILLE NUMBER CHARTS
-          </h3>
+        {/* Swiss Asymmetric Hero Header */}
+        <div className="border-b-4 border-black pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <span className="text-xs font-mono font-black text-[#FF3000] uppercase tracking-[0.25em] block mb-1">
+              Objective Chord Charts // 2026
+            </span>
+            <h2 className="text-4xl sm:text-6xl font-black text-black uppercase tracking-tight leading-none font-sans">
+              REPERTOIRE
+            </h2>
+          </div>
+
+          <div className="text-left sm:text-right font-mono text-xs text-neutral-600">
+            <span className="font-bold text-black block">{songs.length} TOTAL CHARTS</span>
+            <span>STANDARD TUNING // NASHVILLE</span>
+          </div>
         </div>
 
-        {/* Glass-morphic Capsule Search Bar matching Stitch */}
-        <div className="relative w-full group">
-          <div className="absolute inset-0 bg-[#d4af37]/10 blur-xl rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
-          <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-[#f2ca50]/70 z-20" />
-          <input
-            type="text"
-            placeholder="Find a song or artist..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-14 pl-14 pr-12 bg-black/40 backdrop-blur-2xl border border-[#d4af37]/30 rounded-full text-base text-white placeholder:text-white/40 focus:outline-none focus:border-[#d4af37]/80 focus:bg-black/60 transition-all duration-300 relative z-10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)] font-sans"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-400 hover:text-white z-20 bg-white/10 px-2.5 py-1 rounded-full"
-            >
-              ✕
-            </button>
-          )}
+        {/* Swiss Search Bar (Underlined input per Swiss convention) */}
+        <div className="relative w-full">
+          <div className="flex items-center border-b-2 border-black focus-within:border-[#FF3000] transition-colors duration-150 py-2">
+            <Search size={20} className="text-black mr-3 shrink-0" />
+            <input
+              type="text"
+              placeholder="FILTER BY TITLE OR ARTIST..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-transparent text-base sm:text-lg font-mono font-bold uppercase placeholder:text-neutral-400 focus:outline-none tracking-wider"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="px-2 py-0.5 text-xs font-mono font-bold bg-neutral-200 hover:bg-black hover:text-white transition-colors"
+              >
+                CLEAR
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* Section Header: "MY SONGS" matching initial prompt & Stitch design */}
-        <div className="flex items-center justify-between gap-3 pt-2 pb-1">
-          <div className="flex items-center gap-2.5">
-            <h3 className="text-xs font-mono font-extrabold text-[#d4af37] tracking-[0.2em] uppercase text-glow-gold">
+        {/* Section Header: "MY SONGS" + Filter Controls */}
+        <div className="flex items-center justify-between gap-4 border-b-2 border-black pb-3">
+          <div className="flex items-baseline gap-2">
+            <h3 className="text-sm font-mono font-black text-black uppercase tracking-widest">
               MY SONGS
             </h3>
-            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-[#d4af37]/15 text-[#f2ca50] border border-[#d4af37]/30">
-              {filteredSongs.length}
+            <span className="text-xs font-mono font-black text-[#FF3000]">
+              [{filteredSongs.length}]
             </span>
           </div>
 
           {/* Filter Pills */}
-          <div className="flex items-center gap-1.5 p-1 rounded-2xl glass-panel font-mono text-xs">
+          <div className="flex items-center gap-1 font-mono text-xs">
             <button
               onClick={() => setActiveFilter('all')}
-              className={`px-3.5 py-1 rounded-xl transition-all font-bold ${
+              className={`px-3 py-1 border border-black font-black uppercase transition-colors duration-150 ${
                 activeFilter === 'all'
-                  ? 'bg-[#f2ca50] text-[#121212] shadow-md'
-                  : 'text-zinc-400 hover:text-white'
+                  ? 'bg-black text-white'
+                  : 'bg-white text-black hover:bg-neutral-100'
               }`}
             >
               All ({songs.length})
             </button>
             <button
               onClick={() => setActiveFilter('favorites')}
-              className={`px-3.5 py-1 rounded-xl transition-all font-bold flex items-center gap-1 ${
+              className={`px-3 py-1 border border-black font-black uppercase transition-colors duration-150 flex items-center gap-1 ${
                 activeFilter === 'favorites'
-                  ? 'bg-[#f2ca50] text-[#121212] shadow-md'
-                  : 'text-zinc-400 hover:text-white'
+                  ? 'bg-[#FF3000] text-white border-[#FF3000]'
+                  : 'bg-white text-black hover:bg-neutral-100'
               }`}
             >
               <span>★ Favs ({songs.filter(s => s.favorite).length})</span>
@@ -147,25 +143,25 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           </div>
         </div>
 
-        {/* Songs List */}
-        <div className="space-y-3.5">
+        {/* Song Cards List */}
+        <div className="space-y-4">
           {filteredSongs.length === 0 ? (
-            <div className="p-12 rounded-[1.5rem] glass-panel text-center space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 text-zinc-500 mx-auto flex items-center justify-center">
+            <div className="p-12 border-2 border-dashed border-neutral-400 text-center space-y-4 bg-[#F2F2F2]">
+              <div className="w-12 h-12 border-2 border-black bg-white mx-auto flex items-center justify-center text-black">
                 <Music size={24} />
               </div>
               <div>
-                <h4 className="text-base font-bold text-white">No songs found</h4>
-                <p className="text-xs text-zinc-500 font-mono mt-1">
-                  {searchQuery ? 'Try adjusting your search query' : 'Create your first Nashville Number chart to get started!'}
+                <h4 className="text-base font-black uppercase tracking-tight text-black">No charts match your filter</h4>
+                <p className="text-xs text-neutral-600 font-mono mt-1 uppercase">
+                  {searchQuery ? 'Try adjusting your search criteria' : 'Create your first Nashville Number chart to begin'}
                 </p>
               </div>
               <button
                 onClick={() => setIsNewSongModalOpen(true)}
-                className="px-4 py-2 rounded-xl bg-[#d4af37]/20 text-[#f2ca50] border border-[#d4af37]/35 text-xs font-mono font-bold inline-flex items-center gap-2 hover:bg-[#d4af37]/30 transition-all"
+                className="swiss-btn px-4 py-2 text-xs"
               >
-                <Plus size={14} />
-                <span>Add First Song</span>
+                <Plus size={14} className="mr-1.5" />
+                <span>Create First Chart</span>
               </button>
             </div>
           ) : (
@@ -184,45 +180,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
       </main>
 
-      {/* Floating Action Button (Stitch FAB) positioned at bottom-24 */}
+      {/* Floating Action Button (Swiss Red square with 2px border) */}
       <button
         onClick={() => setIsNewSongModalOpen(true)}
-        className="fixed bottom-24 right-6 z-40 stitch-fab flex items-center justify-center"
+        className="fixed bottom-8 right-8 z-40 w-14 h-14 bg-[#FF3000] text-white border-2 border-black shadow-[4px_4px_0px_#000000] hover:bg-black hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-150 flex items-center justify-center"
         title="Create New Song"
       >
         <Plus size={28} />
       </button>
-
-      {/* Bottom Navigation Bar matching Stitch */}
-      <nav className="fixed bottom-0 w-full z-50 flex justify-around items-center px-6 pb-6 pt-2.5 bg-black/50 backdrop-blur-2xl border-t border-white/10 shadow-[0_-4px_20px_rgba(0,0,0,0.6)]">
-        {/* Active Tab: Songs */}
-        <button className="flex flex-col items-center justify-center text-[#f2ca50] drop-shadow-[0_0_8px_rgba(242,202,80,0.4)] scale-105 transition-transform duration-300">
-          <Layers size={20} className="mb-1" />
-          <span className="text-[10px] font-extrabold uppercase tracking-widest">Songs</span>
-        </button>
-
-        {/* Editor Tab */}
-        <button 
-          onClick={() => {
-            if (songs.length > 0) onSelectSong(songs[0]);
-          }}
-          className="flex flex-col items-center justify-center text-white/60 hover:text-[#f2ca50] transition-colors"
-        >
-          <Edit3 size={20} className="mb-1" />
-          <span className="text-[10px] font-extrabold uppercase tracking-widest">Editor</span>
-        </button>
-
-        {/* Stage Tab */}
-        <button 
-          onClick={() => {
-            if (songs.length > 0) onPerformSong(songs[0]);
-          }}
-          className="flex flex-col items-center justify-center text-white/60 hover:text-[#f2ca50] transition-colors"
-        >
-          <Play size={20} className="mb-1" />
-          <span className="text-[10px] font-extrabold uppercase tracking-widest">Stage</span>
-        </button>
-      </nav>
 
       {/* New Song Modal */}
       <NewSongModal
@@ -233,16 +198,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
       {/* Delete Confirmation Modal */}
       {songToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-backdrop-fade-in">
-          <div className="w-full max-w-sm rounded-3xl p-6 glass-modal text-white space-y-4 animate-scale-in">
-            <h3 className="text-lg font-bold text-white">Delete Song Chart?</h3>
-            <p className="text-xs text-zinc-400 font-mono">
-              Are you sure you want to remove this song from your repertoire? This cannot be undone.
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
+          <div className="w-full max-w-sm p-6 swiss-dialog space-y-4">
+            <div className="flex items-center gap-2 text-[#FF3000]">
+              <Trash2 size={20} />
+              <h3 className="text-lg font-black uppercase text-black">Delete Chart?</h3>
+            </div>
+            <p className="text-xs text-neutral-600 font-mono uppercase">
+              Are you sure you want to remove this chart from your repertoire? This action cannot be undone.
             </p>
-            <div className="flex justify-end gap-2 pt-2">
+            <div className="flex justify-end gap-2 pt-3 border-t-2 border-black">
               <button
                 onClick={() => setSongToDelete(null)}
-                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-mono font-bold"
+                className="swiss-btn-outline px-4 py-2 text-xs"
               >
                 Cancel
               </button>
@@ -251,7 +219,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                   onDeleteSong(songToDelete);
                   setSongToDelete(null);
                 }}
-                className="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-mono font-bold shadow-lg shadow-rose-500/20"
+                className="swiss-btn-accent px-4 py-2 text-xs"
               >
                 Confirm Delete
               </button>

@@ -5,7 +5,6 @@ import {
   ChevronLeft, 
   ChevronRight, 
   Plus, 
-  Music, 
   Trash2 
 } from 'lucide-react';
 import { applyKeypadInput } from '../utils/nashville';
@@ -39,54 +38,51 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
   };
 
   return (
-    <div className="fixed bottom-0 left-0 w-full px-3 sm:px-6 pb-6 pt-3 backdrop-blur-[40px] bg-[#121212]/92 border-t border-white/[0.1] rounded-t-3xl z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.85)] animate-fade-in-up">
+    <div className="fixed bottom-0 left-0 w-full px-4 sm:px-8 pb-6 pt-4 bg-[#F2F2F2] border-t-4 border-black z-50 swiss-dots select-none shadow-[0_-8px_0px_rgba(0,0,0,0.15)]">
       
-      {/* Drag Indicator Pill from Stitch */}
-      <div className="w-12 h-1 bg-white/20 rounded-full mx-auto mb-3" />
-
       {/* Top Preview Bar & Controls */}
-      <div className="max-w-3xl mx-auto flex items-center justify-between gap-3 mb-3 pb-2 border-b border-white/10">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-[#d4af37]/20 border border-[#d4af37]/35 flex items-center justify-center text-[#f2ca50]">
-            <Music size={14} />
+      <div className="max-w-4xl mx-auto flex items-center justify-between gap-4 mb-4 pb-3 border-b-2 border-black bg-white p-3 border-2">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-[#FF3000] text-white flex items-center justify-center font-mono font-black text-xs">
+            #{slotIndex !== undefined ? slotIndex + 1 : '1'}
           </div>
           <div>
-            <span className="text-[10px] font-mono text-[#d0c5af] block uppercase tracking-wider">
-              {sectionLabel || 'Section'} {slotIndex !== undefined ? `#${slotIndex + 1}` : ''}
+            <span className="text-[10px] font-mono font-black text-neutral-500 uppercase tracking-widest block">
+              {sectionLabel || 'SECTION SLOT'}
             </span>
-            <span className="text-xl font-extrabold text-[#f2ca50] font-mono tracking-wider">
-              {currentChord || <span className="text-zinc-600 italic text-sm font-normal">(empty)</span>}
+            <span className="text-2xl font-black text-black font-sans uppercase tracking-tight">
+              {currentChord || <span className="text-neutral-400 font-normal italic">(EMPTY)</span>}
             </span>
           </div>
         </div>
 
-        {/* Quick Slot Actions */}
-        <div className="flex items-center gap-1.5">
+        {/* Navigation & Slot Controls */}
+        <div className="flex items-center gap-1.5 font-mono text-xs">
           {onPrevSlot && (
             <button
               onClick={onPrevSlot}
               title="Previous Slot"
-              className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-zinc-300 border border-white/10 active:scale-95 transition-all"
+              className="p-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors duration-100"
             >
-              <ChevronLeft size={15} />
+              <ChevronLeft size={16} />
             </button>
           )}
           {onNextSlot && (
             <button
               onClick={onNextSlot}
               title="Next Slot"
-              className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-zinc-300 border border-white/10 active:scale-95 transition-all"
+              className="p-2 border-2 border-black bg-white hover:bg-black hover:text-white transition-colors duration-100"
             >
-              <ChevronRight size={15} />
+              <ChevronRight size={16} />
             </button>
           )}
           {onAddNewSlot && (
             <button
               onClick={onAddNewSlot}
               title="Append Slot"
-              className="px-2 py-1 rounded-lg bg-[#d4af37]/20 hover:bg-[#d4af37]/30 text-[#f2ca50] border border-[#d4af37]/35 text-xs font-mono font-bold flex items-center gap-1 active:scale-95 transition-all"
+              className="px-3 py-2 border-2 border-black bg-black text-white hover:bg-[#FF3000] hover:border-[#FF3000] font-black flex items-center gap-1 uppercase transition-colors duration-100"
             >
-              <Plus size={13} />
+              <Plus size={14} />
               <span>Add</span>
             </button>
           )}
@@ -94,52 +90,70 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
             <button
               onClick={onDeleteSlot}
               title="Delete Slot"
-              className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 active:scale-95 transition-all"
+              className="p-2 border-2 border-black bg-white hover:bg-[#FF3000] hover:text-white hover:border-[#FF3000] transition-colors duration-100 text-neutral-600"
             >
-              <Trash2 size={14} />
+              <Trash2 size={16} />
             </button>
           )}
           <button
             onClick={onClose}
             title="Done / Close"
-            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/15 active:scale-95 transition-all ml-1"
+            className="p-2 border-2 border-black bg-black text-white hover:bg-[#FF3000] hover:border-[#FF3000] transition-colors duration-100 ml-1"
           >
-            <X size={15} />
+            <X size={16} />
           </button>
         </div>
       </div>
 
-      {/* Grid Keyboard from Stitch */}
-      <div className="max-w-3xl mx-auto grid grid-cols-4 sm:grid-cols-5 gap-2 select-none">
-        {/* Row 1: Numbers 1, 2, 3, 4, 5 */}
-        <button onClick={() => handleKeyClick('1')} className="key-tile h-12 text-lg font-bold flex items-center justify-center">1</button>
-        <button onClick={() => handleKeyClick('2')} className="key-tile h-12 text-lg font-bold flex items-center justify-center">2</button>
-        <button onClick={() => handleKeyClick('3')} className="key-tile h-12 text-lg font-bold flex items-center justify-center">3</button>
-        <button onClick={() => handleKeyClick('4')} className="key-tile h-12 text-lg font-bold flex items-center justify-center">4</button>
-        <button onClick={() => handleKeyClick('5')} className="key-tile h-12 text-lg font-bold hidden sm:flex items-center justify-center">5</button>
+      {/* Swiss Keypad Matrix (Visual division between Numbers and Modifiers) */}
+      <div className="max-w-4xl mx-auto flex flex-col gap-2">
+        
+        {/* Row 1: Scale Degree Numbers (1 - 7) */}
+        <div className="grid grid-cols-7 gap-2">
+          {['1', '2', '3', '4', '5', '6', '7'].map((num) => (
+            <button
+              key={num}
+              onClick={() => handleKeyClick(num)}
+              className="swiss-key text-xl font-black h-12 sm:h-14"
+            >
+              {num}
+            </button>
+          ))}
+        </div>
 
-        {/* Row 2: 5 (mobile), 6, 7, m, #, b */}
-        <button onClick={() => handleKeyClick('5')} className="key-tile h-12 text-lg font-bold sm:hidden flex items-center justify-center">5</button>
-        <button onClick={() => handleKeyClick('6')} className="key-tile h-12 text-lg font-bold flex items-center justify-center">6</button>
-        <button onClick={() => handleKeyClick('7')} className="key-tile h-12 text-lg font-bold flex items-center justify-center">7</button>
-        <button onClick={() => handleKeyClick('m')} className="key-tile h-12 text-base font-bold text-[#f2ca50] bg-[#d4af37]/15 border-[#d4af37]/30 flex items-center justify-center">m</button>
-        <button onClick={() => handleKeyClick('#')} className="key-tile h-12 text-base font-bold text-[#f2ca50] bg-[#d4af37]/15 border-[#d4af37]/30 hidden sm:flex items-center justify-center">#</button>
+        {/* Dividing Rule between Numbers & Qualities */}
+        <div className="h-[2px] bg-black my-0.5" />
 
-        {/* Row 3: # (mobile), b, dim, M7, m7, sus4 */}
-        <button onClick={() => handleKeyClick('#')} className="key-tile h-12 text-base font-bold text-[#f2ca50] bg-[#d4af37]/15 border-[#d4af37]/30 sm:hidden flex items-center justify-center">#</button>
-        <button onClick={() => handleKeyClick('b')} className="key-tile h-12 text-base font-bold text-[#f2ca50] bg-[#d4af37]/15 border-[#d4af37]/30 flex items-center justify-center">b</button>
-        <button onClick={() => handleKeyClick('dim')} className="key-tile h-12 text-xs font-bold text-[#f2ca50] bg-[#d4af37]/10 flex items-center justify-center">dim</button>
-        <button onClick={() => handleKeyClick('M7')} className="key-tile h-12 text-xs font-bold flex items-center justify-center">M7</button>
-        <button onClick={() => handleKeyClick('m7')} className="key-tile h-12 text-xs font-bold hidden sm:flex items-center justify-center">m7</button>
+        {/* Row 2: Basic Modifiers & Accidentals */}
+        <div className="grid grid-cols-6 sm:grid-cols-8 gap-2">
+          <button onClick={() => handleKeyClick('m')} className="swiss-key text-base font-black h-11 bg-neutral-100">m</button>
+          <button onClick={() => handleKeyClick('#')} className="swiss-key text-base font-black h-11 bg-neutral-100">#</button>
+          <button onClick={() => handleKeyClick('b')} className="swiss-key text-base font-black h-11 bg-neutral-100">b</button>
+          <button onClick={() => handleKeyClick('dim')} className="swiss-key text-xs font-black h-11 bg-neutral-100">dim</button>
+          <button onClick={() => handleKeyClick('aug')} className="swiss-key text-xs font-black h-11 bg-neutral-100">aug</button>
+          <button onClick={() => handleKeyClick('/')} className="swiss-key text-base font-black h-11 bg-neutral-200 text-[#FF3000] border-[#FF3000]">/</button>
+          <button onClick={() => handleKeyClick('M7')} className="swiss-key text-xs font-black h-11 hidden sm:flex">M7</button>
+          <button onClick={() => handleKeyClick('m7')} className="swiss-key text-xs font-black h-11 hidden sm:flex">m7</button>
+        </div>
 
-        {/* Row 4: m7 (mobile), sus4, sus2, /, Backspace */}
-        <button onClick={() => handleKeyClick('m7')} className="key-tile h-12 text-xs font-bold sm:hidden flex items-center justify-center">m7</button>
-        <button onClick={() => handleKeyClick('sus4')} className="key-tile h-12 text-xs font-bold flex items-center justify-center">sus4</button>
-        <button onClick={() => handleKeyClick('sus2')} className="key-tile h-12 text-xs font-bold flex items-center justify-center">sus2</button>
-        <button onClick={() => handleKeyClick('/')} className="key-tile h-12 text-base font-bold text-cyan-300 bg-cyan-950/30 border-cyan-500/30 flex items-center justify-center">/</button>
-        <button onClick={() => handleKeyClick('⌫')} className="key-tile h-12 bg-red-500/10 border-red-500/20 text-red-400 hover:text-red-300 flex items-center justify-center" title="Backspace">
-          <Delete size={18} />
-        </button>
+        {/* Row 3: Extensions & Backspace */}
+        <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+          <button onClick={() => handleKeyClick('M7')} className="swiss-key text-xs font-black h-11 sm:hidden">M7</button>
+          <button onClick={() => handleKeyClick('m7')} className="swiss-key text-xs font-black h-11 sm:hidden">m7</button>
+          <button onClick={() => handleKeyClick('sus4')} className="swiss-key text-xs font-black h-11">sus4</button>
+          <button onClick={() => handleKeyClick('sus2')} className="swiss-key text-xs font-black h-11">sus2</button>
+          <button onClick={() => handleKeyClick('2')} className="swiss-key text-xs font-black h-11 hidden sm:flex">add9</button>
+          
+          {/* Distinct Outlined Backspace Key */}
+          <button
+            onClick={() => handleKeyClick('⌫')}
+            className="swiss-key border-2 border-black text-black bg-white hover:bg-[#FF3000] hover:text-white hover:border-[#FF3000] col-span-2 sm:col-span-2 h-11 font-mono font-black text-xs flex items-center justify-center gap-1.5"
+            title="Backspace"
+          >
+            <Delete size={16} />
+            <span>BACKSPACE</span>
+          </button>
+        </div>
       </div>
     </div>
   );

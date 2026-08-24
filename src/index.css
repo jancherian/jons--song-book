@@ -1,28 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @layer base {
   *, ::before, ::after {
     box-sizing: border-box;
-    border-width: 0;
-    border-style: solid;
-    border-color: rgba(255, 255, 255, 0.1);
+    border-radius: 0 !important;
   }
 
   html {
     scroll-behavior: smooth;
-    color-scheme: dark;
+    color-scheme: light dark;
     -webkit-text-size-adjust: 100%;
   }
   
   body {
     margin: 0;
-    line-height: inherit;
-    background-color: #121212;
-    color: #e5e2e1;
+    line-height: 1.4;
+    background-color: #FFFFFF;
+    color: #000000;
     min-height: 100vh;
     overflow-x: hidden;
-    font-family: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -33,175 +31,140 @@
 }
 
 /* =============================================
-   Exact Stitch "Luminous Harmonic" CSS Rules
+   Swiss International Design Tokens & Utilities
    ============================================= */
 
 :root {
-  --primary-gold: #f2ca50;
-  --primary-gold-container: #d4af37;
-  --surface-base: #121212;
-  --on-surface: #e5e2e1;
-  --on-surface-variant: #d0c5af;
+  --swiss-white: #FFFFFF;
+  --swiss-black: #000000;
+  --swiss-muted: #F2F2F2;
+  --swiss-red: #FF3000;
+  --swiss-border: #000000;
 }
 
-/* Glass Panels with physical beveled highlight */
-.glass-panel {
-  position: relative;
-  background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.02), 0 8px 32px rgba(0, 0, 0, 0.4);
+/* Swiss 24px Grid Background Texture (3% opacity) */
+.swiss-grid {
+  background-size: 24px 24px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
 }
 
-.glass-panel::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
-  border-left: 1px solid rgba(255, 255, 255, 0.18);
-  pointer-events: none;
+/* Swiss Dot Matrix Texture (16px, 4% opacity) */
+.swiss-dots {
+  background-size: 16px 16px;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.06) 1.5px, transparent 1.5px);
 }
 
-.glass-panel-hover {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.glass-panel-hover:hover {
-  background-color: rgba(255, 255, 255, 0.09);
-  border-color: rgba(212, 175, 55, 0.35);
-  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.04), 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 25px rgba(212, 175, 55, 0.15);
-  transform: translateY(-2px);
+/* High-Contrast Swiss Focus State */
+*:focus-visible {
+  outline: 2px solid #FF3000;
+  outline-offset: 1px;
 }
 
-/* Glass Modal */
-.glass-modal {
-  position: relative;
-  background-color: rgba(18, 18, 18, 0.94);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.03), 0 20px 50px rgba(0, 0, 0, 0.85);
-}
-.glass-modal::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border-top: 1px solid rgba(255, 255, 255, 0.25);
-  border-left: 1px solid rgba(255, 255, 255, 0.25);
-  pointer-events: none;
+/* Mechanical Instant Transitions */
+.swiss-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid #000000;
+  background-color: #000000;
+  color: #FFFFFF;
+  transition: all 150ms ease-linear;
+  cursor: pointer;
+  user-select: none;
 }
 
-/* Glow Text & Backgrounds */
-.text-glow-gold {
-  text-shadow: 0 0 20px rgba(212, 175, 55, 0.45);
+.swiss-btn:hover {
+  background-color: #FF3000;
+  border-color: #FF3000;
+  color: #FFFFFF;
 }
 
-.chord-glow {
-  text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+.swiss-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid #000000;
+  background-color: #FFFFFF;
+  color: #000000;
+  transition: all 150ms ease-linear;
+  cursor: pointer;
+  user-select: none;
 }
 
-.bg-glow-gold {
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
+.swiss-btn-outline:hover {
+  background-color: #000000;
+  color: #FFFFFF;
 }
 
-/* Floating Gold Circular Action Button (Stitch FAB) */
-.stitch-fab {
-  width: 56px;
-  height: 56px;
-  border-radius: 9999px;
-  background-color: rgba(18, 18, 18, 0.7);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  color: #f2ca50;
-  box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.2), 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.2);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.stitch-fab:hover {
-  transform: scale(1.1);
-  background-color: rgba(212, 175, 55, 0.15);
-  border-color: #f2ca50;
-  box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.3), 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 35px rgba(212, 175, 55, 0.35);
-}
-.stitch-fab:active {
-  transform: scale(0.95);
+.swiss-btn-accent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid #000000;
+  background-color: #FF3000;
+  color: #FFFFFF;
+  transition: all 150ms ease-linear;
+  cursor: pointer;
+  user-select: none;
 }
 
-/* Keypad Glass Tile from Stitch */
-.key-tile {
-  font-family: 'JetBrains Mono', monospace;
-  border-radius: 12px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  background: rgba(255, 255, 255, 0.05);
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
-  border-left: 1px solid rgba(255, 255, 255, 0.18);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-  border-right: 1px solid rgba(0, 0, 0, 0.4);
-  color: #e5e2e1;
-  transition: all 0.15s ease-out;
-}
-.key-tile:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-}
-.key-tile:active {
-  transform: scale(0.94);
-  background: rgba(212, 175, 55, 0.25);
-  border-color: #d4af37;
-  color: #f2ca50;
-  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.15);
+.swiss-btn-accent:hover {
+  background-color: #000000;
+  color: #FFFFFF;
 }
 
-/* Chord Chips */
-.chord-chip-active {
-  font-family: 'JetBrains Mono', monospace;
-  background-color: #f2ca50;
-  color: #121212;
-  font-weight: 700;
-  border: 1px solid #d4af37;
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.45);
+/* Swiss Keypad Key Tile */
+.swiss-key {
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+  background-color: #FFFFFF;
+  border: 2px solid #000000;
+  color: #000000;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 100ms ease-linear;
 }
 
-.chord-chip-inactive {
-  font-family: 'JetBrains Mono', monospace;
-  background-color: rgba(255, 255, 255, 0.06);
-  color: #e5e2e1;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  border-left: 1px solid rgba(255, 255, 255, 0.15);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  border-right: 1px solid rgba(0, 0, 0, 0.3);
-}
-.chord-chip-inactive:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(212, 175, 55, 0.4);
-  color: #f2ca50;
+.swiss-key:hover {
+  background-color: #000000;
+  color: #FFFFFF;
 }
 
-/* Animations */
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.swiss-key:active {
+  background-color: #FF3000 !important;
+  border-color: #FF3000 !important;
+  color: #FFFFFF !important;
 }
 
-@keyframes scaleIn {
-  0% { opacity: 0; transform: scale(0.92) translateY(10px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
+/* Swiss Card Styling */
+.swiss-card {
+  background-color: #FFFFFF;
+  border: 2px solid #000000;
+  transition: all 150ms ease-linear;
 }
 
-@keyframes backdropFadeIn {
-  from { opacity: 0; backdrop-filter: blur(0px); }
-  to { opacity: 1; backdrop-filter: blur(16px); }
+.swiss-card:hover {
+  background-color: #F2F2F2;
 }
 
-.animate-card { animation: fadeSlideUp 0.5s ease-out both; }
-.animate-scale-in { animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.animate-backdrop-fade-in { animation: backdropFadeIn 0.3s ease-out both; }
+/* Swiss Modal Dialog */
+.swiss-dialog {
+  background-color: #FFFFFF;
+  border: 4px solid #000000;
+  box-shadow: 8px 8px 0px #000000;
+}

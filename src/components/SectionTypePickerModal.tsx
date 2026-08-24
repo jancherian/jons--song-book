@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Layers, Plus } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import type { SectionType } from '../types/song';
 import { SECTION_TYPES } from '../utils/nashville';
 
@@ -17,41 +17,43 @@ export const SectionTypePickerModal: React.FC<SectionTypePickerModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-backdrop-fade-in">
-      <div className="w-full max-w-md rounded-3xl p-6 glass-modal text-[#e5e2e1] relative animate-scale-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
+      <div className="w-full max-w-md p-6 swiss-dialog text-black relative">
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 text-zinc-400 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+          className="absolute top-5 right-5 text-black hover:bg-black hover:text-white p-1.5 transition-colors"
         >
           <X size={18} />
         </button>
 
-        <div className="flex items-center gap-3 mb-5">
-          <div className="p-2.5 rounded-2xl bg-[#d4af37]/20 text-[#f2ca50] border border-[#d4af37]/35">
-            <Layers size={20} />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold tracking-tight text-white">Add Song Section</h3>
-            <p className="text-xs text-[#d0c5af] font-mono">Select a section type to insert</p>
-          </div>
+        <div className="border-b-2 border-black pb-4 mb-5">
+          <span className="text-[10px] font-mono font-black text-[#FF3000] uppercase tracking-[0.25em] block mb-1">
+            Section Selector
+          </span>
+          <h3 className="text-xl font-black tracking-tight text-black uppercase font-sans">
+            ADD SECTION TYPE
+          </h3>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-2">
-          {SECTION_TYPES.map((sec) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2 font-mono">
+          {SECTION_TYPES.map((sec, idx) => (
             <button
               key={sec.type}
               onClick={() => {
                 onSelectType(sec.type, sec.label);
                 onClose();
               }}
-              className="p-3.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#d4af37]/40 flex items-center justify-between group transition-all text-left active:scale-98"
+              className="p-3 border-2 border-black bg-white hover:bg-black hover:text-white flex items-center justify-between group transition-colors duration-100 text-left cursor-pointer"
             >
-              <div className="flex items-center gap-2.5">
-                <span className={`px-2.5 py-1 rounded-xl text-xs font-mono font-bold border ${sec.color}`}>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black text-[#FF3000]">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <span className="text-xs font-black uppercase tracking-wider">
                   {sec.type}
                 </span>
               </div>
-              <Plus size={16} className="text-zinc-500 group-hover:text-[#f2ca50] transition-colors" />
+              <Plus size={14} className="text-neutral-400 group-hover:text-[#FF3000] transition-colors" />
             </button>
           ))}
         </div>

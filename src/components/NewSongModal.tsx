@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Plus, Music } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import { MAJOR_KEYS } from '../utils/nashville';
 
 interface NewSongModalProps {
@@ -30,63 +30,62 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-backdrop-fade-in">
-      <div className="w-full max-w-md rounded-3xl p-6 glass-modal text-[#e5e2e1] relative animate-scale-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
+      <div className="w-full max-w-md p-6 swiss-dialog text-black relative">
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 text-zinc-400 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+          className="absolute top-5 right-5 text-black hover:bg-black hover:text-white p-1.5 transition-colors"
         >
           <X size={18} />
         </button>
 
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 rounded-2xl bg-[#d4af37]/20 text-[#f2ca50] border border-[#d4af37]/35">
-            <Music size={22} />
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold tracking-tight text-white">New Nashville Chart</h3>
-            <p className="text-xs text-[#d0c5af] font-mono">Create a new song for your repertoire</p>
-          </div>
+        <div className="border-b-2 border-black pb-4 mb-6">
+          <span className="text-[10px] font-mono font-black text-[#FF3000] uppercase tracking-[0.25em] block mb-1">
+            New Repertoire Chart
+          </span>
+          <h3 className="text-2xl font-black tracking-tight text-black uppercase font-sans">
+            CREATE SONG
+          </h3>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 font-mono text-xs">
+        <form onSubmit={handleSubmit} className="space-y-5 font-mono text-xs">
           <div>
-            <label className="text-zinc-300 block mb-1.5 font-bold uppercase tracking-wider text-[11px]">
-              Song Title <span className="text-[#f2ca50]">*</span>
+            <label className="text-black block mb-1 font-black uppercase tracking-wider text-[11px]">
+              Song Title <span className="text-[#FF3000]">*</span>
             </label>
             <input
               type="text"
               autoFocus
               required
-              placeholder="e.g. Goodness of God, Stand by Me"
+              placeholder="E.G. AMAZING GRACE, STAND BY ME"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl bg-[#1c1b1b]/90 border border-white/15 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#d4af37] transition-colors"
+              className="w-full px-3 py-2.5 bg-neutral-100 border-b-2 border-black text-sm text-black uppercase font-bold placeholder:text-neutral-400 focus:outline-none focus:border-[#FF3000] transition-colors"
             />
           </div>
 
           <div>
-            <label className="text-zinc-300 block mb-1.5 font-bold uppercase tracking-wider text-[11px]">
+            <label className="text-black block mb-1 font-black uppercase tracking-wider text-[11px]">
               Artist / Band (Optional)
             </label>
             <input
               type="text"
-              placeholder="e.g. Ben E. King, John Denver"
+              placeholder="E.G. JOHN NEWTON, BEN E. KING"
               value={artist}
               onChange={(e) => setArtist(e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl bg-[#1c1b1b]/90 border border-white/15 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#d4af37] transition-colors"
+              className="w-full px-3 py-2.5 bg-neutral-100 border-b-2 border-black text-sm text-black uppercase font-bold placeholder:text-neutral-400 focus:outline-none focus:border-[#FF3000] transition-colors"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-zinc-300 block mb-1.5 font-bold uppercase tracking-wider text-[11px]">
+              <label className="text-black block mb-1 font-black uppercase tracking-wider text-[11px]">
                 Default Key
               </label>
               <select
                 value={selectedKey}
                 onChange={(e) => setSelectedKey(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-2xl bg-[#1c1b1b]/90 border border-white/15 text-sm text-white focus:outline-none focus:border-[#d4af37] transition-colors"
+                className="w-full px-3 py-2.5 bg-neutral-100 border-b-2 border-black text-sm text-black uppercase font-bold focus:outline-none focus:border-[#FF3000] cursor-pointer transition-colors"
               >
                 {MAJOR_KEYS.map((k) => (
                   <option key={k} value={k}>Key of {k}</option>
@@ -95,7 +94,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
             </div>
 
             <div>
-              <label className="text-zinc-300 block mb-1.5 font-bold uppercase tracking-wider text-[11px]">
+              <label className="text-black block mb-1 font-black uppercase tracking-wider text-[11px]">
                 Tempo (BPM)
               </label>
               <input
@@ -104,26 +103,26 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
                 max={250}
                 value={bpm}
                 onChange={(e) => setBpm(Number(e.target.value))}
-                className="w-full px-3 py-2.5 rounded-2xl bg-[#1c1b1b]/90 border border-white/15 text-sm text-white focus:outline-none focus:border-[#d4af37] transition-colors"
+                className="w-full px-3 py-2.5 bg-neutral-100 border-b-2 border-black text-sm text-black uppercase font-bold focus:outline-none focus:border-[#FF3000] transition-colors"
               />
             </div>
           </div>
 
-          <div className="pt-3 border-t border-white/10 flex justify-end gap-2">
+          <div className="pt-4 border-t-2 border-black flex justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-zinc-300 text-xs font-bold transition-all"
+              className="swiss-btn-outline px-4 py-2.5 text-xs"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={!title.trim()}
-              className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#f2ca50] to-[#d4af37] hover:from-[#ffe088] hover:to-[#e9c349] disabled:opacity-50 text-[#1e1700] font-black text-xs flex items-center gap-1.5 shadow-lg shadow-[#d4af37]/25 active:scale-95 transition-all"
+              className="swiss-btn-accent px-5 py-2.5 text-xs flex items-center gap-1.5"
             >
-              <Plus size={15} />
-              <span>Create Song</span>
+              <Plus size={14} />
+              <span>Create Chart</span>
             </button>
           </div>
         </form>

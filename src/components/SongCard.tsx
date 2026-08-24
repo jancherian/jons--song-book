@@ -3,10 +3,9 @@ import {
   Star, 
   Play, 
   Trash2, 
-  ChevronRight
+  ArrowRight
 } from 'lucide-react';
 import type { Song } from '../types/song';
-import { SECTION_TYPES } from '../utils/nashville';
 
 interface SongCardProps {
   song: Song;
@@ -26,31 +25,43 @@ export const SongCard: React.FC<SongCardProps> = ({
   onRequestDelete,
 }) => {
   const totalSections = song.sections.length;
+  const formattedIndex = String(index + 1).padStart(2, '0');
 
   return (
     <div
       onClick={() => onSelectSong(song)}
-      className="glass-panel glass-panel-hover animate-card relative rounded-[1.5rem] p-5 flex flex-col gap-3.5 cursor-pointer transition-all duration-300"
-      style={{ animationDelay: `${(index + 1) * 80}ms` }}
+      className="swiss-card relative p-5 flex flex-col gap-4 cursor-pointer"
     >
-      {/* Top Row: Title + Star Favorite */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex flex-col gap-1 min-w-0">
-          <h4 className="text-xl font-bold text-white group-hover:text-[#f2ca50] transition-colors truncate tracking-tight font-sans">
-            {song.title}
-          </h4>
+      {/* Top Row: Index + Title + Star Favorite */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-baseline gap-3 min-w-0">
+          <span className="font-mono text-xs font-black text-[#FF3000] shrink-0">
+            {formattedIndex}
+          </span>
           
-          {/* Metadata Row matching Stitch: [X SECTIONS] • [KEY OF X] • [ARTIST] */}
-          <div className="flex items-center gap-2.5 text-[11px] font-mono font-bold text-white/70 tracking-wider uppercase">
-            <span>{totalSections} {totalSections === 1 ? 'Section' : 'Sections'}</span>
-            <span className="w-1 h-1 rounded-full bg-white/30" />
-            {song.key && (
-              <>
-                <span className="text-[#f2ca50]">Key of {song.key}</span>
-                <span className="w-1 h-1 rounded-full bg-white/30" />
-              </>
-            )}
-            <span className="text-[#d0c5af] truncate">{song.artist || 'Traditional'}</span>
+          <div className="min-w-0">
+            <h4 className="text-xl sm:text-2xl font-black text-black tracking-tight uppercase truncate">
+              {song.title}
+            </h4>
+            
+            {/* Metadata Line */}
+            <div className="flex items-center gap-3 text-xs font-mono text-neutral-600 mt-1 uppercase font-bold tracking-wider">
+              <span>{totalSections} {totalSections === 1 ? 'Section' : 'Sections'}</span>
+              <span className="w-1 h-1 bg-black" />
+              {song.key && (
+                <>
+                  <span className="text-black font-extrabold">Key {song.key}</span>
+                  <span className="w-1 h-1 bg-black" />
+                </>
+              )}
+              {song.bpm && (
+                <>
+                  <span>{song.bpm} BPM</span>
+                  <span className="w-1 h-1 bg-black" />
+                </>
+              )}
+              <span className="truncate">{song.artist || 'Traditional'}</span>
+            </div>
           </div>
         </div>
 
@@ -60,44 +71,39 @@ export const SongCard: React.FC<SongCardProps> = ({
             e.stopPropagation();
             onToggleFavorite(song.id);
           }}
-          className="p-1.5 -mr-1 -mt-1 rounded-full text-zinc-500 hover:text-[#f2ca50] hover:bg-white/10 transition-all shrink-0 active:scale-75"
+          className="p-2 -mr-1 -mt-1 hover:bg-black hover:text-white transition-colors duration-150 shrink-0"
           title={song.favorite ? 'Remove from favorites' : 'Add to favorites'}
         >
           <Star
             size={20}
             className={
               song.favorite
-                ? 'text-[#f2ca50] fill-[#f2ca50] drop-shadow-[0_0_8px_rgba(242,202,80,0.6)]'
-                : 'text-zinc-600 hover:text-white/70'
+                ? 'text-[#FF3000] fill-[#FF3000]'
+                : 'text-neutral-400 hover:text-white'
             }
           />
         </button>
       </div>
 
-      {/* Section Badges Row */}
-      <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-        {song.sections.slice(0, 5).map((sec) => {
-          const secConfig = SECTION_TYPES.find(t => t.type === sec.type);
-          return (
-            <span
-              key={sec.id}
-              className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border tracking-wider uppercase ${
-                secConfig?.color || 'bg-white/5 text-zinc-300 border-white/10'
-              }`}
-            >
+      {/* Section Flow Tags Row */}
+      <div className="flex items-center gap-2 flex-wrap border-t border-neutral-300 pt-3">
+        <span className="text-[10px] font-mono font-black uppercase text-neutral-500 tracking-widest mr-1">
+          Flow:
+        </span>
+        {song.sections.map((sec, idx) => (
+          <React.Fragment key={sec.id}>
+            <span className="text-xs font-mono font-bold text-black uppercase tracking-wider">
               {sec.type}
             </span>
-          );
-        })}
-        {song.sections.length > 5 && (
-          <span className="text-[10px] font-mono text-zinc-500">
-            +{song.sections.length - 5} more
-          </span>
-        )}
+            {idx < song.sections.length - 1 && (
+              <span className="text-neutral-400 font-mono text-xs">→</span>
+            )}
+          </React.Fragment>
+        ))}
       </div>
 
       {/* Action Row at Bottom */}
-      <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-3">
+      <div className="border-t-2 border-black pt-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           {/* Quick Stage Perform Button */}
           <button
@@ -105,7 +111,7 @@ export const SongCard: React.FC<SongCardProps> = ({
               e.stopPropagation();
               onPerformSong(song);
             }}
-            className="px-3.5 py-1.5 rounded-full bg-[#d4af37]/20 hover:bg-[#f2ca50] text-[#f2ca50] hover:text-[#121212] border border-[#d4af37]/35 text-xs font-mono font-bold flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm"
+            className="px-4 py-1.5 bg-[#FF3000] text-white hover:bg-black text-xs font-mono font-black uppercase tracking-wider flex items-center gap-1.5 transition-colors duration-150"
           >
             <Play size={12} className="fill-current" />
             <span>Perform</span>
@@ -117,17 +123,17 @@ export const SongCard: React.FC<SongCardProps> = ({
               e.stopPropagation();
               onRequestDelete(song.id);
             }}
-            className="p-1.5 rounded-full text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors active:scale-95"
+            className="p-1.5 border border-transparent hover:border-black hover:bg-black hover:text-white text-neutral-500 transition-colors duration-150"
             title="Delete Song"
           >
             <Trash2 size={15} />
           </button>
         </div>
 
-        {/* Chevron */}
-        <div className="flex items-center gap-1 text-xs font-mono text-[#d4af37]/70 group-hover:text-[#f2ca50] transition-colors">
-          <span className="text-[11px] hidden sm:inline text-zinc-400 group-hover:text-[#f2ca50]">Open Editor</span>
-          <ChevronRight size={18} className="transition-transform group-hover:translate-x-0.5" />
+        {/* Open Chart Indicator */}
+        <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-black">
+          <span>Edit Chart</span>
+          <ArrowRight size={15} className="text-[#FF3000]" />
         </div>
       </div>
     </div>
