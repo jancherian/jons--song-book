@@ -442,9 +442,9 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                   {section.lines.map((line) => (
                     <div key={line.id} className="space-y-2 relative group/line bg-white border-2 border-black p-3 sm:p-4 w-full max-w-full overflow-hidden">
                       
-                      {/* Responsive Grid Chord Cells Container */}
-                      <div className="w-full max-w-full overflow-hidden border-2 border-black bg-black">
-                        <div className="grid grid-cols-2 xs:grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-[2px] w-full max-w-full bg-black">
+                      {/* Responsive Flexible Chord Cells Container */}
+                      <div className="w-full max-w-full overflow-hidden border-2 border-black bg-white">
+                        <div className="flex flex-wrap items-stretch w-full max-w-full bg-white">
                           {line.chords.map((chord, cIdx) => {
                             const isSelected =
                               selectedSlot?.sectionId === section.id &&
@@ -452,13 +452,17 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                               selectedSlot?.chordIndex === cIdx;
 
                             return (
-                              <div key={cIdx} className="relative group/slot w-full min-w-0 bg-white">
+                              <div
+                                key={cIdx}
+                                className="relative group/slot flex-1 min-w-[56px] sm:min-w-[68px] border-r-2 border-b-2 sm:border-b-0 border-black bg-white"
+                              >
                                 <button
+                                  type="button"
                                   onClick={() => handleSelectChordSlot(section.id, line.id, cIdx)}
                                   className={`w-full h-12 sm:h-14 flex items-center justify-center font-sans font-black text-lg sm:text-xl select-none transition-colors duration-100 min-w-0 truncate px-1 ${
                                     isSelected 
                                       ? 'bg-[#FF3000] text-white' 
-                                      : 'bg-white text-black hover:bg-neutral-200'
+                                      : 'bg-white text-black hover:bg-neutral-100'
                                   }`}
                                 >
                                   {chord || <span className="text-neutral-400 font-normal">_</span>}
@@ -466,6 +470,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
 
                                 {line.chords.length > 1 && (
                                   <button
+                                    type="button"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       handleDeleteChordSlot(section.id, line.id, cIdx);
@@ -480,10 +485,11 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                             );
                           })}
 
-                          {/* Plus button to append slot as a grid cell */}
+                          {/* Plus button to append slot */}
                           <button
+                            type="button"
                             onClick={() => handleAddChordSlotToLine(section.id, line.id)}
-                            className="w-full h-12 sm:h-14 bg-neutral-100 hover:bg-black hover:text-white font-mono font-black text-base text-black flex items-center justify-center transition-colors duration-100 min-w-0"
+                            className="px-3.5 sm:px-4 h-12 sm:h-14 bg-neutral-100 hover:bg-black hover:text-white font-mono font-black text-base text-black flex items-center justify-center transition-colors duration-100 shrink-0 border-b-2 sm:border-b-0 border-black"
                             title="Add chord slot"
                           >
                             +

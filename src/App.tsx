@@ -13,15 +13,17 @@ import { PerformanceMode } from './components/PerformanceMode';
 type AppView = 'home' | 'editor' | 'performance';
 
 export default function App() {
-  const [songs, setSongs] = useState<Song[]>([]);
+  const [songs, setSongs] = useState<Song[]>(() => getStoredSongs());
   const [currentView, setCurrentView] = useState<AppView>('home');
   const [activeSong, setActiveSong] = useState<Song | null>(null);
 
-  // Load songs on mount
+  // Sync state if storage changes
   useEffect(() => {
     const loaded = getStoredSongs();
-    setSongs(loaded);
-  }, []);
+    if (loaded.length > 0 && songs.length === 0) {
+      setSongs(loaded);
+    }
+  }, [songs.length]);
 
   const handleSelectSong = (song: Song) => {
     setActiveSong(song);
