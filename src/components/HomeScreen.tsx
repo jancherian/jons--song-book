@@ -45,8 +45,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       
       {/* Top Header Rule */}
       <header className="sticky top-0 z-40 bg-white border-b-2 border-black px-4 sm:px-6 h-16 flex items-center justify-between gap-3 w-full max-w-full">
-        <div className="flex items-center gap-3 min-w-0">
-          <LogoMark size={34} className="border-2 border-black" />
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <LogoMark size={36} />
           <h1 className="text-lg sm:text-xl font-black tracking-tight text-black uppercase font-sans truncate">
             CHORDSET
           </h1>

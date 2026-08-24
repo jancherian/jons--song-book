@@ -9,7 +9,7 @@ export const SplashLoader: React.FC<SplashLoaderProps> = ({ message = 'INITIALIZ
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black text-white p-6 swiss-dots select-none">
       <div className="flex flex-col items-center gap-6 animate-pulse">
-        <LogoMark size={72} className="border-2 border-white shadow-[0_0_20px_rgba(255,48,0,0.3)]" />
+        <LogoMark size={80} />
         
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-black tracking-tight text-white uppercase font-sans">
