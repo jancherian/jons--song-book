@@ -55,37 +55,52 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans select-none pb-48 relative">
+    <div className="min-h-screen bg-black text-white font-sans select-none pb-48 relative w-full max-w-full overflow-x-hidden">
       
-      {/* Fixed Stage Toolbar (Pure Minimal High-Contrast) */}
-      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-black border-b-2 border-white/20">
-        <div className="flex items-center gap-3 min-w-0">
-          <button
-            onClick={onExit}
-            className="p-1.5 border border-white text-white hover:bg-white hover:text-black transition-colors duration-150"
-            title="Exit Stage Mode"
-          >
-            <ArrowLeft size={18} />
-          </button>
-          <div className="min-w-0">
-            <h1 className="text-lg sm:text-xl font-black text-white truncate uppercase tracking-tight font-sans">
-              {song.title}
-            </h1>
-            <div className="flex items-center gap-2 text-xs font-mono text-neutral-400 uppercase font-bold">
-              <span className="text-[#FF3000]">KEY {stageKey}</span>
-              {song.bpm && <span>// {song.bpm} BPM</span>}
-              {song.timeSignature && <span>// {song.timeSignature}</span>}
+      {/* Fixed Stage Toolbar (Responsive 2-Tier on Mobile / Single Row on Tablet & Desktop) */}
+      <header className="fixed top-0 left-0 w-full z-50 bg-black border-b-2 border-white/20 px-3.5 sm:px-6 py-2.5 sm:py-0 sm:h-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4 max-w-full">
+        {/* Row 1 / Left Info Area */}
+        <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-3 min-w-0 w-full sm:w-auto">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <button
+              type="button"
+              onClick={onExit}
+              className="p-1.5 border border-white text-white hover:bg-white hover:text-black transition-colors duration-150 shrink-0"
+              title="Exit Stage Mode"
+            >
+              <ArrowLeft size={16} />
+            </button>
+            <div className="min-w-0">
+              <h1 className="text-base sm:text-xl font-black text-white truncate uppercase tracking-tight font-sans">
+                {song.title}
+              </h1>
+              <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-neutral-400 uppercase font-bold truncate">
+                <span className="text-[#FF3000]">KEY {stageKey}</span>
+                {song.bpm && <span>// {song.bpm} BPM</span>}
+                {song.timeSignature && <span className="hidden xs:inline">// {song.timeSignature}</span>}
+              </div>
             </div>
           </div>
+
+          {/* Mobile Direct "DONE" Button */}
+          <button
+            type="button"
+            onClick={onExit}
+            className="sm:hidden px-3 py-1 border-2 border-white bg-black text-white hover:bg-white hover:text-black text-xs font-mono font-black uppercase tracking-wider transition-colors duration-150 shrink-0"
+            title="Done"
+          >
+            DONE
+          </button>
         </div>
 
-        {/* Stage Tools */}
-        <div className="flex items-center gap-2 font-mono text-xs">
+        {/* Row 2 on Mobile / Right Tools on Desktop */}
+        <div className="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2 font-mono text-xs w-full sm:w-auto overflow-x-auto pb-0.5 sm:pb-0">
           {/* Nashville ↔ Letters Toggle */}
-          <div className="flex items-center border border-white">
+          <div className="flex items-center border border-white shrink-0">
             <button
+              type="button"
               onClick={() => setDisplayMode('nashville')}
-              className={`px-3 py-1 font-black uppercase transition-colors duration-150 ${
+              className={`px-2.5 sm:px-3 py-1 font-black uppercase transition-colors duration-150 text-[11px] sm:text-xs ${
                 displayMode === 'nashville'
                   ? 'bg-white text-black'
                   : 'bg-black text-white hover:bg-neutral-800'
@@ -94,8 +109,9 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
               1-4-5
             </button>
             <button
+              type="button"
               onClick={() => setDisplayMode('letters')}
-              className={`px-3 py-1 font-black uppercase transition-colors duration-150 ${
+              className={`px-2.5 sm:px-3 py-1 font-black uppercase transition-colors duration-150 text-[11px] sm:text-xs ${
                 displayMode === 'letters'
                   ? 'bg-[#FF3000] text-white'
                   : 'bg-black text-white hover:bg-neutral-800'
@@ -109,7 +125,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
             <select
               value={stageKey}
               onChange={(e) => setStageKey(e.target.value)}
-              className="px-2.5 py-1 bg-black border border-white text-xs font-mono font-black text-white uppercase focus:outline-none cursor-pointer"
+              className="px-2 py-1 bg-black border border-white text-[11px] sm:text-xs font-mono font-black text-white uppercase focus:outline-none cursor-pointer shrink-0"
             >
               {MAJOR_KEYS.map(k => (
                 <option key={k} value={k}>Key {k}</option>
@@ -118,44 +134,50 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
           )}
 
           {/* Zoom */}
-          <div className="flex items-center border border-white">
+          <div className="flex items-center border border-white shrink-0">
             <button
+              type="button"
               onClick={() => {
                 if (fontSizeLevel === 'xlarge') setFontSizeLevel('large');
                 else if (fontSizeLevel === 'large') setFontSizeLevel('normal');
               }}
               className="p-1 text-neutral-400 hover:text-white hover:bg-neutral-800"
+              title="Zoom Out"
             >
-              <ZoomOut size={15} />
+              <ZoomOut size={14} />
             </button>
             <button
+              type="button"
               onClick={() => {
                 if (fontSizeLevel === 'normal') setFontSizeLevel('large');
                 else if (fontSizeLevel === 'large') setFontSizeLevel('xlarge');
               }}
               className="p-1 text-neutral-400 hover:text-white hover:bg-neutral-800"
+              title="Zoom In"
             >
-              <ZoomIn size={15} />
+              <ZoomIn size={14} />
             </button>
           </div>
 
           {/* Auto Scroll */}
           <button
+            type="button"
             onClick={() => setIsAutoScrolling(!isAutoScrolling)}
-            className={`px-3 py-1 font-mono text-xs font-black uppercase flex items-center gap-1.5 border transition-colors duration-150 ${
+            className={`px-2.5 sm:px-3 py-1 font-mono text-[11px] sm:text-xs font-black uppercase flex items-center gap-1 sm:gap-1.5 border transition-colors duration-150 shrink-0 ${
               isAutoScrolling
                 ? 'bg-[#FF3000] text-white border-[#FF3000]'
                 : 'bg-black text-white border-white hover:bg-neutral-800'
             }`}
           >
-            {isAutoScrolling ? <Pause size={13} /> : <Play size={13} />}
-            <span className="hidden sm:inline">SCROLL</span>
+            {isAutoScrolling ? <Pause size={12} /> : <Play size={12} />}
+            <span>SCROLL</span>
           </button>
 
-          {/* Outlined White "DONE" Button */}
+          {/* Desktop Outlined White "DONE" Button */}
           <button
+            type="button"
             onClick={onExit}
-            className="px-4 py-1 border-2 border-white bg-black text-white hover:bg-white hover:text-black text-xs font-mono font-black uppercase tracking-wider transition-colors duration-150"
+            className="hidden sm:inline-flex px-4 py-1 border-2 border-white bg-black text-white hover:bg-white hover:text-black text-xs font-mono font-black uppercase tracking-wider transition-colors duration-150 shrink-0"
             title="Done (Exit Stage Mode)"
           >
             DONE
@@ -164,7 +186,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
       </header>
 
       {/* Main Content Area (Maximum Legibility for Stage Use) */}
-      <main className="max-w-4xl mx-auto px-6 sm:px-10 pt-28 space-y-16">
+      <main className="max-w-4xl mx-auto px-4 sm:px-10 pt-28 sm:pt-24 space-y-12 sm:space-y-16 w-full max-w-full overflow-x-hidden">
         {song.sections.map((section, secIdx) => {
           const formattedSecIndex = String(secIdx + 1).padStart(2, '0');
 

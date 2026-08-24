@@ -357,14 +357,14 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             </select>
           </div>
 
-          <div className="flex-1 min-w-[180px] flex items-center gap-2 bg-[#F2F2F2] border border-black px-3 py-1.5 font-bold">
-            <span className="text-neutral-500 uppercase">Artist:</span>
+          <div className="w-full sm:w-auto sm:flex-1 min-w-0 flex items-center gap-2 bg-[#F2F2F2] border border-black px-3 py-1.5 font-bold">
+            <span className="text-neutral-500 uppercase shrink-0">Artist:</span>
             <input
               type="text"
               value={song.artist || ''}
               onChange={(e) => mutateSong(s => ({ ...s, artist: e.target.value }))}
               placeholder="OPTIONAL ARTIST..."
-              className="w-full bg-transparent font-black text-black uppercase placeholder:text-neutral-400 focus:outline-none"
+              className="w-full bg-transparent font-black text-black uppercase placeholder:text-neutral-400 focus:outline-none min-w-0"
             />
           </div>
         </div>

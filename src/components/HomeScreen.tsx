@@ -40,33 +40,33 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   });
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans swiss-grid pb-32 relative">
+    <div className="min-h-screen bg-white text-black font-sans swiss-grid pb-32 relative w-full max-w-full overflow-x-hidden">
       
       {/* Top Header Rule */}
-      <header className="sticky top-0 z-40 bg-white border-b-2 border-black px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-4 h-4 bg-[#FF3000]" />
-          <h1 className="text-xl font-black tracking-tight text-black uppercase font-sans">
+      <header className="sticky top-0 z-40 bg-white border-b-2 border-black px-4 sm:px-6 h-16 flex items-center justify-between gap-3 w-full max-w-full">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#FF3000] shrink-0" />
+          <h1 className="text-lg sm:text-xl font-black tracking-tight text-black uppercase font-sans truncate">
             CHORDSET
           </h1>
-          <span className="hidden sm:inline text-xs font-mono font-bold text-neutral-500 uppercase tracking-widest pl-2 border-l border-neutral-300">
+          <span className="hidden sm:inline text-xs font-mono font-bold text-neutral-500 uppercase tracking-widest pl-2 border-l border-neutral-300 truncate">
             Nashville Number System
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={() => setIsNewSongModalOpen(true)}
-            className="swiss-btn px-4 py-2 text-xs"
+            className="swiss-btn px-3 sm:px-4 py-1.5 sm:py-2 text-xs"
           >
-            <Plus size={14} className="mr-1.5" />
+            <Plus size={14} className="mr-1 sm:mr-1.5" />
             <span>New Song</span>
           </button>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main className="max-w-4xl mx-auto px-5 sm:px-8 pt-10 flex flex-col gap-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-8 pt-6 sm:pt-10 flex flex-col gap-6 sm:gap-8 w-full max-w-full overflow-x-hidden">
         
         {/* Swiss Asymmetric Hero Header */}
         <div className="border-b-4 border-black pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
