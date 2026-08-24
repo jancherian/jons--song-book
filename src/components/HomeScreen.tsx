@@ -8,6 +8,7 @@ import {
 import type { Song } from '../types/song';
 import { NewSongModal } from './NewSongModal';
 import { SongCard } from './SongCard';
+import { LogoMark } from './LogoMark';
 
 interface HomeScreenProps {
   songs: Song[];
@@ -44,8 +45,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       
       {/* Top Header Rule */}
       <header className="sticky top-0 z-40 bg-white border-b-2 border-black px-4 sm:px-6 h-16 flex items-center justify-between gap-3 w-full max-w-full">
-        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-[#FF3000] shrink-0" />
+        <div className="flex items-center gap-3 min-w-0">
+          <LogoMark size={34} className="border-2 border-black" />
           <h1 className="text-lg sm:text-xl font-black tracking-tight text-black uppercase font-sans truncate">
             CHORDSET
           </h1>

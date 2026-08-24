@@ -14,6 +14,7 @@ import type { Song, SongSection, SongLine, SectionType, SelectedChordSlot } from
 import { MAJOR_KEYS } from '../utils/nashville';
 import { SectionTypePickerModal } from './SectionTypePickerModal';
 import { NashvilleNumberPad } from './NashvilleNumberPad';
+import { LogoMark } from './LogoMark';
 
 interface SongEditorProps {
   song: Song;
@@ -270,6 +271,8 @@ export const SongEditor: React.FC<SongEditorProps> = ({
           >
             <ArrowLeft size={16} />
           </button>
+
+          <LogoMark size={30} className="border-2 border-black hidden sm:inline-flex" />
 
           <h1 className="text-base sm:text-lg font-black uppercase text-black tracking-tight truncate">
             CHORDSET <span className="text-[#FF3000]">//</span> <span className="hidden xs:inline">EDITOR</span>
