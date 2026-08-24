@@ -62,7 +62,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </button>
 
         <h1 className="text-lg sm:text-xl font-extrabold text-[#f2ca50] tracking-tight truncate px-2 font-sans">
-          Jon's Song Book
+          CHORDSET
         </h1>
 
         <div className="flex items-center gap-1">
@@ -80,13 +80,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       {/* Main Content Canvas */}
       <main className="relative z-10 pt-24 px-5 sm:px-8 flex flex-col gap-6 max-w-3xl mx-auto">
         
-        {/* Hero Title Section matching Stitch 1:1 */}
+        {/* Hero Title Section */}
         <div className="flex flex-col items-center text-center mt-4 mb-2">
           <h2 className="text-[46px] sm:text-[54px] leading-[1.05] font-black text-white tracking-tighter">
-            Jon's
+            CHORD<span className="text-[#f2ca50]">SET</span>
           </h2>
           <h3 className="text-xs sm:text-sm font-extrabold text-[#d4af37] tracking-[0.35em] mt-1.5 text-glow-gold uppercase">
-            SONG BOOK
+            NASHVILLE NUMBER CHARTS
           </h3>
         </div>
 

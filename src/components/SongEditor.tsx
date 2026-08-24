@@ -272,7 +272,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
           </button>
 
           <h1 className="text-lg sm:text-xl font-bold text-[#f2ca50] tracking-tight">
-            Jon's Song Book
+            CHORDSET
           </h1>
         </div>
 

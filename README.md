@@ -1,4 +1,4 @@
-# Jon's Song Book (Nashville Number System)
+# CHORDSET (Nashville Number System)
 
 A chord chart app designed for musicians using the Nashville Number System, with inline lyrics support and a stage performance mode.
 
