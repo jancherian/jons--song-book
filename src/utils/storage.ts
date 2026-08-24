@@ -4,6 +4,102 @@ const STORAGE_KEY = 'jons_song_book_v2_songs';
 
 export const DEFAULT_SONGS: Song[] = [
   {
+    id: 'song-amazing-grace',
+    title: 'Amazing Grace',
+    artist: 'John Newton',
+    key: 'G',
+    bpm: 72,
+    timeSignature: '3/4',
+    favorite: true,
+    createdAt: Date.now() - 86400000 * 4,
+    updatedAt: Date.now() - 86400000 * 4,
+    sections: [
+      {
+        id: 'sec-ag-intro',
+        type: 'INTRO',
+        label: 'Acoustic Intro',
+        lines: [
+          {
+            id: 'line-ag-1',
+            chords: ['1', '1', '4', '1'],
+            lyrics: '(Gentle acoustic guitar strumming in 3/4 time)'
+          }
+        ]
+      },
+      {
+        id: 'sec-ag-v1',
+        type: 'VERSE',
+        label: 'Verse 1',
+        lines: [
+          {
+            id: 'line-ag-2',
+            chords: ['1', '1', '4', '1'],
+            lyrics: 'Amazing grace, how sweet the sound'
+          },
+          {
+            id: 'line-ag-3',
+            chords: ['1', '1', '5', '5'],
+            lyrics: 'That saved a wretch like me'
+          },
+          {
+            id: 'line-ag-4',
+            chords: ['1', '1', '4', '1'],
+            lyrics: 'I once was lost, but now am found'
+          },
+          {
+            id: 'line-ag-5',
+            chords: ['1', '5', '1', '1'],
+            lyrics: 'Was blind, but now I see'
+          }
+        ]
+      },
+      {
+        id: 'sec-ag-v2',
+        type: 'VERSE',
+        label: 'Verse 2',
+        lines: [
+          {
+            id: 'line-ag-6',
+            chords: ['1', '1', '4', '1'],
+            lyrics: '\'Twas grace that taught my heart to fear'
+          },
+          {
+            id: 'line-ag-7',
+            chords: ['1', '1', '5', '5'],
+            lyrics: 'And grace my fears relieved'
+          },
+          {
+            id: 'line-ag-8',
+            chords: ['1', '1', '4', '1'],
+            lyrics: 'How precious did that grace appear'
+          },
+          {
+            id: 'line-ag-9',
+            chords: ['1', '5', '1', '1'],
+            lyrics: 'The hour I first believed'
+          }
+        ]
+      },
+      {
+        id: 'sec-ag-chorus',
+        type: 'CHORUS',
+        label: 'Chorus / Refrain',
+        lines: [
+          {
+            id: 'line-ag-10',
+            chords: ['1', '4', '1', '5'],
+            lyrics: 'My chains are gone, I\'ve been set free'
+          },
+          {
+            id: 'line-ag-11',
+            chords: ['1/3', '4', '1', '5', '1'],
+            lyrics: 'My God, my Savior has ransomed me'
+          }
+        ]
+      }
+    ]
+  },
+  {
     id: 'song-1',
     title: 'Stand By Me',
     artist: 'Ben E. King',

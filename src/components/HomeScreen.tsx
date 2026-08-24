@@ -111,12 +111,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           )}
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex items-center justify-between gap-2 pt-1">
+        {/* Section Header: "MY SONGS" matching initial prompt & Stitch design */}
+        <div className="flex items-center justify-between gap-3 pt-2 pb-1">
+          <div className="flex items-center gap-2.5">
+            <h3 className="text-xs font-mono font-extrabold text-[#d4af37] tracking-[0.2em] uppercase text-glow-gold">
+              MY SONGS
+            </h3>
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-[#d4af37]/15 text-[#f2ca50] border border-[#d4af37]/30">
+              {filteredSongs.length}
+            </span>
+          </div>
+
+          {/* Filter Pills */}
           <div className="flex items-center gap-1.5 p-1 rounded-2xl glass-panel font-mono text-xs">
             <button
               onClick={() => setActiveFilter('all')}
-              className={`px-4 py-1.5 rounded-xl transition-all font-bold ${
+              className={`px-3.5 py-1 rounded-xl transition-all font-bold ${
                 activeFilter === 'all'
                   ? 'bg-[#f2ca50] text-[#121212] shadow-md'
                   : 'text-zinc-400 hover:text-white'
@@ -126,19 +136,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </button>
             <button
               onClick={() => setActiveFilter('favorites')}
-              className={`px-4 py-1.5 rounded-xl transition-all font-bold flex items-center gap-1.5 ${
+              className={`px-3.5 py-1 rounded-xl transition-all font-bold flex items-center gap-1 ${
                 activeFilter === 'favorites'
                   ? 'bg-[#f2ca50] text-[#121212] shadow-md'
                   : 'text-zinc-400 hover:text-white'
               }`}
             >
-              <span>★ Favorites ({songs.filter(s => s.favorite).length})</span>
+              <span>★ Favs ({songs.filter(s => s.favorite).length})</span>
             </button>
           </div>
-
-          <span className="text-[11px] font-mono text-zinc-500">
-            {filteredSongs.length} {filteredSongs.length === 1 ? 'song' : 'songs'}
-          </span>
         </div>
 
         {/* Songs List */}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  X, 
   ZoomIn, 
   ZoomOut, 
   Play, 
@@ -158,12 +157,13 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
             <span className="hidden sm:inline">Scroll</span>
           </button>
 
+          {/* Explicit "Done" Exit button */}
           <button
             onClick={onExit}
-            className="p-2 rounded-full text-zinc-400 hover:text-white hover:bg-white/10"
-            title="Exit"
+            className="px-3.5 py-1.5 rounded-full bg-[#f2ca50] hover:bg-[#ffe088] text-[#121212] text-xs font-mono font-black active:scale-95 transition-all shadow-md flex items-center gap-1"
+            title="Done (Exit Stage Mode)"
           >
-            <X size={20} />
+            <span>Done</span>
           </button>
         </div>
       </header>
