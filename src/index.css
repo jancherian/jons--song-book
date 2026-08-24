@@ -1,0 +1,207 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  *, ::before, ::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  body {
+    margin: 0;
+    line-height: inherit;
+    background-color: #121212;
+    color: #e5e2e1;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code, pre, kbd, samp {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* =============================================
+   Exact Stitch "Luminous Harmonic" CSS Rules
+   ============================================= */
+
+:root {
+  --primary-gold: #f2ca50;
+  --primary-gold-container: #d4af37;
+  --surface-base: #121212;
+  --on-surface: #e5e2e1;
+  --on-surface-variant: #d0c5af;
+}
+
+/* Glass Panels with physical beveled highlight */
+.glass-panel {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.02), 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+  pointer-events: none;
+}
+
+.glass-panel-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  background-color: rgba(255, 255, 255, 0.09);
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.04), 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 25px rgba(212, 175, 55, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Glass Modal */
+.glass-modal {
+  position: relative;
+  background-color: rgba(18, 18, 18, 0.94);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.03), 0 20px 50px rgba(0, 0, 0, 0.85);
+}
+.glass-modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+}
+
+/* Glow Text & Backgrounds */
+.text-glow-gold {
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.45);
+}
+
+.chord-glow {
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+.bg-glow-gold {
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
+}
+
+/* Floating Gold Circular Action Button (Stitch FAB) */
+.stitch-fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 9999px;
+  background-color: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #f2ca50;
+  box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.2), 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.2);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.stitch-fab:hover {
+  transform: scale(1.1);
+  background-color: rgba(212, 175, 55, 0.15);
+  border-color: #f2ca50;
+  box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.3), 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 35px rgba(212, 175, 55, 0.35);
+}
+.stitch-fab:active {
+  transform: scale(0.95);
+}
+
+/* Keypad Glass Tile from Stitch */
+.key-tile {
+  font-family: 'JetBrains Mono', monospace;
+  border-radius: 12px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  border-right: 1px solid rgba(0, 0, 0, 0.4);
+  color: #e5e2e1;
+  transition: all 0.15s ease-out;
+}
+.key-tile:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+.key-tile:active {
+  transform: scale(0.94);
+  background: rgba(212, 175, 55, 0.25);
+  border-color: #d4af37;
+  color: #f2ca50;
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.15);
+}
+
+/* Chord Chips */
+.chord-chip-active {
+  font-family: 'JetBrains Mono', monospace;
+  background-color: #f2ca50;
+  color: #121212;
+  font-weight: 700;
+  border: 1px solid #d4af37;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.45);
+}
+
+.chord-chip-inactive {
+  font-family: 'JetBrains Mono', monospace;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #e5e2e1;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+}
+.chord-chip-inactive:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(212, 175, 55, 0.4);
+  color: #f2ca50;
+}
+
+/* Animations */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% { opacity: 0; transform: scale(0.92) translateY(10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes backdropFadeIn {
+  from { opacity: 0; backdrop-filter: blur(0px); }
+  to { opacity: 1; backdrop-filter: blur(16px); }
+}
+
+.animate-card { animation: fadeSlideUp 0.5s ease-out both; }
+.animate-scale-in { animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-backdrop-fade-in { animation: backdropFadeIn 0.3s ease-out both; }
