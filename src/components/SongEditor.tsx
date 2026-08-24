@@ -258,32 +258,32 @@ export const SongEditor: React.FC<SongEditorProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans swiss-grid pb-72 relative">
+    <div className="min-h-screen bg-white text-black font-sans swiss-grid pb-72 relative w-full max-w-full overflow-x-hidden">
       
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-40 bg-white border-b-2 border-black px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      {/* Sticky Header (Constrained for 375px+ Viewports) */}
+      <header className="sticky top-0 z-40 bg-white border-b-2 border-black px-4 sm:px-6 h-16 flex items-center justify-between gap-2 w-full max-w-full">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
             onClick={onBack}
-            className="p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150"
+            className="p-1.5 sm:p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150 shrink-0"
             title="Back to Songs"
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft size={16} />
           </button>
 
-          <h1 className="text-lg sm:text-xl font-black uppercase text-black tracking-tight">
-            CHORDSET <span className="text-[#FF3000]">//</span> CHART EDITOR
+          <h1 className="text-base sm:text-lg font-black uppercase text-black tracking-tight truncate">
+            CHORDSET <span className="text-[#FF3000]">//</span> <span className="hidden xs:inline">EDITOR</span>
           </h1>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 font-mono">
           <button
             onClick={() => onToggleFavorite(song.id)}
-            className="p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150"
+            className="p-1.5 sm:p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150"
             title={song.favorite ? 'Favorite' : 'Add to favorites'}
           >
             <Star
-              size={18}
+              size={16}
               className={song.favorite ? 'text-[#FF3000] fill-[#FF3000]' : 'text-neutral-400'}
             />
           </button>
@@ -291,16 +291,16 @@ export const SongEditor: React.FC<SongEditorProps> = ({
           {/* Launch Stage Performance Mode */}
           <button
             onClick={onLaunchPerformance}
-            className="swiss-btn-accent px-4 py-2 text-xs"
+            className="swiss-btn-accent px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-xs"
           >
-            <Play size={14} className="fill-current mr-1.5" />
-            <span>STAGE MODE</span>
+            <Play size={12} className="fill-current mr-1 sm:mr-1.5" />
+            <span>STAGE</span>
           </button>
         </div>
       </header>
 
       {/* Main Content Canvas */}
-      <main className="max-w-4xl mx-auto px-5 sm:px-8 pt-8 flex flex-col gap-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-8 pt-6 sm:pt-8 flex flex-col gap-6 sm:gap-8 w-full max-w-full overflow-x-hidden">
         
         {/* Editable Song Title (Underlined Swiss Input) */}
         <div className="border-b-4 border-black pb-4">
@@ -380,15 +380,15 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                 className="bg-[#F2F2F2] border-2 border-black p-5 flex flex-col gap-4"
               >
                 {/* Section Header with Swiss Index Prefix */}
-                <div className="flex justify-between items-center border-b-2 border-black pb-3">
-                  <div className="flex items-baseline gap-2.5">
-                    <span className="font-mono text-sm font-black text-[#FF3000]">
+                <div className="flex justify-between items-center border-b-2 border-black pb-3 w-full max-w-full">
+                  <div className="flex items-baseline gap-2 min-w-0">
+                    <span className="font-mono text-sm font-black text-[#FF3000] shrink-0">
                       {formattedSecIndex}
                     </span>
-                    <span className="font-mono text-xs font-black uppercase text-black tracking-widest">
+                    <span className="font-mono text-xs font-black uppercase text-black tracking-widest shrink-0">
                       {section.type}
                     </span>
-                    <span className="text-neutral-400 text-xs font-mono">—</span>
+                    <span className="text-neutral-400 text-xs font-mono shrink-0">—</span>
                     <input
                       type="text"
                       value={section.label || ''}
@@ -400,11 +400,11 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                         }));
                       }}
                       placeholder="CUSTOM LABEL"
-                      className="text-xs font-mono font-bold text-black uppercase bg-transparent border-b border-transparent hover:border-black focus:border-[#FF3000] focus:outline-none"
+                      className="text-xs font-mono font-bold text-black uppercase bg-transparent border-b border-transparent hover:border-black focus:border-[#FF3000] focus:outline-none min-w-0 truncate"
                     />
                   </div>
 
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 shrink-0">
                     <button
                       onClick={() => handleMoveSection(secIdx, 'up')}
                       disabled={secIdx === 0}
@@ -438,66 +438,68 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                 </div>
 
                 {/* Section Lines */}
-                <div className="space-y-5 pt-1">
+                <div className="space-y-4 pt-1 w-full max-w-full">
                   {section.lines.map((line) => (
-                    <div key={line.id} className="space-y-2 relative group/line bg-white border-2 border-black p-4">
+                    <div key={line.id} className="space-y-2 relative group/line bg-white border-2 border-black p-3 sm:p-4 w-full max-w-full overflow-hidden">
                       
-                      {/* Visible Chord Grid Cell Rows */}
-                      <div className="flex flex-wrap items-stretch border-2 border-black bg-neutral-100">
-                        {line.chords.map((chord, cIdx) => {
-                          const isSelected =
-                            selectedSlot?.sectionId === section.id &&
-                            selectedSlot?.lineId === line.id &&
-                            selectedSlot?.chordIndex === cIdx;
+                      {/* Responsive Grid Chord Cells Container */}
+                      <div className="w-full max-w-full overflow-hidden border-2 border-black bg-black">
+                        <div className="grid grid-cols-2 xs:grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-[2px] w-full max-w-full bg-black">
+                          {line.chords.map((chord, cIdx) => {
+                            const isSelected =
+                              selectedSlot?.sectionId === section.id &&
+                              selectedSlot?.lineId === line.id &&
+                              selectedSlot?.chordIndex === cIdx;
 
-                          return (
-                            <div key={cIdx} className="relative group/slot flex-1 min-w-[72px]">
-                              <button
-                                onClick={() => handleSelectChordSlot(section.id, line.id, cIdx)}
-                                className={`w-full h-14 flex items-center justify-center font-sans font-black text-xl border-r-2 border-black select-none transition-colors duration-100 ${
-                                  isSelected 
-                                    ? 'bg-[#FF3000] text-white border-[#FF3000]' 
-                                    : 'bg-white text-black hover:bg-neutral-200'
-                                }`}
-                              >
-                                {chord || <span className="text-neutral-400 font-normal">_</span>}
-                              </button>
-
-                              {line.chords.length > 1 && (
+                            return (
+                              <div key={cIdx} className="relative group/slot w-full min-w-0 bg-white">
                                 <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteChordSlot(section.id, line.id, cIdx);
-                                  }}
-                                  className="absolute -top-2 -right-2 w-4 h-4 bg-black text-white text-[10px] items-center justify-center hidden group-hover/slot:flex border border-white"
-                                  title="Delete chord"
+                                  onClick={() => handleSelectChordSlot(section.id, line.id, cIdx)}
+                                  className={`w-full h-12 sm:h-14 flex items-center justify-center font-sans font-black text-lg sm:text-xl select-none transition-colors duration-100 min-w-0 truncate px-1 ${
+                                    isSelected 
+                                      ? 'bg-[#FF3000] text-white' 
+                                      : 'bg-white text-black hover:bg-neutral-200'
+                                  }`}
                                 >
-                                  ×
+                                  {chord || <span className="text-neutral-400 font-normal">_</span>}
                                 </button>
-                              )}
-                            </div>
-                          );
-                        })}
 
-                        {/* Plus button to append slot */}
-                        <button
-                          onClick={() => handleAddChordSlotToLine(section.id, line.id)}
-                          className="px-3 h-14 bg-white hover:bg-black hover:text-white font-mono font-bold text-sm text-black border-l-0 flex items-center justify-center transition-colors duration-100"
-                          title="Add chord slot"
-                        >
-                          +
-                        </button>
+                                {line.chords.length > 1 && (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleDeleteChordSlot(section.id, line.id, cIdx);
+                                    }}
+                                    className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-black text-white text-[10px] items-center justify-center hidden group-hover/slot:flex border border-white z-10"
+                                    title="Delete chord"
+                                  >
+                                    ×
+                                  </button>
+                                )}
+                              </div>
+                            );
+                          })}
+
+                          {/* Plus button to append slot as a grid cell */}
+                          <button
+                            onClick={() => handleAddChordSlotToLine(section.id, line.id)}
+                            className="w-full h-12 sm:h-14 bg-neutral-100 hover:bg-black hover:text-white font-mono font-black text-base text-black flex items-center justify-center transition-colors duration-100 min-w-0"
+                            title="Add chord slot"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
 
                       {/* Inline Lyrics Line directly beneath chord grid */}
-                      <div className="flex items-center gap-2 border-b border-black pt-2 pb-1">
+                      <div className="flex items-center gap-2 border-b border-black pt-2 pb-1 w-full max-w-full">
                         <AlignLeft size={14} className="text-neutral-400 shrink-0" />
                         <input
                           type="text"
                           value={line.lyrics}
                           onChange={(e) => handleUpdateLyrics(section.id, line.id, e.target.value)}
                           placeholder="ENTER LYRICS FOR THIS MEASURE..."
-                          className="w-full bg-transparent border-none text-xs font-mono font-bold uppercase text-neutral-800 placeholder:text-neutral-400 focus:outline-none"
+                          className="w-full bg-transparent border-none text-xs font-mono font-bold uppercase text-neutral-800 placeholder:text-neutral-400 focus:outline-none min-w-0"
                         />
                         {section.lines.length > 1 && (
                           <button
