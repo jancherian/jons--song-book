@@ -114,7 +114,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-slate-100 font-sans selection:bg-amber-500 selection:text-zinc-950">
+    <div className="min-h-screen bg-white text-black font-sans selection:bg-[#FF3000] selection:text-white">
       {currentView === 'home' && (
         <HomeScreen
           songs={songs}
