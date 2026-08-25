@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Plus } from 'lucide-react';
 import { MAJOR_KEYS } from '../utils/nashville';
 import { triggerHaptic } from '../utils/haptics';
+import { MONO_FONT_STACK } from '../utils/typography';
 
 interface NewSongModalProps {
   isOpen: boolean;
@@ -59,7 +60,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
         <div>
           <span 
             className="font-mono text-xs font-bold uppercase tracking-wider text-[#E8432E] block mb-1"
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
           >
             New Chart
           </span>
@@ -67,7 +68,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
             className={`font-mono text-xl sm:text-2xl font-bold tracking-tight ${
               isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
             }`}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
           >
             Create Song
           </h3>
@@ -79,7 +80,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
               className={`font-mono block mb-1.5 font-bold text-xs uppercase tracking-wider ${
                 isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
               }`}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             >
               Song title <span className="text-[#E8432E]">*</span>
             </label>
@@ -90,7 +91,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
               placeholder="e.g. Amazing Grace, Stand By Me"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               className={`w-full px-3.5 py-2.5 min-h-[44px] rounded-md text-sm font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#E8432E] border-2 transition-all duration-150 ${
                 isDarkMode 
                   ? 'bg-[#241D17] text-[#F7F4EB] placeholder:text-[#A89C8E]/40 border-[#3D332A]' 
@@ -104,7 +105,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
               className={`font-mono block mb-1.5 font-bold text-xs uppercase tracking-wider ${
                 isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
               }`}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             >
               Artist / Band (optional)
             </label>
@@ -127,7 +128,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
                 className={`block mb-1.5 font-bold text-xs uppercase tracking-wider ${
                   isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
                 }`}
-                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               >
                 Default key
               </label>
@@ -137,7 +138,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
                   triggerHaptic(10);
                   setSelectedKey(e.target.value);
                 }}
-                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                 className={`w-full px-3.5 py-2.5 min-h-[44px] rounded-md text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#E8432E] border-2 cursor-pointer transition-all duration-150 ${
                   isDarkMode 
                     ? 'bg-[#241D17] text-[#F7F4EB] border-[#3D332A]' 
@@ -155,7 +156,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
                 className={`block mb-1.5 font-bold text-xs uppercase tracking-wider ${
                   isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
                 }`}
-                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               >
                 Tempo (BPM)
               </label>
@@ -165,7 +166,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
                 max={250}
                 value={bpm}
                 onChange={(e) => setBpm(Number(e.target.value))}
-                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                 className={`w-full px-3.5 py-2.5 min-h-[44px] rounded-md text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#E8432E] border-2 transition-all duration-150 ${
                   isDarkMode 
                     ? 'bg-[#241D17] text-[#F7F4EB] border-[#3D332A]' 
@@ -185,7 +186,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
                 triggerHaptic(10);
                 onClose();
               }}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               className={`px-4 py-2.5 min-h-[44px] text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 border-2 ${
                 isDarkMode 
                   ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
@@ -197,7 +198,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
             <button
               type="submit"
               disabled={!title.trim()}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               className="px-5 py-2.5 min-h-[44px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] text-xs font-bold rounded-md flex items-center justify-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 disabled:opacity-50 cursor-pointer uppercase tracking-wider border-2 border-[#171310]"
             >
               <Plus size={15} />

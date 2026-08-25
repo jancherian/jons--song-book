@@ -18,6 +18,7 @@ import { SectionTypePickerModal } from './SectionTypePickerModal';
 import { NashvilleNumberPad } from './NashvilleNumberPad';
 import { LogoMark } from './LogoMark';
 import { triggerHaptic } from '../utils/haptics';
+import { MONO_FONT_STACK } from '../utils/typography';
 
 interface SongEditorProps {
   song: Song;
@@ -318,7 +319,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
               className={`font-mono text-sm sm:text-base md:text-lg font-bold tracking-tight truncate ${
                 isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
               }`}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             >
               {song.title || 'Untitled Chart'}
             </h1>
@@ -380,7 +381,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
               triggerHaptic(20);
               onLaunchPerformance();
             }}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             className="px-3.5 sm:px-4 py-2 min-h-[40px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono font-bold text-xs rounded-md flex items-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 border-[#E8432E]"
           >
             <Play size={12} className="fill-current" />
@@ -398,7 +399,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             className={`font-mono text-xs font-bold uppercase tracking-wider block ${
               isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'
             }`}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
           >
             Chart Title
           </label>
@@ -407,7 +408,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             value={song.title}
             onChange={(e) => mutateSong(s => ({ ...s, title: e.target.value }))}
             placeholder="Enter chart title..."
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             className={`font-mono text-2xl sm:text-4xl font-bold bg-transparent w-full focus:outline-none tracking-tight ${
               isDarkMode 
                 ? 'text-[#F7F4EB] placeholder:text-[#A89C8E]/30' 
@@ -424,7 +425,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                 ? 'bg-[#1A1512] border-[#3A332C] text-[#F7F4EB]' 
                 : 'bg-white border-[#171310] text-[#171310]'
             }`}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
           >
             <span className={`uppercase ${isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'}`}>Key:</span>
             <select
@@ -451,7 +452,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                 ? 'bg-[#1A1512] border-[#3A332C] text-[#F7F4EB]' 
                 : 'bg-white border-[#171310] text-[#171310]'
             }`}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
           >
             <span className={`uppercase ${isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'}`}>BPM:</span>
             <input
@@ -472,7 +473,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                 ? 'bg-[#1A1512] border-[#3A332C] text-[#F7F4EB]' 
                 : 'bg-white border-[#171310] text-[#171310]'
             }`}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
           >
             <span className={`uppercase ${isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'}`}>Time:</span>
             <select
@@ -501,7 +502,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
               className={`font-mono font-bold uppercase shrink-0 ${
                 isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'
               }`}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             >
               Artist:
             </span>
@@ -538,7 +539,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <span 
                       className="font-mono text-xs font-black bg-[#D9A62E] text-[#100D0A] px-2 py-0.5 rounded border border-[#171310] shrink-0"
-                      style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 900 }}
+                      style={{ fontFamily: MONO_FONT_STACK, fontWeight: 900 }}
                     >
                       {formattedSecIndex}
                     </span>
@@ -548,7 +549,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                           ? 'bg-[#241D17] text-[#F7F4EB] border-[#3D332A]' 
                           : 'bg-[#171310] text-[#F7F4EB] border-[#171310]'
                       }`}
-                      style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                      style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                     >
                       {section.type}
                     </span>
@@ -563,7 +564,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                         }));
                       }}
                       placeholder="Custom label"
-                      style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                      style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                       className={`font-mono text-sm font-bold bg-transparent rounded px-2 py-0.5 focus:outline-none transition-colors min-w-0 truncate border flex-1 max-w-xs ${
                         isDarkMode 
                           ? 'text-[#F7F4EB] hover:bg-[#241D17] focus:bg-[#241D17] border-transparent focus:border-[#3A332C]' 
@@ -602,7 +603,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                     <button
                       type="button"
                       onClick={() => handleAddLine(section.id)}
-                      style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                      style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                       className={`px-3 py-2 min-h-[36px] rounded-md font-mono text-xs font-bold transition-all duration-150 hover:scale-105 active:scale-95 ml-1 uppercase border flex items-center justify-center ${
                         isDarkMode 
                           ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
@@ -651,7 +652,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                               <button
                                 type="button"
                                 onClick={() => handleSelectChordSlot(section.id, line.id, cIdx)}
-                                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                                style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                                 className={`min-w-[54px] sm:min-w-[64px] px-3.5 h-12 sm:h-14 min-h-[44px] rounded-md flex items-center justify-center font-mono font-bold select-none transition-all duration-150 cursor-pointer border-2 ${getChordTextSize(chord)} ${
                                   isSelected 
                                     ? 'bg-[#E8432E] text-[#F7F4EB] hover:bg-[#E8432E] scale-105 border-[#E8432E]' 
@@ -686,7 +687,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                         <button
                           type="button"
                           onClick={() => handleAddChordSlotToLine(section.id, line.id)}
-                          style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                          style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                           className={`w-12 h-12 sm:w-14 sm:h-14 min-w-[44px] min-h-[44px] rounded-md font-mono font-bold text-xl flex items-center justify-center transition-all duration-150 flex-none cursor-pointer border-2 hover:scale-105 active:scale-95 ${
                             isDarkMode 
                               ? 'bg-[#2E2520] hover:bg-[#3D332A] text-[#F7F4EB] border-[#3D332A]' 
@@ -743,7 +744,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
               triggerHaptic(15);
               setIsSectionPickerOpen(true);
             }}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             className={`px-6 py-3.5 min-h-[48px] font-mono text-xs sm:text-sm font-bold rounded-md inline-flex items-center justify-center gap-2 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 ${
               isDarkMode 
                 ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 

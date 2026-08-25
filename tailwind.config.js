@@ -8,8 +8,18 @@ module.exports = {
     extend: {
       fontFamily: {
         display: ['"Big Shoulders Display"', 'Anton', '"Archivo Black"', 'sans-serif'],
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        mono: ['"JetBrains Mono"', '"IBM Plex Mono"', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        mono: [
+          '"JetBrains Mono"',
+          '"IBM Plex Mono"',
+          '"Cascadia Code"',
+          '"Segoe UI Mono"',
+          'Consolas',
+          '"Roboto Mono"',
+          '"SF Mono"',
+          'ui-monospace',
+          'monospace',
+        ],
       },
       colors: {
         paper: '#F7F4EB',

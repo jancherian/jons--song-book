@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import type { Song } from '../types/song';
 import { triggerHaptic } from '../utils/haptics';
+import { MONO_FONT_STACK } from '../utils/typography';
 
 interface SongCardProps {
   song: Song;
@@ -28,6 +29,9 @@ export const SongCard: React.FC<SongCardProps> = ({
 }) => {
   const isDarkMode = theme === 'dark';
   const totalSections = song.sections.length;
+  const maxVisibleBadges = 4;
+  const visibleSections = song.sections.slice(0, maxVisibleBadges);
+  const remainingCount = song.sections.length - maxVisibleBadges;
 
   return (
     <div
@@ -48,12 +52,12 @@ export const SongCard: React.FC<SongCardProps> = ({
       {/* Top Row: Left-Anchored Monospace Title + Favorite Star */}
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
-          {/* Song Title as Primary Anchor strictly in Bold Monospace */}
+          {/* Song Title as Primary Anchor strictly in Bold Sans-Serif Monospace */}
           <h4 
             className={`font-mono font-bold text-xl sm:text-2xl tracking-tight truncate group-hover:text-[#E8432E] transition-colors ${
               isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
             }`}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
           >
             {song.title}
           </h4>
@@ -104,39 +108,53 @@ export const SongCard: React.FC<SongCardProps> = ({
         </button>
       </div>
 
-      {/* Section Flow Monospace Tags Row */}
+      {/* Section Flow Monospace Tags Row: Unified Badge+Arrow grouping prevents orphaned arrows on line wrap */}
       {song.sections.length > 0 && (
-        <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+        <div className="flex items-center gap-1.5 flex-wrap pt-0.5 font-mono">
           <span 
-            className={`text-[11px] font-bold uppercase tracking-wider mr-1 font-mono ${
+            className={`text-[11px] font-bold uppercase tracking-wider mr-0.5 ${
               isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'
             }`}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
           >
             Flow:
           </span>
-          {song.sections.map((sec, idx) => (
-            <React.Fragment key={sec.id}>
+          {visibleSections.map((sec, idx) => (
+            <div key={sec.id} className="inline-flex items-center gap-1.5 shrink-0">
               <span 
-                className={`font-mono text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wide border ${
+                className={`text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wide border ${
                   isDarkMode 
                     ? 'bg-[#241D17] text-[#F7F4EB] border-[#3D332A]' 
                     : 'bg-white text-[#171310] border-[#171310]/30'
                 }`}
-                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               >
                 {sec.type}
               </span>
-              {idx < song.sections.length - 1 && (
+              {(idx < visibleSections.length - 1 || remainingCount > 0) && (
                 <span 
-                  className={`text-xs font-bold font-mono ${isDarkMode ? 'text-[#A89C8E]/50' : 'text-[#171310]/40'}`}
-                  style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                  className={`text-xs font-bold ${isDarkMode ? 'text-[#A89C8E]/50' : 'text-[#171310]/40'}`}
+                  style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                 >
                   →
                 </span>
               )}
-            </React.Fragment>
+            </div>
           ))}
+
+          {/* Graceful overflow count badge */}
+          {remainingCount > 0 && (
+            <span 
+              className={`text-[11px] font-bold px-2 py-0.5 rounded border ${
+                isDarkMode 
+                  ? 'bg-[#241D17] text-[#A89C8E] border-[#3D332A]' 
+                  : 'bg-[#F3EFE3] text-[#171310]/60 border-[#171310]/20'
+              }`}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
+            >
+              +{remainingCount} more
+            </span>
+          )}
         </div>
       )}
 
@@ -153,7 +171,7 @@ export const SongCard: React.FC<SongCardProps> = ({
               triggerHaptic(20);
               onPerformSong(song);
             }}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             className={`px-4 py-2.5 min-h-[44px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono font-bold text-xs rounded-md flex items-center gap-2 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wide border ${
               isDarkMode ? 'border-[#E8432E]' : 'border-[#171310]'
             }`}
@@ -186,7 +204,7 @@ export const SongCard: React.FC<SongCardProps> = ({
           className={`flex items-center gap-1 font-mono text-xs font-bold group-hover:text-[#E8432E] transition-colors uppercase ${
             isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/70'
           }`}
-          style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+          style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
         >
           <span>EDIT CHART</span>
           <ArrowRight size={13} className="text-[#E8432E] group-hover:translate-x-0.5 transition-transform" />

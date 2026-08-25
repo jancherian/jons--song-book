@@ -13,6 +13,7 @@ import { NewSongModal } from './NewSongModal';
 import { SongCard } from './SongCard';
 import { LogoMark } from './LogoMark';
 import { triggerHaptic } from '../utils/haptics';
+import { MONO_FONT_STACK, DISPLAY_FONT_STACK } from '../utils/typography';
 
 interface HomeScreenProps {
   songs: Song[];
@@ -79,7 +80,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             className={`font-mono text-lg sm:text-xl font-bold tracking-tight truncate ${
               isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
             }`}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
           >
             Chordset
           </h1>
@@ -121,7 +122,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               className={`font-display font-black text-4xl sm:text-5xl md:text-6xl tracking-tight leading-none uppercase ${
                 isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
               }`}
-              style={{ fontFamily: "'Big Shoulders Display', Anton, 'Archivo Black', sans-serif", fontWeight: 900 }}
+              style={{ fontFamily: DISPLAY_FONT_STACK, fontWeight: 900 }}
             >
               My Songs
             </h2>
@@ -134,7 +135,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                   ? 'bg-[#1A1512] text-[#F7F4EB] border-[#3A332C]' 
                   : 'bg-white text-[#171310] border-[#171310]'
               }`}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             >
               {songs.length} {songs.length === 1 ? 'CHART' : 'CHARTS'}
             </span>
@@ -185,7 +186,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               className={`font-mono text-xs font-bold uppercase tracking-wider ${
                 isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/70'
               }`}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace" }}
+              style={{ fontFamily: MONO_FONT_STACK }}
             >
               Showing {filteredSongs.length} of {songs.length}
             </span>
@@ -199,7 +200,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 triggerHaptic(10);
                 setActiveFilter('all');
               }}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               className={`px-3.5 py-2 min-h-[44px] rounded-md font-bold transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer border-2 flex items-center justify-center ${
                 activeFilter === 'all'
                   ? isDarkMode 
@@ -218,7 +219,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 triggerHaptic(10);
                 setActiveFilter('favorites');
               }}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               className={`px-3.5 py-2 min-h-[44px] rounded-md font-bold transition-all duration-150 hover:scale-105 active:scale-95 flex items-center justify-center gap-1 cursor-pointer border-2 ${
                 activeFilter === 'favorites'
                   ? 'bg-[#E8432E] text-[#F7F4EB] border-[#E8432E]'
@@ -250,7 +251,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               <div className="space-y-1">
                 <h4 
                   className="font-mono font-bold text-base"
-                  style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                  style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                 >
                   No charts match your filter
                 </h4>
@@ -261,7 +262,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               <button
                 type="button"
                 onClick={handleOpenCreateModal}
-                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                 className={`px-5 py-3 min-h-[44px] bg-[#E8432E] text-[#F7F4EB] hover:bg-[#D03522] font-mono text-xs font-bold rounded-md inline-flex items-center justify-center gap-2 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 ${
                   isDarkMode ? 'border-[#E8432E]' : 'border-[#171310]'
                 }`}
@@ -334,7 +335,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               </div>
               <h3 
                 className="font-mono text-lg font-bold"
-                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               >
                 Delete chart?
               </h3>
@@ -348,7 +349,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               <button
                 type="button"
                 onClick={() => setSongToDelete(null)}
-                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                 className={`px-4 py-2.5 min-h-[44px] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 border-2 ${
                   isDarkMode 
                     ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
@@ -364,7 +365,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                   onDeleteSong(songToDelete);
                   setSongToDelete(null);
                 }}
-                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                 className="px-4 py-2.5 min-h-[44px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 uppercase tracking-wider border-2 border-[#E8432E]"
               >
                 Confirm delete

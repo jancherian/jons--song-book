@@ -12,6 +12,7 @@ import type { Song } from '../types/song';
 import { MAJOR_KEYS, convertNashvilleToLetter } from '../utils/nashville';
 import { LogoMark } from './LogoMark';
 import { triggerHaptic } from '../utils/haptics';
+import { MONO_FONT_STACK } from '../utils/typography';
 
 interface PerformanceModeProps {
   song: Song;
@@ -135,7 +136,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
             <div className="min-w-0">
               <h1 
                 className="font-mono text-sm sm:text-base md:text-lg font-bold truncate tracking-tight"
-                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               >
                 {song.title}
               </h1>
@@ -156,7 +157,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
               triggerHaptic(15);
               onExit();
             }}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             className={`sm:hidden px-3.5 py-1.5 min-h-[40px] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border flex items-center justify-center ${
               isDarkMode 
                 ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
@@ -198,7 +199,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                 triggerHaptic(10);
                 setDisplayMode('nashville');
               }}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               className={`px-3 py-1.5 min-h-[34px] rounded transition-all duration-150 text-[11px] sm:text-xs flex items-center justify-center ${
                 displayMode === 'nashville'
                   ? 'bg-[#E8432E] text-[#F7F4EB]'
@@ -213,7 +214,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                 triggerHaptic(10);
                 setDisplayMode('letters');
               }}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               className={`px-3 py-1.5 min-h-[34px] rounded transition-all duration-150 text-[11px] sm:text-xs flex items-center justify-center ${
                 displayMode === 'letters'
                   ? 'bg-[#E8432E] text-[#F7F4EB]'
@@ -231,7 +232,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                 triggerHaptic(10);
                 setStageKey(e.target.value);
               }}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               className={`px-2.5 py-1.5 min-h-[40px] rounded-md text-[11px] sm:text-xs font-mono font-bold focus:outline-none cursor-pointer shrink-0 border ${
                 isDarkMode 
                   ? 'bg-[#241D17] text-[#F7F4EB] border-[#3D332A]' 
@@ -285,7 +286,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
               triggerHaptic(20);
               setIsAutoScrolling(!isAutoScrolling);
             }}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             className="px-3.5 sm:px-4 py-2 min-h-[40px] rounded-md text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] border border-[#E8432E]"
             title={isAutoScrolling ? 'Pause auto-scroll' : 'Start auto-scroll'}
           >
@@ -300,7 +301,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
               triggerHaptic(15);
               onExit();
             }}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             className={`hidden sm:inline-flex px-4 py-2 min-h-[40px] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border items-center justify-center ${
               isDarkMode 
                 ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
@@ -328,7 +329,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                 <div className="flex items-baseline gap-2.5">
                   <span 
                     className="font-mono text-xs font-black bg-[#D9A62E] text-[#100D0A] px-2 py-0.5 rounded border border-[#171310] shrink-0"
-                    style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 900 }}
+                    style={{ fontFamily: MONO_FONT_STACK, fontWeight: 900 }}
                   >
                     {formattedSecIndex}
                   </span>
@@ -338,7 +339,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                         ? 'text-[#F7F4EB] bg-[#241D17] border-[#3D332A]' 
                         : 'text-[#171310] bg-white border-[#D9D2C0]'
                     }`}
-                    style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                    style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                   >
                     {section.label || section.type}
                   </span>
@@ -379,7 +380,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                                 {/* Chord Text */}
                                 <span
                                   style={{ 
-                                    fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", 
+                                    fontFamily: MONO_FONT_STACK, 
                                     fontWeight: 700,
                                     lineHeight: 1,
                                     verticalAlign: 'baseline',

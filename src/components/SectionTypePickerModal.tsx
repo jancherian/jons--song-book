@@ -3,6 +3,7 @@ import { X, Plus } from 'lucide-react';
 import type { SectionType } from '../types/song';
 import { SECTION_TYPES } from '../utils/nashville';
 import { triggerHaptic } from '../utils/haptics';
+import { MONO_FONT_STACK } from '../utils/typography';
 
 interface SectionTypePickerModalProps {
   isOpen: boolean;
@@ -45,7 +46,7 @@ export const SectionTypePickerModal: React.FC<SectionTypePickerModalProps> = ({
         <div>
           <span 
             className="font-mono text-xs font-bold uppercase tracking-wider text-[#E8432E] block mb-1"
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
           >
             Section Selector
           </span>
@@ -53,7 +54,7 @@ export const SectionTypePickerModal: React.FC<SectionTypePickerModalProps> = ({
             className={`font-mono text-xl sm:text-2xl font-bold tracking-tight ${
               isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
             }`}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
           >
             Add Section Type
           </h3>
@@ -78,7 +79,7 @@ export const SectionTypePickerModal: React.FC<SectionTypePickerModalProps> = ({
               <div className="flex items-center gap-2.5">
                 <span 
                   className="font-mono text-xs font-black bg-[#D9A62E] text-[#100D0A] px-2 py-0.5 rounded border border-[#171310] group-hover:bg-[#F7F4EB]"
-                  style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 900 }}
+                  style={{ fontFamily: MONO_FONT_STACK, fontWeight: 900 }}
                 >
                   {String(idx + 1).padStart(2, '0')}
                 </span>
@@ -86,7 +87,7 @@ export const SectionTypePickerModal: React.FC<SectionTypePickerModalProps> = ({
                   className={`text-xs font-bold uppercase tracking-wider group-hover:text-[#F7F4EB] ${
                     isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
                   }`}
-                  style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                  style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                 >
                   {sec.type}
                 </span>

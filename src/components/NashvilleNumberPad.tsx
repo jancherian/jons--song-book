@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { applyKeypadInput } from '../utils/nashville';
 import { triggerHaptic } from '../utils/haptics';
+import { MONO_FONT_STACK } from '../utils/typography';
 
 interface NashvilleNumberPadProps {
   currentChord: string;
@@ -59,7 +60,7 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
         <div className="flex items-center gap-2.5 min-w-0">
           <div 
             className="w-9 h-9 min-w-[36px] bg-[#D9A62E] text-[#100D0A] rounded border border-[#171310] flex items-center justify-center font-black text-xs shrink-0"
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 900 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 900 }}
           >
             #{slotIndex !== undefined ? slotIndex + 1 : '1'}
           </div>
@@ -73,7 +74,7 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
               className={`text-xl sm:text-2xl font-bold truncate ${
                 isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
               }`}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             >
               {currentChord || <span className={`${isDarkMode ? 'text-[#A89C8E]/40' : 'text-[#171310]/30'} font-normal italic font-sans`}>(Empty)</span>}
             </span>
@@ -123,7 +124,7 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
                 triggerHaptic(15);
                 onAddNewSlot();
               }}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               title="Add chord slot"
               className="px-3.5 py-2 min-h-[44px] rounded-md bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-bold flex items-center justify-center gap-1 text-xs transition-all duration-150 hover:scale-105 active:scale-95 uppercase border-2 border-[#E8432E]"
             >
@@ -176,7 +177,7 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
               key={num}
               type="button"
               onClick={() => handleKeyClick(num)}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               className={`rounded-md font-bold text-xl sm:text-2xl h-12 sm:h-14 min-h-[44px] flex items-center justify-center transition-all duration-150 cursor-pointer border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${
                 isDarkMode 
                   ? 'bg-[#1A1512] hover:bg-[#241D17] text-[#F7F4EB] border-[#3D332A]' 
@@ -195,7 +196,7 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
               key={mod}
               type="button"
               onClick={() => handleKeyClick(mod)}
-              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
               className={`rounded-md font-bold text-sm sm:text-base h-11 min-h-[44px] flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${
                 isDarkMode 
                   ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' 
@@ -210,7 +211,7 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
           <button 
             type="button" 
             onClick={() => handleKeyClick('/')} 
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }} 
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} 
             className={`rounded-md font-bold text-base sm:text-lg h-11 min-h-[44px] flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${
               isDarkMode 
                 ? 'bg-[#2E2314] hover:bg-[#3D2F1A] text-[#D9A62E] border-[#3D332A]' 
@@ -220,23 +221,23 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
             /
           </button>
           
-          <button type="button" onClick={() => handleKeyClick('M7')} style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] hidden sm:flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>M7</button>
-          <button type="button" onClick={() => handleKeyClick('m7')} style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] hidden sm:flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>m7</button>
+          <button type="button" onClick={() => handleKeyClick('M7')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] hidden sm:flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>M7</button>
+          <button type="button" onClick={() => handleKeyClick('m7')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] hidden sm:flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>m7</button>
         </div>
 
         {/* Row 3: Extensions & Backspace */}
         <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5 sm:gap-2">
-          <button type="button" onClick={() => handleKeyClick('M7')} style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }} className={`rounded-md font-bold text-xs h-11 min-h-[44px] sm:hidden flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>M7</button>
-          <button type="button" onClick={() => handleKeyClick('m7')} style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }} className={`rounded-md font-bold text-xs h-11 min-h-[44px] sm:hidden flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>m7</button>
-          <button type="button" onClick={() => handleKeyClick('sus4')} style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>sus4</button>
-          <button type="button" onClick={() => handleKeyClick('sus2')} style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>sus2</button>
-          <button type="button" onClick={() => handleKeyClick('2')} style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] hidden sm:flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>add9</button>
+          <button type="button" onClick={() => handleKeyClick('M7')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs h-11 min-h-[44px] sm:hidden flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>M7</button>
+          <button type="button" onClick={() => handleKeyClick('m7')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs h-11 min-h-[44px] sm:hidden flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>m7</button>
+          <button type="button" onClick={() => handleKeyClick('sus4')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>sus4</button>
+          <button type="button" onClick={() => handleKeyClick('sus2')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>sus2</button>
+          <button type="button" onClick={() => handleKeyClick('2')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] hidden sm:flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>add9</button>
           
           {/* Bold Backspace Key with 44px min height */}
           <button
             type="button"
             onClick={() => handleKeyClick('⌫')}
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             className={`rounded-md col-span-2 sm:col-span-2 h-11 min-h-[44px] font-bold text-xs flex items-center justify-center gap-1.5 transition-all duration-150 cursor-pointer uppercase border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${
               isDarkMode 
                 ? 'bg-red-950/40 hover:bg-red-900/50 text-[#E8432E] border-[#3D332A]' 
