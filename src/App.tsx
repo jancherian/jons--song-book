@@ -17,6 +17,7 @@ export default function App() {
   const [songs, setSongs] = useState<Song[]>(() => getStoredSongs());
   const [currentView, setCurrentView] = useState<AppView>('home');
   const [activeSong, setActiveSong] = useState<Song | null>(null);
+  const [performanceReturnView, setPerformanceReturnView] = useState<'home' | 'editor'>('home');
 
   // Global Theme State: Default to saved preference or system preference
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -67,9 +68,19 @@ export default function App() {
     setCurrentView('editor');
   };
 
-  const handlePerformSong = (song: Song) => {
+  const handlePerformSongFromHome = (song: Song) => {
     setActiveSong(song);
+    setPerformanceReturnView('home');
     setCurrentView('performance');
+  };
+
+  const handlePerformSongFromEditor = () => {
+    setPerformanceReturnView('editor');
+    setCurrentView('performance');
+  };
+
+  const handleExitPerformance = () => {
+    setCurrentView(performanceReturnView);
   };
 
   const handleCreateSong = (title: string, artist: string, key: string, bpm: number) => {
@@ -164,7 +175,7 @@ export default function App() {
           theme={theme}
           onToggleTheme={toggleTheme}
           onSelectSong={handleSelectSong}
-          onPerformSong={handlePerformSong}
+          onPerformSong={handlePerformSongFromHome}
           onToggleFavorite={handleToggleFavorite}
           onCreateSong={handleCreateSong}
           onDeleteSong={handleDeleteSong}
@@ -178,7 +189,7 @@ export default function App() {
           onToggleTheme={toggleTheme}
           onUpdateSong={handleUpdateSong}
           onBack={() => setCurrentView('home')}
-          onLaunchPerformance={() => setCurrentView('performance')}
+          onLaunchPerformance={handlePerformSongFromEditor}
           onToggleFavorite={handleToggleFavorite}
         />
       )}
@@ -188,7 +199,7 @@ export default function App() {
           song={activeSong}
           theme={theme}
           onToggleTheme={toggleTheme}
-          onExit={() => setCurrentView('editor')}
+          onExit={handleExitPerformance}
         />
       )}
     </div>
