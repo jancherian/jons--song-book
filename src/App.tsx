@@ -9,6 +9,7 @@ import {
 import { HomeScreen } from './components/HomeScreen';
 import { SongEditor } from './components/SongEditor';
 import { PerformanceMode } from './components/PerformanceMode';
+import { triggerHaptic } from './utils/haptics';
 
 type AppView = 'home' | 'editor' | 'performance';
 
@@ -16,6 +17,42 @@ export default function App() {
   const [songs, setSongs] = useState<Song[]>(() => getStoredSongs());
   const [currentView, setCurrentView] = useState<AppView>('home');
   const [activeSong, setActiveSong] = useState<Song | null>(null);
+
+  // Global Theme State: Default to saved preference or system preference
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    try {
+      const saved = localStorage.getItem('chordset_theme') || localStorage.getItem('chordset_stage_theme');
+      if (saved === 'light' || saved === 'dark') return saved;
+      if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+    } catch {
+      // fallback
+    }
+    return 'light';
+  });
+
+  // Sync theme changes to localStorage and HTML document element
+  useEffect(() => {
+    try {
+      localStorage.setItem('chordset_theme', theme);
+      localStorage.setItem('chordset_stage_theme', theme);
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.colorScheme = 'dark';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.style.colorScheme = 'light';
+      }
+    } catch {
+      // ignore storage errors
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    triggerHaptic(15);
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   // Sync state if storage changes
   useEffect(() => {
@@ -115,11 +152,17 @@ export default function App() {
     }
   };
 
+  const isDarkMode = theme === 'dark';
+
   return (
-    <div className="min-h-screen chart-grid-bg bg-[#F7F4EB] text-[#171310] font-sans selection:bg-[#E8432E] selection:text-[#F7F4EB]">
+    <div className={`min-h-screen font-sans selection:bg-[#E8432E] selection:text-[#F7F4EB] transition-colors duration-200 ${
+      isDarkMode ? 'chart-grid-bg-dark bg-[#100D0A] text-[#F7F4EB]' : 'chart-grid-bg-light bg-[#F7F4EB] text-[#171310]'
+    }`}>
       {currentView === 'home' && (
         <HomeScreen
           songs={songs}
+          theme={theme}
+          onToggleTheme={toggleTheme}
           onSelectSong={handleSelectSong}
           onPerformSong={handlePerformSong}
           onToggleFavorite={handleToggleFavorite}
@@ -131,6 +174,8 @@ export default function App() {
       {currentView === 'editor' && activeSong && (
         <SongEditor
           song={activeSong}
+          theme={theme}
+          onToggleTheme={toggleTheme}
           onUpdateSong={handleUpdateSong}
           onBack={() => setCurrentView('home')}
           onLaunchPerformance={() => setCurrentView('performance')}
@@ -141,6 +186,8 @@ export default function App() {
       {currentView === 'performance' && activeSong && (
         <PerformanceMode
           song={activeSong}
+          theme={theme}
+          onToggleTheme={toggleTheme}
           onExit={() => setCurrentView('editor')}
         />
       )}

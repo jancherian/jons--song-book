@@ -15,44 +15,24 @@ import { triggerHaptic } from '../utils/haptics';
 
 interface PerformanceModeProps {
   song: Song;
+  theme?: 'light' | 'dark';
+  onToggleTheme?: () => void;
   onExit: () => void;
 }
 
 export const PerformanceMode: React.FC<PerformanceModeProps> = ({
   song,
+  theme = 'dark',
+  onToggleTheme,
   onExit,
 }) => {
+  const isDarkMode = theme === 'dark';
   const [fontSizeLevel, setFontSizeLevel] = useState<'normal' | 'large' | 'xlarge'>('large');
   const [displayMode, setDisplayMode] = useState<'nashville' | 'letters'>('nashville');
   const [stageKey, setStageKey] = useState<string>(song.key || 'G');
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const [scrollSpeed, setScrollSpeed] = useState(1);
   const [activeLineId, setActiveLineId] = useState<string | null>(null);
-  
-  // Persistent Light / Dark Mode Toggle
-  const [themeMode, setThemeMode] = useState<'dark' | 'light'>(() => {
-    try {
-      const saved = localStorage.getItem('chordset_stage_theme');
-      return saved === 'light' || saved === 'dark' ? saved : 'dark';
-    } catch {
-      return 'dark';
-    }
-  });
-
-  const toggleTheme = () => {
-    triggerHaptic(15);
-    setThemeMode((prev) => {
-      const next = prev === 'dark' ? 'light' : 'dark';
-      try {
-        localStorage.setItem('chordset_stage_theme', next);
-      } catch {
-        // localStorage not available
-      }
-      return next;
-    });
-  };
-
-  const isDarkMode = themeMode === 'dark';
 
   const scrollIntervalRef = useRef<number | null>(null);
   const lineElementsRef = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -151,7 +131,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
             >
               <ArrowLeft size={18} />
             </button>
-            <LogoMark size={26} theme={isDarkMode ? 'dark' : 'light'} />
+            <LogoMark size={26} theme={theme} />
             <div className="min-w-0">
               <h1 
                 className="font-mono text-sm sm:text-base md:text-lg font-bold truncate tracking-tight"
@@ -190,20 +170,23 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
 
         {/* Row 2 on Mobile / Right Tools on Desktop */}
         <div className="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2 text-xs w-full sm:w-auto overflow-x-auto pb-0.5 sm:pb-0 font-mono font-bold">
-          {/* Light / Dark Mode Toggle */}
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className={`p-2 min-h-[40px] sm:px-3 sm:py-2 rounded-md flex items-center justify-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border ${
-              isDarkMode 
-                ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
-                : 'bg-white hover:bg-[#F3EFE3] text-[#171310] border-[#D9D2C0]'
-            }`}
-            title={isDarkMode ? 'Switch to Light paper mode' : 'Switch to Dark stage mode'}
-          >
-            {isDarkMode ? <Sun size={15} className="text-[#D9A62E]" /> : <Moon size={15} className="text-[#171310]" />}
-            <span className="hidden md:inline text-[11px] uppercase font-bold">{isDarkMode ? 'LIGHT' : 'DARK'}</span>
-          </button>
+          {/* Global Light / Dark Mode Toggle */}
+          {onToggleTheme && (
+            <button
+              type="button"
+              onClick={onToggleTheme}
+              className={`p-2 min-h-[40px] sm:px-3 sm:py-2 rounded-md flex items-center justify-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border ${
+                isDarkMode 
+                  ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
+                  : 'bg-white hover:bg-[#F3EFE3] text-[#171310] border-[#D9D2C0]'
+              }`}
+              title={isDarkMode ? 'Switch to Light paper mode' : 'Switch to Dark stage mode'}
+              aria-label="Toggle light/dark theme"
+            >
+              {isDarkMode ? <Sun size={15} className="text-[#D9A62E]" /> : <Moon size={15} className="text-[#171310]" />}
+              <span className="hidden md:inline text-[11px] uppercase font-bold">{isDarkMode ? 'LIGHT' : 'DARK'}</span>
+            </button>
+          )}
 
           {/* Nashville ↔ Letters Toggle */}
           <div className={`flex items-center rounded-md p-0.5 min-h-[40px] shrink-0 border ${
@@ -330,7 +313,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
         </div>
       </header>
 
-      {/* Main Content Area: Generous top padding (pt-36 on mobile, pt-28 on desktop) prevents any sticky toolbar overlap */}
+      {/* Main Content Area */}
       <main className="max-w-4xl mx-auto px-4 sm:px-10 pt-36 sm:pt-28 md:pt-24 w-full max-w-full overflow-x-hidden">
         <div className={`relative pl-4 sm:pl-7 border-l ml-1 sm:ml-3 space-y-8 sm:space-y-10 transition-colors ${
           isDarkMode ? 'border-[#2A2420]' : 'border-[#D9D2C0]'
@@ -393,7 +376,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
 
                             return (
                               <div key={cIdx} className="inline-flex items-baseline gap-5 sm:gap-8">
-                                {/* Chord Text: Entire label (root + modifier) renders in single bold monospace font & uniform baseline */}
+                                {/* Chord Text */}
                                 <span
                                   style={{ 
                                     fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", 
@@ -426,7 +409,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                           })}
                         </div>
 
-                        {/* Lyrics / Annotations: Warm gray, italic, Inter beneath chord line */}
+                        {/* Lyrics / Annotations */}
                         {line.lyrics ? (
                           <p className={`font-sans italic font-normal leading-relaxed pt-0.5 ${lyricsSizeClasses[fontSizeLevel]} ${
                             isDarkMode ? 'text-[#A89C8E]' : 'text-[#7A6E62]'

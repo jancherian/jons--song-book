@@ -8,7 +8,9 @@ import {
   ChevronUp, 
   ChevronDown, 
   AlignLeft,
-  X
+  X,
+  Sun,
+  Moon
 } from 'lucide-react';
 import type { Song, SongSection, SongLine, SectionType, SelectedChordSlot } from '../types/song';
 import { MAJOR_KEYS } from '../utils/nashville';
@@ -19,6 +21,8 @@ import { triggerHaptic } from '../utils/haptics';
 
 interface SongEditorProps {
   song: Song;
+  theme?: 'light' | 'dark';
+  onToggleTheme?: () => void;
   onUpdateSong: (updatedSong: Song) => void;
   onBack: () => void;
   onLaunchPerformance: () => void;
@@ -27,11 +31,14 @@ interface SongEditorProps {
 
 export const SongEditor: React.FC<SongEditorProps> = ({
   song,
+  theme = 'light',
+  onToggleTheme,
   onUpdateSong,
   onBack,
   onLaunchPerformance,
   onToggleFavorite,
 }) => {
+  const isDarkMode = theme === 'dark';
   const [isSectionPickerOpen, setIsSectionPickerOpen] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState<SelectedChordSlot | null>(null);
 
@@ -276,11 +283,15 @@ export const SongEditor: React.FC<SongEditorProps> = ({
   };
 
   return (
-    <div className="min-h-screen chart-grid-bg text-[#171310] font-sans pb-72 relative w-full max-w-full overflow-x-hidden">
+    <div className={`min-h-screen pb-72 relative w-full max-w-full overflow-x-hidden transition-colors duration-200 ${
+      isDarkMode ? 'chart-grid-bg-dark text-[#F7F4EB]' : 'chart-grid-bg-light text-[#171310]'
+    }`}>
       
-      {/* Sticky Top Header: Streamlined for mobile with maximum room for song title */}
-      <header className="sticky top-0 z-40 bg-[#F7F4EB]/95 border-b-2 border-[#171310] px-3 sm:px-6 h-16 flex items-center justify-between gap-2.5 w-full max-w-full">
-        {/* Left: Back button + Song title (takes priority) */}
+      {/* Sticky Top Header: Streamlined for mobile with maximum room for song title & global theme switch */}
+      <header className={`sticky top-0 z-40 px-3 sm:px-6 h-16 flex items-center justify-between gap-2.5 w-full max-w-full border-b-2 backdrop-blur-md transition-colors duration-200 ${
+        isDarkMode ? 'bg-[#100D0A]/95 border-[#3A332C]' : 'bg-[#F7F4EB]/95 border-[#171310]'
+      }`}>
+        {/* Left: Back button + Song title */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
           <button
             type="button"
@@ -288,33 +299,58 @@ export const SongEditor: React.FC<SongEditorProps> = ({
               triggerHaptic(15);
               onBack();
             }}
-            className="p-2 min-w-[40px] min-h-[40px] rounded-md hover:bg-white text-[#171310] transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border-2 border-[#171310] flex items-center justify-center"
+            className={`p-2 min-w-[40px] min-h-[40px] rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border-2 flex items-center justify-center ${
+              isDarkMode 
+                ? 'bg-[#1A1512] hover:bg-[#241D17] text-[#F7F4EB] border-[#3A332C]' 
+                : 'bg-white hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'
+            }`}
             title="Back to Songs"
           >
             <ArrowLeft size={18} />
           </button>
 
           <div className="hidden sm:flex shrink-0">
-            <LogoMark size={26} />
+            <LogoMark size={26} theme={theme} />
           </div>
 
           <div className="min-w-0 flex-1">
             <h1 
-              className="font-mono text-sm sm:text-base md:text-lg font-bold text-[#171310] tracking-tight truncate"
+              className={`font-mono text-sm sm:text-base md:text-lg font-bold tracking-tight truncate ${
+                isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
+              }`}
               style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
             >
               {song.title || 'Untitled Chart'}
             </h1>
-            <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-[#171310]/60 font-mono font-bold truncate">
-              <span>KEY {song.key || 'G'}</span>
+            <div className={`flex items-center gap-1.5 text-[10px] sm:text-xs font-mono font-bold truncate ${
+              isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'
+            }`}>
+              <span className="text-[#E8432E]">KEY {song.key || 'G'}</span>
               <span>•</span>
               <span>{song.bpm || 80} BPM</span>
             </div>
           </div>
         </div>
 
-        {/* Right: Favorite + Perform CTA (compact on mobile) */}
-        <div className="flex items-center gap-2 shrink-0">
+        {/* Right: Theme Toggle + Favorite + Perform CTA */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Global Theme Toggle */}
+          {onToggleTheme && (
+            <button
+              type="button"
+              onClick={onToggleTheme}
+              className={`p-2 min-w-[38px] min-h-[38px] sm:min-w-[40px] sm:min-h-[40px] rounded-md flex items-center justify-center transition-all duration-150 hover:scale-105 active:scale-95 border-2 ${
+                isDarkMode 
+                  ? 'bg-[#1A1512] hover:bg-[#241D17] text-[#F7F4EB] border-[#3A332C]' 
+                  : 'bg-white hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'
+              }`}
+              title={isDarkMode ? 'Switch to Light paper mode' : 'Switch to Dark mode'}
+              aria-label="Toggle light/dark theme"
+            >
+              {isDarkMode ? <Sun size={16} className="text-[#D9A62E]" /> : <Moon size={16} className="text-[#171310]" />}
+            </button>
+          )}
+
           {/* Favorite Circle Button */}
           <button
             type="button"
@@ -322,10 +358,12 @@ export const SongEditor: React.FC<SongEditorProps> = ({
               triggerHaptic(15);
               onToggleFavorite(song.id);
             }}
-            className={`w-10 h-10 min-w-[40px] min-h-[40px] rounded-full flex items-center justify-center transition-all duration-150 hover:scale-110 active:scale-95 border-2 border-[#171310] ${
+            className={`w-10 h-10 min-w-[40px] min-h-[40px] rounded-full flex items-center justify-center transition-all duration-150 hover:scale-110 active:scale-95 border-2 ${
               song.favorite 
-                ? 'bg-[#E8432E] text-[#F7F4EB]' 
-                : 'bg-white text-[#171310]/40 hover:text-[#E8432E]'
+                ? 'bg-[#E8432E] text-[#F7F4EB] border-[#E8432E]' 
+                : isDarkMode 
+                  ? 'bg-[#1A1512] text-[#A89C8E] hover:text-[#E8432E] border-[#3A332C]' 
+                  : 'bg-white text-[#171310]/40 hover:text-[#E8432E] border-[#171310]'
             }`}
             title={song.favorite ? 'Remove from favorites' : 'Add to favorites'}
           >
@@ -343,7 +381,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
               onLaunchPerformance();
             }}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-            className="px-3.5 sm:px-4 py-2 min-h-[40px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono font-bold text-xs rounded-md flex items-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 border-[#171310]"
+            className="px-3.5 sm:px-4 py-2 min-h-[40px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono font-bold text-xs rounded-md flex items-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 border-[#E8432E]"
           >
             <Play size={12} className="fill-current" />
             <span>PERFORM</span>
@@ -357,7 +395,9 @@ export const SongEditor: React.FC<SongEditorProps> = ({
         {/* Editable Song Title in Bold Monospace */}
         <div className="space-y-1">
           <label 
-            className="font-mono text-xs font-bold uppercase tracking-wider text-[#171310]/60 block"
+            className={`font-mono text-xs font-bold uppercase tracking-wider block ${
+              isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'
+            }`}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
           >
             Chart Title
@@ -368,69 +408,99 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             onChange={(e) => mutateSong(s => ({ ...s, title: e.target.value }))}
             placeholder="Enter chart title..."
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-            className="font-mono text-2xl sm:text-4xl font-bold text-[#171310] bg-transparent w-full focus:outline-none tracking-tight placeholder:text-[#171310]/30"
+            className={`font-mono text-2xl sm:text-4xl font-bold bg-transparent w-full focus:outline-none tracking-tight ${
+              isDarkMode 
+                ? 'text-[#F7F4EB] placeholder:text-[#A89C8E]/30' 
+                : 'text-[#171310] placeholder:text-[#171310]/30'
+            }`}
           />
         </div>
 
         {/* Metadata Controls Strip */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
           <div 
-            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
+            className={`flex items-center gap-1.5 border-2 rounded-md px-3 py-2 min-h-[44px] text-xs font-mono font-bold ${
+              isDarkMode 
+                ? 'bg-[#1A1512] border-[#3A332C] text-[#F7F4EB]' 
+                : 'bg-white border-[#171310] text-[#171310]'
+            }`}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
           >
-            <span className="text-[#171310]/60 uppercase">Key:</span>
+            <span className={`uppercase ${isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'}`}>Key:</span>
             <select
               value={song.key || 'G'}
               onChange={(e) => {
                 triggerHaptic(10);
                 mutateSong(s => ({ ...s, key: e.target.value }));
               }}
-              className="bg-transparent font-mono font-bold text-[#171310] focus:outline-none cursor-pointer"
+              className={`bg-transparent font-mono font-bold focus:outline-none cursor-pointer ${
+                isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
+              }`}
             >
               {MAJOR_KEYS.map(k => (
-                <option key={k} value={k}>Key of {k}</option>
+                <option key={k} value={k} className={isDarkMode ? 'bg-[#1A1512] text-[#F7F4EB]' : 'bg-white text-[#171310]'}>
+                  Key of {k}
+                </option>
               ))}
             </select>
           </div>
 
           <div 
-            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
+            className={`flex items-center gap-1.5 border-2 rounded-md px-3 py-2 min-h-[44px] text-xs font-mono font-bold ${
+              isDarkMode 
+                ? 'bg-[#1A1512] border-[#3A332C] text-[#F7F4EB]' 
+                : 'bg-white border-[#171310] text-[#171310]'
+            }`}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
           >
-            <span className="text-[#171310]/60 uppercase">BPM:</span>
+            <span className={`uppercase ${isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'}`}>BPM:</span>
             <input
               type="number"
               min={30}
               max={250}
               value={song.bpm || 80}
               onChange={(e) => mutateSong(s => ({ ...s, bpm: Number(e.target.value) }))}
-              className="w-12 bg-transparent font-mono font-bold text-[#171310] focus:outline-none"
+              className={`w-12 bg-transparent font-mono font-bold focus:outline-none ${
+                isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
+              }`}
             />
           </div>
 
           <div 
-            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
+            className={`flex items-center gap-1.5 border-2 rounded-md px-3 py-2 min-h-[44px] text-xs font-mono font-bold ${
+              isDarkMode 
+                ? 'bg-[#1A1512] border-[#3A332C] text-[#F7F4EB]' 
+                : 'bg-white border-[#171310] text-[#171310]'
+            }`}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
           >
-            <span className="text-[#171310]/60 uppercase">Time:</span>
+            <span className={`uppercase ${isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'}`}>Time:</span>
             <select
               value={song.timeSignature || '4/4'}
               onChange={(e) => {
                 triggerHaptic(10);
                 mutateSong(s => ({ ...s, timeSignature: e.target.value }));
               }}
-              className="bg-transparent font-mono font-bold text-[#171310] focus:outline-none cursor-pointer"
+              className={`bg-transparent font-mono font-bold focus:outline-none cursor-pointer ${
+                isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
+              }`}
             >
-              <option value="4/4">4/4</option>
-              <option value="3/4">3/4</option>
-              <option value="6/8">6/8</option>
-              <option value="2/4">2/4</option>
+              <option value="4/4" className={isDarkMode ? 'bg-[#1A1512] text-[#F7F4EB]' : 'bg-white text-[#171310]'}>4/4</option>
+              <option value="3/4" className={isDarkMode ? 'bg-[#1A1512] text-[#F7F4EB]' : 'bg-white text-[#171310]'}>3/4</option>
+              <option value="6/8" className={isDarkMode ? 'bg-[#1A1512] text-[#F7F4EB]' : 'bg-white text-[#171310]'}>6/8</option>
+              <option value="2/4" className={isDarkMode ? 'bg-[#1A1512] text-[#F7F4EB]' : 'bg-white text-[#171310]'}>2/4</option>
             </select>
           </div>
 
-          <div className="w-full sm:w-auto sm:flex-1 min-w-0 flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3 py-2 min-h-[44px] text-xs font-medium text-[#171310]">
+          <div className={`w-full sm:w-auto sm:flex-1 min-w-0 flex items-center gap-1.5 border-2 rounded-md px-3 py-2 min-h-[44px] text-xs font-medium ${
+            isDarkMode 
+              ? 'bg-[#1A1512] border-[#3A332C] text-[#F7F4EB]' 
+              : 'bg-white border-[#171310] text-[#171310]'
+          }`}>
             <span 
-              className="font-mono text-[#171310]/60 font-bold uppercase shrink-0"
+              className={`font-mono font-bold uppercase shrink-0 ${
+                isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'
+              }`}
               style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
             >
               Artist:
@@ -440,7 +510,11 @@ export const SongEditor: React.FC<SongEditorProps> = ({
               value={song.artist || ''}
               onChange={(e) => mutateSong(s => ({ ...s, artist: e.target.value }))}
               placeholder="Artist or band (optional)..."
-              className="w-full bg-transparent font-sans font-medium text-[#171310] placeholder:text-[#171310]/40 focus:outline-none min-w-0"
+              className={`w-full bg-transparent font-sans font-medium focus:outline-none min-w-0 ${
+                isDarkMode 
+                  ? 'text-[#F7F4EB] placeholder:text-[#A89C8E]/40' 
+                  : 'text-[#171310] placeholder:text-[#171310]/40'
+              }`}
             />
           </div>
         </div>
@@ -453,7 +527,11 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             return (
               <section
                 key={section.id}
-                className="bg-white border-2 border-[#171310] rounded-md p-4 sm:p-6 flex flex-col gap-4 transition-all duration-150"
+                className={`border-2 rounded-md p-4 sm:p-6 flex flex-col gap-4 transition-all duration-150 ${
+                  isDarkMode 
+                    ? 'bg-[#1A1512] border-[#3A332C]' 
+                    : 'bg-white border-[#171310]'
+                }`}
               >
                 {/* Section Header with Mustard Monospace Sequence Number */}
                 <div className="flex justify-between items-center w-full max-w-full flex-wrap gap-2">
@@ -465,7 +543,11 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                       {formattedSecIndex}
                     </span>
                     <span 
-                      className="font-mono text-xs font-bold bg-[#171310] text-[#F7F4EB] px-2.5 py-1 rounded uppercase tracking-wider shrink-0"
+                      className={`font-mono text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider shrink-0 border ${
+                        isDarkMode 
+                          ? 'bg-[#241D17] text-[#F7F4EB] border-[#3D332A]' 
+                          : 'bg-[#171310] text-[#F7F4EB] border-[#171310]'
+                      }`}
                       style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
                     >
                       {section.type}
@@ -482,7 +564,11 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                       }}
                       placeholder="Custom label"
                       style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-                      className="font-mono text-sm font-bold text-[#171310] bg-transparent hover:bg-[#F7F4EB] focus:bg-[#F7F4EB] rounded px-2 py-0.5 focus:outline-none transition-colors min-w-0 truncate border border-transparent focus:border-[#171310] flex-1 max-w-xs"
+                      className={`font-mono text-sm font-bold bg-transparent rounded px-2 py-0.5 focus:outline-none transition-colors min-w-0 truncate border flex-1 max-w-xs ${
+                        isDarkMode 
+                          ? 'text-[#F7F4EB] hover:bg-[#241D17] focus:bg-[#241D17] border-transparent focus:border-[#3A332C]' 
+                          : 'text-[#171310] hover:bg-[#F7F4EB] focus:bg-[#F7F4EB] border-transparent focus:border-[#171310]'
+                      }`}
                     />
                   </div>
 
@@ -491,7 +577,11 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                       type="button"
                       onClick={() => handleMoveSection(secIdx, 'up')}
                       disabled={secIdx === 0}
-                      className="p-2 min-w-[36px] min-h-[36px] rounded-md bg-[#F7F4EB] hover:bg-[#EDE8DA] text-[#171310] disabled:opacity-30 disabled:hover:bg-[#F7F4EB] transition-all duration-150 hover:scale-105 active:scale-95 border border-[#171310] flex items-center justify-center"
+                      className={`p-2 min-w-[36px] min-h-[36px] rounded-md disabled:opacity-30 transition-all duration-150 hover:scale-105 active:scale-95 border flex items-center justify-center ${
+                        isDarkMode 
+                          ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
+                          : 'bg-[#F7F4EB] hover:bg-[#EDE8DA] text-[#171310] border-[#171310]'
+                      }`}
                       title="Move Up"
                     >
                       <ChevronUp size={16} />
@@ -500,7 +590,11 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                       type="button"
                       onClick={() => handleMoveSection(secIdx, 'down')}
                       disabled={secIdx === song.sections.length - 1}
-                      className="p-2 min-w-[36px] min-h-[36px] rounded-md bg-[#F7F4EB] hover:bg-[#EDE8DA] text-[#171310] disabled:opacity-30 disabled:hover:bg-[#F7F4EB] transition-all duration-150 hover:scale-105 active:scale-95 border border-[#171310] flex items-center justify-center"
+                      className={`p-2 min-w-[36px] min-h-[36px] rounded-md disabled:opacity-30 transition-all duration-150 hover:scale-105 active:scale-95 border flex items-center justify-center ${
+                        isDarkMode 
+                          ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
+                          : 'bg-[#F7F4EB] hover:bg-[#EDE8DA] text-[#171310] border-[#171310]'
+                      }`}
                       title="Move Down"
                     >
                       <ChevronDown size={16} />
@@ -509,14 +603,22 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                       type="button"
                       onClick={() => handleAddLine(section.id)}
                       style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-                      className="px-3 py-2 min-h-[36px] rounded-md bg-[#F7F4EB] hover:bg-[#EDE8DA] text-[#171310] font-mono text-xs font-bold transition-all duration-150 hover:scale-105 active:scale-95 ml-1 uppercase border border-[#171310] flex items-center justify-center"
+                      className={`px-3 py-2 min-h-[36px] rounded-md font-mono text-xs font-bold transition-all duration-150 hover:scale-105 active:scale-95 ml-1 uppercase border flex items-center justify-center ${
+                        isDarkMode 
+                          ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
+                          : 'bg-[#F7F4EB] hover:bg-[#EDE8DA] text-[#171310] border-[#171310]'
+                      }`}
                     >
                       + LINE
                     </button>
                     <button
                       type="button"
                       onClick={() => handleDeleteSection(section.id)}
-                      className="p-2 min-w-[36px] min-h-[36px] rounded-md text-[#171310]/50 hover:text-[#E8432E] hover:bg-red-50 transition-all duration-150 hover:scale-105 active:scale-95 ml-0.5 flex items-center justify-center"
+                      className={`p-2 min-w-[36px] min-h-[36px] rounded-md transition-all duration-150 hover:scale-105 active:scale-95 ml-0.5 flex items-center justify-center ${
+                        isDarkMode 
+                          ? 'text-[#A89C8E] hover:text-[#E8432E] hover:bg-red-950/30' 
+                          : 'text-[#171310]/50 hover:text-[#E8432E] hover:bg-red-50'
+                      }`}
                       title="Delete Section"
                     >
                       <Trash2 size={16} />
@@ -527,9 +629,13 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                 {/* Section Lines Container */}
                 <div className="space-y-3.5 pt-1 w-full max-w-full">
                   {section.lines.map((line) => (
-                    <div key={line.id} className="space-y-2.5 relative group/line bg-[#FBF9F2] rounded-md p-3 sm:p-4 w-full max-w-full border border-[#171310]/30">
+                    <div key={line.id} className={`space-y-2.5 relative group/line rounded-md p-3 sm:p-4 w-full max-w-full border ${
+                      isDarkMode 
+                        ? 'bg-[#241D17] border-[#3D332A]' 
+                        : 'bg-[#FBF9F2] border-[#171310]/30'
+                    }`}>
                       
-                      {/* Strictly Inline Chord Row: Never wraps + button to a new line, consistent slot widths */}
+                      {/* Strictly Inline Chord Row */}
                       <div className="flex items-center gap-2.5 w-full max-w-full overflow-x-auto pb-1 pt-1 scrollbar-thin">
                         {line.chords.map((chord, cIdx) => {
                           const isSelected =
@@ -548,11 +654,13 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                                 style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
                                 className={`min-w-[56px] sm:min-w-[68px] px-3 h-13 sm:h-14 min-h-[48px] rounded-md flex items-center justify-center font-mono font-bold select-none transition-all duration-150 cursor-pointer border-2 ${getChordTextSize(chord)} ${
                                   isSelected 
-                                    ? 'bg-[#E8432E] text-[#F7F4EB] hover:bg-[#E8432E] scale-105 border-[#171310]' 
-                                    : 'bg-white text-[#171310] hover:bg-[#F3EFE3] hover:scale-105 active:scale-95 border-[#171310]'
+                                    ? 'bg-[#E8432E] text-[#F7F4EB] hover:bg-[#E8432E] scale-105 border-[#E8432E]' 
+                                    : isDarkMode
+                                      ? 'bg-[#1A1512] text-[#F7F4EB] hover:bg-[#2E2520] hover:scale-105 active:scale-95 border-[#3D332A]'
+                                      : 'bg-white text-[#171310] hover:bg-[#F3EFE3] hover:scale-105 active:scale-95 border-[#171310]'
                                 }`}
                               >
-                                {chord || <span className="text-[#171310]/30 font-normal">_</span>}
+                                {chord || <span className={`${isDarkMode ? 'text-[#A89C8E]/40' : 'text-[#171310]/30'} font-normal`}>_</span>}
                               </button>
 
                               {line.chords.length > 1 && (
@@ -577,7 +685,11 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                           type="button"
                           onClick={() => handleAddChordSlotToLine(section.id, line.id)}
                           style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-                          className="w-13 h-13 sm:w-14 sm:h-14 min-w-[52px] min-h-[48px] bg-[#F7F4EB] hover:bg-[#EDE8DA] hover:scale-105 active:scale-95 rounded-md text-[#171310] font-mono font-bold text-xl flex items-center justify-center transition-all duration-150 flex-shrink-0 cursor-pointer border-2 border-[#171310]"
+                          className={`w-13 h-13 sm:w-14 sm:h-14 min-w-[52px] min-h-[48px] rounded-md font-mono font-bold text-xl flex items-center justify-center transition-all duration-150 flex-shrink-0 cursor-pointer border-2 hover:scale-105 active:scale-95 ${
+                            isDarkMode 
+                              ? 'bg-[#2E2520] hover:bg-[#3D332A] text-[#F7F4EB] border-[#3D332A]' 
+                              : 'bg-[#F7F4EB] hover:bg-[#EDE8DA] text-[#171310] border-[#171310]'
+                          }`}
                           title="Add chord slot"
                         >
                           +
@@ -586,19 +698,27 @@ export const SongEditor: React.FC<SongEditorProps> = ({
 
                       {/* Inline Lyrics Line */}
                       <div className="flex items-center gap-2 pt-1 w-full max-w-full font-sans">
-                        <AlignLeft size={16} className="text-[#171310]/50 shrink-0" />
+                        <AlignLeft size={16} className={`shrink-0 ${isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/50'}`} />
                         <input
                           type="text"
                           value={line.lyrics}
                           onChange={(e) => handleUpdateLyrics(section.id, line.id, e.target.value)}
                           placeholder="Lyrics for this line (optional)..."
-                          className="w-full bg-transparent border-none text-xs sm:text-sm font-medium text-[#171310] placeholder:text-[#171310]/40 focus:outline-none focus:bg-white rounded px-2 py-1.5 min-w-0"
+                          className={`w-full bg-transparent border-none text-xs sm:text-sm font-medium rounded px-2 py-1.5 min-w-0 focus:outline-none ${
+                            isDarkMode 
+                              ? 'text-[#F7F4EB] placeholder:text-[#A89C8E]/40 focus:bg-[#1A1512]' 
+                              : 'text-[#171310] placeholder:text-[#171310]/40 focus:bg-white'
+                          }`}
                         />
                         {section.lines.length > 1 && (
                           <button
                             type="button"
                             onClick={() => handleDeleteLine(section.id, line.id)}
-                            className="p-1.5 min-w-[32px] min-h-[32px] rounded-md text-[#171310]/50 hover:text-[#E8432E] hover:bg-red-50 transition-colors shrink-0 flex items-center justify-center"
+                            className={`p-1.5 min-w-[32px] min-h-[32px] rounded-md transition-colors shrink-0 flex items-center justify-center ${
+                              isDarkMode 
+                                ? 'text-[#A89C8E] hover:text-[#E8432E] hover:bg-red-950/30' 
+                                : 'text-[#171310]/50 hover:text-[#E8432E] hover:bg-red-50'
+                            }`}
                             title="Delete Line"
                           >
                             <X size={16} />
@@ -622,7 +742,11 @@ export const SongEditor: React.FC<SongEditorProps> = ({
               setIsSectionPickerOpen(true);
             }}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-            className="px-6 py-3.5 min-h-[48px] bg-[#171310] hover:bg-[#2E2520] text-[#F7F4EB] font-mono text-xs sm:text-sm font-bold rounded-md inline-flex items-center justify-center gap-2 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 border-[#171310]"
+            className={`px-6 py-3.5 min-h-[48px] font-mono text-xs sm:text-sm font-bold rounded-md inline-flex items-center justify-center gap-2 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 ${
+              isDarkMode 
+                ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
+                : 'bg-[#171310] hover:bg-[#2E2520] text-[#F7F4EB] border-[#171310]'
+            }`}
           >
             <Plus size={16} />
             <span>ADD SECTION</span>
@@ -633,6 +757,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
       {/* Section Type Picker Modal */}
       <SectionTypePickerModal
         isOpen={isSectionPickerOpen}
+        theme={theme}
         onClose={() => setIsSectionPickerOpen(false)}
         onSelectType={handleAddSection}
       />
@@ -641,6 +766,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
       {selectedSlot && (
         <NashvilleNumberPad
           currentChord={activeChordValue}
+          theme={theme}
           onChangeChord={handleUpdateActiveChord}
           onClose={() => {
             triggerHaptic(15);

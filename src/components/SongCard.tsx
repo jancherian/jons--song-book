@@ -10,6 +10,7 @@ import { triggerHaptic } from '../utils/haptics';
 
 interface SongCardProps {
   song: Song;
+  theme?: 'light' | 'dark';
   index?: number;
   onSelectSong: (song: Song) => void;
   onPerformSong: (song: Song) => void;
@@ -19,11 +20,13 @@ interface SongCardProps {
 
 export const SongCard: React.FC<SongCardProps> = ({
   song,
+  theme = 'light',
   onSelectSong,
   onPerformSong,
   onToggleFavorite,
   onRequestDelete,
 }) => {
+  const isDarkMode = theme === 'dark';
   const totalSections = song.sections.length;
 
   return (
@@ -32,10 +35,14 @@ export const SongCard: React.FC<SongCardProps> = ({
         triggerHaptic(15);
         onSelectSong(song);
       }}
-      className={`p-5 sm:p-6 rounded-md flex flex-col gap-4 cursor-pointer transition-all duration-150 hover:scale-[1.012] active:scale-[0.99] group select-none border-2 border-[#171310] ${
-        song.favorite 
-          ? 'bg-[#FDF6E8] hover:bg-[#F8ECD2]' 
-          : 'bg-[#FBF9F2] hover:bg-[#F3EFE3]'
+      className={`p-5 sm:p-6 rounded-md flex flex-col gap-4 cursor-pointer transition-all duration-150 hover:scale-[1.012] active:scale-[0.99] group select-none border-2 ${
+        isDarkMode
+          ? song.favorite
+            ? 'bg-[#221B14] hover:bg-[#2A2219] border-[#4A3F35]'
+            : 'bg-[#1A1512] hover:bg-[#241D17] border-[#3A332C]'
+          : song.favorite 
+            ? 'bg-[#FDF6E8] hover:bg-[#F8ECD2] border-[#171310]' 
+            : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] border-[#171310]'
       }`}
     >
       {/* Top Row: Left-Anchored Monospace Title + Favorite Star */}
@@ -43,29 +50,33 @@ export const SongCard: React.FC<SongCardProps> = ({
         <div className="min-w-0 flex-1">
           {/* Song Title as Primary Anchor strictly in Bold Monospace */}
           <h4 
-            className="font-mono font-bold text-xl sm:text-2xl text-[#171310] tracking-tight truncate group-hover:text-[#E8432E] transition-colors"
+            className={`font-mono font-bold text-xl sm:text-2xl tracking-tight truncate group-hover:text-[#E8432E] transition-colors ${
+              isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
+            }`}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
           >
             {song.title}
           </h4>
           
           {/* Tighter, Smaller Metadata Cluster Beneath in Sans-Serif */}
-          <div className="flex items-center gap-2.5 text-xs text-[#171310]/70 mt-1.5 font-medium flex-wrap font-sans">
-            <span className="text-[#171310] font-bold">{totalSections} {totalSections === 1 ? 'sec' : 'secs'}</span>
-            <span className="w-1 h-1 rounded-full bg-[#171310]/30" />
+          <div className={`flex items-center gap-2.5 text-xs mt-1.5 font-medium flex-wrap font-sans ${
+            isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/70'
+          }`}>
+            <span className={`font-bold ${isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'}`}>{totalSections} {totalSections === 1 ? 'sec' : 'secs'}</span>
+            <span className={`w-1 h-1 rounded-full ${isDarkMode ? 'bg-[#A89C8E]/40' : 'bg-[#171310]/30'}`} />
             {song.key && (
               <>
-                <span className="text-[#171310] font-bold">Key {song.key}</span>
-                <span className="w-1 h-1 rounded-full bg-[#171310]/30" />
+                <span className={`font-bold ${isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'}`}>Key {song.key}</span>
+                <span className={`w-1 h-1 rounded-full ${isDarkMode ? 'bg-[#A89C8E]/40' : 'bg-[#171310]/30'}`} />
               </>
             )}
             {song.bpm && (
               <>
                 <span className="font-semibold">{song.bpm} BPM</span>
-                <span className="w-1 h-1 rounded-full bg-[#171310]/30" />
+                <span className={`w-1 h-1 rounded-full ${isDarkMode ? 'bg-[#A89C8E]/40' : 'bg-[#171310]/30'}`} />
               </>
             )}
-            <span className="truncate text-[#171310]/70 font-medium">{song.artist || 'Traditional'}</span>
+            <span className="truncate font-medium">{song.artist || 'Traditional'}</span>
           </div>
         </div>
 
@@ -79,8 +90,10 @@ export const SongCard: React.FC<SongCardProps> = ({
           }}
           className={`w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-all duration-150 hover:scale-110 active:scale-95 shrink-0 border ${
             song.favorite
-              ? 'bg-[#E8432E] text-[#F7F4EB] border-[#171310]'
-              : 'bg-white text-[#171310]/40 hover:text-[#E8432E] hover:bg-[#FDF6E8] border-[#171310]/30'
+              ? isDarkMode ? 'bg-[#E8432E] text-[#F7F4EB] border-[#E8432E]' : 'bg-[#E8432E] text-[#F7F4EB] border-[#171310]'
+              : isDarkMode 
+                ? 'bg-[#241D17] text-[#A89C8E] hover:text-[#E8432E] hover:bg-[#332A22] border-[#3D332A]' 
+                : 'bg-white text-[#171310]/40 hover:text-[#E8432E] hover:bg-[#FDF6E8] border-[#171310]/30'
           }`}
           title={song.favorite ? 'Remove from favorites' : 'Add to favorites'}
         >
@@ -95,7 +108,9 @@ export const SongCard: React.FC<SongCardProps> = ({
       {song.sections.length > 0 && (
         <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
           <span 
-            className="text-[11px] text-[#171310]/60 font-bold uppercase tracking-wider mr-1 font-mono"
+            className={`text-[11px] font-bold uppercase tracking-wider mr-1 font-mono ${
+              isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'
+            }`}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
           >
             Flow:
@@ -103,14 +118,18 @@ export const SongCard: React.FC<SongCardProps> = ({
           {song.sections.map((sec, idx) => (
             <React.Fragment key={sec.id}>
               <span 
-                className="font-mono text-xs font-bold text-[#171310] bg-white px-2 py-0.5 rounded border border-[#171310]/30 uppercase tracking-wide"
+                className={`font-mono text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wide border ${
+                  isDarkMode 
+                    ? 'bg-[#241D17] text-[#F7F4EB] border-[#3D332A]' 
+                    : 'bg-white text-[#171310] border-[#171310]/30'
+                }`}
                 style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
               >
                 {sec.type}
               </span>
               {idx < song.sections.length - 1 && (
                 <span 
-                  className="text-[#171310]/40 text-xs font-bold font-mono"
+                  className={`text-xs font-bold font-mono ${isDarkMode ? 'text-[#A89C8E]/50' : 'text-[#171310]/40'}`}
                   style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
                 >
                   →
@@ -122,7 +141,9 @@ export const SongCard: React.FC<SongCardProps> = ({
       )}
 
       {/* Action Row at Bottom */}
-      <div className="pt-1 flex items-center justify-between gap-3 border-t border-[#171310]/15">
+      <div className={`pt-1 flex items-center justify-between gap-3 border-t ${
+        isDarkMode ? 'border-[#3A332C]' : 'border-[#171310]/15'
+      }`}>
         <div className="flex items-center gap-2">
           {/* Solid Vermilion Perform CTA with 44px Touch Target */}
           <button
@@ -133,7 +154,9 @@ export const SongCard: React.FC<SongCardProps> = ({
               onPerformSong(song);
             }}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-            className="px-4 py-2.5 min-h-[44px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono font-bold text-xs rounded-md flex items-center gap-2 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wide border border-[#171310]"
+            className={`px-4 py-2.5 min-h-[44px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono font-bold text-xs rounded-md flex items-center gap-2 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wide border ${
+              isDarkMode ? 'border-[#E8432E]' : 'border-[#171310]'
+            }`}
           >
             <Play size={13} className="fill-current" />
             <span>PERFORM</span>
@@ -147,7 +170,11 @@ export const SongCard: React.FC<SongCardProps> = ({
               triggerHaptic(15);
               onRequestDelete(song.id);
             }}
-            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white hover:bg-red-50 text-[#171310]/40 hover:text-[#E8432E] transition-all duration-150 hover:scale-110 active:scale-95 flex items-center justify-center border border-[#171310]/20"
+            className={`w-11 h-11 min-w-[44px] min-h-[44px] rounded-full transition-all duration-150 hover:scale-110 active:scale-95 flex items-center justify-center border ${
+              isDarkMode 
+                ? 'bg-[#241D17] hover:bg-red-950/40 text-[#A89C8E] hover:text-[#E8432E] border-[#3D332A]' 
+                : 'bg-white hover:bg-red-50 text-[#171310]/40 hover:text-[#E8432E] border-[#171310]/20'
+            }`}
             title="Delete Song"
           >
             <Trash2 size={15} />
@@ -156,7 +183,9 @@ export const SongCard: React.FC<SongCardProps> = ({
 
         {/* Open Chart Indicator */}
         <div 
-          className="flex items-center gap-1 font-mono text-xs font-bold text-[#171310]/70 group-hover:text-[#E8432E] transition-colors uppercase"
+          className={`flex items-center gap-1 font-mono text-xs font-bold group-hover:text-[#E8432E] transition-colors uppercase ${
+            isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/70'
+          }`}
           style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
         >
           <span>EDIT CHART</span>
