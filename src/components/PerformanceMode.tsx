@@ -125,12 +125,12 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
   };
 
   return (
-    <div className={`min-h-screen font-sans select-none pb-48 relative w-full max-w-full overflow-x-hidden transition-colors duration-200 ${
+    <div className={`min-h-screen font-sans select-none pb-48 scroll-pt-36 relative w-full max-w-full overflow-x-hidden transition-colors duration-200 ${
       isDarkMode ? 'bg-[#100D0A] text-[#F7F4EB]' : 'bg-[#F7F4EB] text-[#171310]'
     }`}>
       
       {/* Fixed Stage Toolbar */}
-      <header className={`fixed top-0 left-0 w-full z-50 px-3.5 sm:px-6 py-2.5 sm:py-0 sm:h-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4 max-w-full border-b-2 transition-colors duration-200 ${
+      <header className={`fixed top-0 left-0 w-full z-50 px-3.5 sm:px-6 py-2.5 sm:py-0 sm:h-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4 max-w-full border-b-2 shadow-sm transition-colors duration-200 ${
         isDarkMode ? 'bg-[#100D0A] border-[#241D17]' : 'bg-[#F7F4EB] border-[#D9D2C0]'
       }`}>
         {/* Row 1 / Left Info Area */}
@@ -142,7 +142,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                 triggerHaptic(15);
                 onExit();
               }}
-              className={`p-2 min-w-[44px] min-h-[44px] rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border flex items-center justify-center ${
+              className={`p-2 min-w-[40px] min-h-[40px] rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border flex items-center justify-center ${
                 isDarkMode 
                   ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
                   : 'bg-white hover:bg-[#F3EFE3] text-[#171310] border-[#D9D2C0]'
@@ -151,10 +151,10 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
             >
               <ArrowLeft size={18} />
             </button>
-            <LogoMark size={28} theme={isDarkMode ? 'dark' : 'light'} />
+            <LogoMark size={26} theme={isDarkMode ? 'dark' : 'light'} />
             <div className="min-w-0">
               <h1 
-                className="font-mono text-base sm:text-lg font-bold truncate tracking-tight"
+                className="font-mono text-sm sm:text-base md:text-lg font-bold truncate tracking-tight"
                 style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
               >
                 {song.title}
@@ -177,7 +177,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
               onExit();
             }}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-            className={`sm:hidden px-4 py-2 min-h-[44px] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border flex items-center justify-center ${
+            className={`sm:hidden px-3.5 py-1.5 min-h-[40px] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border flex items-center justify-center ${
               isDarkMode 
                 ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
                 : 'bg-white hover:bg-[#F3EFE3] text-[#171310] border-[#D9D2C0]'
@@ -194,7 +194,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
           <button
             type="button"
             onClick={toggleTheme}
-            className={`p-2 min-h-[44px] sm:px-3 sm:py-2 rounded-md flex items-center justify-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border ${
+            className={`p-2 min-h-[40px] sm:px-3 sm:py-2 rounded-md flex items-center justify-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border ${
               isDarkMode 
                 ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
                 : 'bg-white hover:bg-[#F3EFE3] text-[#171310] border-[#D9D2C0]'
@@ -206,7 +206,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
           </button>
 
           {/* Nashville ↔ Letters Toggle */}
-          <div className={`flex items-center rounded-md p-0.5 min-h-[44px] shrink-0 border ${
+          <div className={`flex items-center rounded-md p-0.5 min-h-[40px] shrink-0 border ${
             isDarkMode ? 'bg-[#241D17] border-[#3D332A]' : 'bg-white border-[#D9D2C0]'
           }`}>
             <button
@@ -216,7 +216,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                 setDisplayMode('nashville');
               }}
               style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-              className={`px-3 py-2 min-h-[36px] rounded transition-all duration-150 text-[11px] sm:text-xs flex items-center justify-center ${
+              className={`px-3 py-1.5 min-h-[34px] rounded transition-all duration-150 text-[11px] sm:text-xs flex items-center justify-center ${
                 displayMode === 'nashville'
                   ? 'bg-[#E8432E] text-[#F7F4EB]'
                   : isDarkMode ? 'text-[#A89C8E] hover:text-[#F7F4EB]' : 'text-[#7A6E62] hover:text-[#171310]'
@@ -231,7 +231,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                 setDisplayMode('letters');
               }}
               style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-              className={`px-3 py-2 min-h-[36px] rounded transition-all duration-150 text-[11px] sm:text-xs flex items-center justify-center ${
+              className={`px-3 py-1.5 min-h-[34px] rounded transition-all duration-150 text-[11px] sm:text-xs flex items-center justify-center ${
                 displayMode === 'letters'
                   ? 'bg-[#E8432E] text-[#F7F4EB]'
                   : isDarkMode ? 'text-[#A89C8E] hover:text-[#F7F4EB]' : 'text-[#7A6E62] hover:text-[#171310]'
@@ -249,7 +249,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                 setStageKey(e.target.value);
               }}
               style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-              className={`px-2.5 py-2 min-h-[44px] rounded-md text-[11px] sm:text-xs font-mono font-bold focus:outline-none cursor-pointer shrink-0 border ${
+              className={`px-2.5 py-1.5 min-h-[40px] rounded-md text-[11px] sm:text-xs font-mono font-bold focus:outline-none cursor-pointer shrink-0 border ${
                 isDarkMode 
                   ? 'bg-[#241D17] text-[#F7F4EB] border-[#3D332A]' 
                   : 'bg-white text-[#171310] border-[#D9D2C0]'
@@ -262,7 +262,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
           )}
 
           {/* Zoom Controls */}
-          <div className={`flex items-center rounded-md p-0.5 min-h-[44px] shrink-0 border ${
+          <div className={`flex items-center rounded-md p-0.5 min-h-[40px] shrink-0 border ${
             isDarkMode ? 'bg-[#241D17] border-[#3D332A]' : 'bg-white border-[#D9D2C0]'
           }`}>
             <button
@@ -272,12 +272,12 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                 if (fontSizeLevel === 'xlarge') setFontSizeLevel('large');
                 else if (fontSizeLevel === 'large') setFontSizeLevel('normal');
               }}
-              className={`p-2.5 min-w-[36px] min-h-[36px] rounded transition-all duration-150 hover:scale-105 active:scale-95 flex items-center justify-center ${
+              className={`p-2 min-w-[34px] min-h-[34px] rounded transition-all duration-150 hover:scale-105 active:scale-95 flex items-center justify-center ${
                 isDarkMode ? 'text-[#A89C8E] hover:text-[#F7F4EB] hover:bg-[#332A22]' : 'text-[#7A6E62] hover:text-[#171310] hover:bg-[#F3EFE3]'
               }`}
               title="Zoom Out"
             >
-              <ZoomOut size={16} />
+              <ZoomOut size={15} />
             </button>
             <button
               type="button"
@@ -286,12 +286,12 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                 if (fontSizeLevel === 'normal') setFontSizeLevel('large');
                 else if (fontSizeLevel === 'large') setFontSizeLevel('xlarge');
               }}
-              className={`p-2.5 min-w-[36px] min-h-[36px] rounded transition-all duration-150 hover:scale-105 active:scale-95 flex items-center justify-center ${
+              className={`p-2 min-w-[34px] min-h-[34px] rounded transition-all duration-150 hover:scale-105 active:scale-95 flex items-center justify-center ${
                 isDarkMode ? 'text-[#A89C8E] hover:text-[#F7F4EB] hover:bg-[#332A22]' : 'text-[#7A6E62] hover:text-[#171310] hover:bg-[#F3EFE3]'
               }`}
               title="Zoom In"
             >
-              <ZoomIn size={16} />
+              <ZoomIn size={15} />
             </button>
           </div>
 
@@ -303,7 +303,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
               setIsAutoScrolling(!isAutoScrolling);
             }}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-            className="px-4 py-2 min-h-[44px] rounded-md text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] border border-[#E8432E]"
+            className="px-3.5 sm:px-4 py-2 min-h-[40px] rounded-md text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] border border-[#E8432E]"
             title={isAutoScrolling ? 'Pause auto-scroll' : 'Start auto-scroll'}
           >
             {isAutoScrolling ? <Pause size={13} className="fill-current" /> : <Play size={13} className="fill-current" />}
@@ -318,7 +318,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
               onExit();
             }}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-            className={`hidden sm:inline-flex px-4 py-2 min-h-[44px] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border items-center justify-center ${
+            className={`hidden sm:inline-flex px-4 py-2 min-h-[40px] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border items-center justify-center ${
               isDarkMode 
                 ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
                 : 'bg-white hover:bg-[#F3EFE3] text-[#171310] border-[#D9D2C0]'
@@ -330,8 +330,8 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
         </div>
       </header>
 
-      {/* Main Content Area (Connected by a continuous left-margin vertical rule) */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-10 pt-28 sm:pt-24 w-full max-w-full overflow-x-hidden">
+      {/* Main Content Area: Generous top padding (pt-36 on mobile, pt-28 on desktop) prevents any sticky toolbar overlap */}
+      <main className="max-w-4xl mx-auto px-4 sm:px-10 pt-36 sm:pt-28 md:pt-24 w-full max-w-full overflow-x-hidden">
         <div className={`relative pl-4 sm:pl-7 border-l ml-1 sm:ml-3 space-y-8 sm:space-y-10 transition-colors ${
           isDarkMode ? 'border-[#2A2420]' : 'border-[#D9D2C0]'
         }`}>
@@ -393,10 +393,18 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
 
                             return (
                               <div key={cIdx} className="inline-flex items-baseline gap-5 sm:gap-8">
-                                {/* Chord Text: Bold Monospace, Unboxed */}
+                                {/* Chord Text: Entire label (root + modifier) renders in single bold monospace font & uniform baseline */}
                                 <span
-                                  style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-                                  className={`font-mono font-bold tracking-wider select-none leading-none ${chordSizeClasses[fontSizeLevel]} ${
+                                  style={{ 
+                                    fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", 
+                                    fontWeight: 700,
+                                    lineHeight: 1,
+                                    verticalAlign: 'baseline',
+                                    fontVariantNumeric: 'tabular-nums',
+                                    letterSpacing: '0.02em',
+                                    display: 'inline-block'
+                                  }}
+                                  className={`font-mono font-bold tracking-wide select-none leading-none ${chordSizeClasses[fontSizeLevel]} ${
                                     isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
                                   }`}
                                 >
@@ -436,7 +444,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
         </div>
       </main>
 
-      {/* Floating Auto-Scroll Speed Selector when active (With pb-safe support) */}
+      {/* Floating Auto-Scroll Speed Selector when active */}
       {isAutoScrolling && (
         <div className={`fixed bottom-6 right-6 z-50 border-2 rounded-md p-3 flex items-center gap-2.5 text-xs font-mono font-bold ${
           isDarkMode 

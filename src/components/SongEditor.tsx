@@ -268,34 +268,52 @@ export const SongEditor: React.FC<SongEditorProps> = ({
     }
   }
 
+  // Calculate dynamic chord font size so long labels never overflow
+  const getChordTextSize = (chordText: string) => {
+    if (chordText.length > 4) return 'text-sm sm:text-base';
+    if (chordText.length > 2) return 'text-base sm:text-lg';
+    return 'text-xl sm:text-2xl';
+  };
+
   return (
     <div className="min-h-screen chart-grid-bg text-[#171310] font-sans pb-72 relative w-full max-w-full overflow-x-hidden">
       
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-40 bg-[#F7F4EB]/95 border-b-2 border-[#171310] px-4 sm:px-6 h-16 flex items-center justify-between gap-2 w-full max-w-full">
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+      {/* Sticky Top Header: Streamlined for mobile with maximum room for song title */}
+      <header className="sticky top-0 z-40 bg-[#F7F4EB]/95 border-b-2 border-[#171310] px-3 sm:px-6 h-16 flex items-center justify-between gap-2.5 w-full max-w-full">
+        {/* Left: Back button + Song title (takes priority) */}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
           <button
             type="button"
             onClick={() => {
               triggerHaptic(15);
               onBack();
             }}
-            className="p-2 min-w-[44px] min-h-[44px] rounded-md hover:bg-white text-[#171310] transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border-2 border-[#171310] flex items-center justify-center"
+            className="p-2 min-w-[40px] min-h-[40px] rounded-md hover:bg-white text-[#171310] transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border-2 border-[#171310] flex items-center justify-center"
             title="Back to Songs"
           >
             <ArrowLeft size={18} />
           </button>
 
-          <LogoMark size={28} />
+          <div className="hidden sm:flex shrink-0">
+            <LogoMark size={26} />
+          </div>
 
-          <h1 
-            className="font-mono text-base sm:text-lg font-bold text-[#171310] tracking-tight truncate"
-            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-          >
-            Chordset <span className="text-[#171310]/40 font-normal">/</span> <span className="text-[#171310] font-black">Editor</span>
-          </h1>
+          <div className="min-w-0 flex-1">
+            <h1 
+              className="font-mono text-sm sm:text-base md:text-lg font-bold text-[#171310] tracking-tight truncate"
+              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            >
+              {song.title || 'Untitled Chart'}
+            </h1>
+            <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-[#171310]/60 font-mono font-bold truncate">
+              <span>KEY {song.key || 'G'}</span>
+              <span>•</span>
+              <span>{song.bpm || 80} BPM</span>
+            </div>
+          </div>
         </div>
 
+        {/* Right: Favorite + Perform CTA (compact on mobile) */}
         <div className="flex items-center gap-2 shrink-0">
           {/* Favorite Circle Button */}
           <button
@@ -304,7 +322,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
               triggerHaptic(15);
               onToggleFavorite(song.id);
             }}
-            className={`w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-all duration-150 hover:scale-110 active:scale-95 border-2 border-[#171310] ${
+            className={`w-10 h-10 min-w-[40px] min-h-[40px] rounded-full flex items-center justify-center transition-all duration-150 hover:scale-110 active:scale-95 border-2 border-[#171310] ${
               song.favorite 
                 ? 'bg-[#E8432E] text-[#F7F4EB]' 
                 : 'bg-white text-[#171310]/40 hover:text-[#E8432E]'
@@ -312,7 +330,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             title={song.favorite ? 'Remove from favorites' : 'Add to favorites'}
           >
             <Star
-              size={18}
+              size={17}
               className={song.favorite ? 'fill-[#F7F4EB]' : ''}
             />
           </button>
@@ -325,16 +343,16 @@ export const SongEditor: React.FC<SongEditorProps> = ({
               onLaunchPerformance();
             }}
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-            className="px-4 py-2.5 min-h-[44px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono font-bold text-xs rounded-md flex items-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 border-[#171310]"
+            className="px-3.5 sm:px-4 py-2 min-h-[40px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono font-bold text-xs rounded-md flex items-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 border-[#171310]"
           >
-            <Play size={13} className="fill-current mr-0.5" />
+            <Play size={12} className="fill-current" />
             <span>PERFORM</span>
           </button>
         </div>
       </header>
 
       {/* Main Content Canvas */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-8 pt-6 sm:pt-8 flex flex-col gap-6 sm:gap-8 w-full max-w-full overflow-x-hidden">
+      <main className="max-w-4xl mx-auto px-3.5 sm:px-8 pt-6 sm:pt-8 flex flex-col gap-6 sm:gap-8 w-full max-w-full overflow-x-hidden">
         
         {/* Editable Song Title in Bold Monospace */}
         <div className="space-y-1">
@@ -355,9 +373,9 @@ export const SongEditor: React.FC<SongEditorProps> = ({
         </div>
 
         {/* Metadata Controls Strip */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
           <div 
-            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3.5 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
+            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
           >
             <span className="text-[#171310]/60 uppercase">Key:</span>
@@ -376,7 +394,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
           </div>
 
           <div 
-            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3.5 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
+            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
           >
             <span className="text-[#171310]/60 uppercase">BPM:</span>
@@ -391,7 +409,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
           </div>
 
           <div 
-            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3.5 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
+            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
             style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
           >
             <span className="text-[#171310]/60 uppercase">Time:</span>
@@ -410,7 +428,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             </select>
           </div>
 
-          <div className="w-full sm:w-auto sm:flex-1 min-w-0 flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3.5 py-2 min-h-[44px] text-xs font-medium text-[#171310]">
+          <div className="w-full sm:w-auto sm:flex-1 min-w-0 flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3 py-2 min-h-[44px] text-xs font-medium text-[#171310]">
             <span 
               className="font-mono text-[#171310]/60 font-bold uppercase shrink-0"
               style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
@@ -435,13 +453,13 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             return (
               <section
                 key={section.id}
-                className="bg-white border-2 border-[#171310] rounded-md p-5 sm:p-6 flex flex-col gap-4 transition-all duration-150"
+                className="bg-white border-2 border-[#171310] rounded-md p-4 sm:p-6 flex flex-col gap-4 transition-all duration-150"
               >
                 {/* Section Header with Mustard Monospace Sequence Number */}
                 <div className="flex justify-between items-center w-full max-w-full flex-wrap gap-2">
-                  <div className="flex items-center gap-2 min-w-0">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
                     <span 
-                      className="font-mono text-xs font-black bg-[#D9A62E] text-[#171310] px-2 py-0.5 rounded border border-[#171310] shrink-0"
+                      className="font-mono text-xs font-black bg-[#D9A62E] text-[#100D0A] px-2 py-0.5 rounded border border-[#171310] shrink-0"
                       style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 900 }}
                     >
                       {formattedSecIndex}
@@ -464,7 +482,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                       }}
                       placeholder="Custom label"
                       style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-                      className="font-mono text-sm font-bold text-[#171310] bg-transparent hover:bg-[#F7F4EB] focus:bg-[#F7F4EB] rounded px-2 py-0.5 focus:outline-none transition-colors min-w-0 truncate border border-transparent focus:border-[#171310]"
+                      className="font-mono text-sm font-bold text-[#171310] bg-transparent hover:bg-[#F7F4EB] focus:bg-[#F7F4EB] rounded px-2 py-0.5 focus:outline-none transition-colors min-w-0 truncate border border-transparent focus:border-[#171310] flex-1 max-w-xs"
                     />
                   </div>
 
@@ -507,12 +525,12 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                 </div>
 
                 {/* Section Lines Container */}
-                <div className="space-y-3 pt-1 w-full max-w-full">
+                <div className="space-y-3.5 pt-1 w-full max-w-full">
                   {section.lines.map((line) => (
-                    <div key={line.id} className="space-y-2.5 relative group/line bg-[#FBF9F2] rounded-md p-3.5 sm:p-4 w-full max-w-full border border-[#171310]/30">
+                    <div key={line.id} className="space-y-2.5 relative group/line bg-[#FBF9F2] rounded-md p-3 sm:p-4 w-full max-w-full border border-[#171310]/30">
                       
-                      {/* Responsive Flexible Chord Cells Container */}
-                      <div className="flex flex-wrap items-stretch gap-2 w-full max-w-full">
+                      {/* Strictly Inline Chord Row: Never wraps + button to a new line, consistent slot widths */}
+                      <div className="flex items-center gap-2.5 w-full max-w-full overflow-x-auto pb-1 pt-1 scrollbar-thin">
                         {line.chords.map((chord, cIdx) => {
                           const isSelected =
                             selectedSlot?.sectionId === section.id &&
@@ -522,13 +540,13 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                           return (
                             <div
                               key={cIdx}
-                              className="relative group/slot flex-1 min-w-[56px] sm:min-w-[68px]"
+                              className="relative group/slot flex-shrink-0"
                             >
                               <button
                                 type="button"
                                 onClick={() => handleSelectChordSlot(section.id, line.id, cIdx)}
                                 style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-                                className={`w-full h-13 sm:h-14 min-h-[44px] rounded-md flex items-center justify-center font-mono font-bold text-xl sm:text-2xl select-none transition-all duration-150 min-w-0 truncate px-1 cursor-pointer border-2 ${
+                                className={`min-w-[56px] sm:min-w-[68px] px-3 h-13 sm:h-14 min-h-[48px] rounded-md flex items-center justify-center font-mono font-bold select-none transition-all duration-150 cursor-pointer border-2 ${getChordTextSize(chord)} ${
                                   isSelected 
                                     ? 'bg-[#E8432E] text-[#F7F4EB] hover:bg-[#E8432E] scale-105 border-[#171310]' 
                                     : 'bg-white text-[#171310] hover:bg-[#F3EFE3] hover:scale-105 active:scale-95 border-[#171310]'
@@ -554,12 +572,12 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                           );
                         })}
 
-                        {/* Plus button to append slot */}
+                        {/* Plus button strictly inline right beside the last chord slot */}
                         <button
                           type="button"
                           onClick={() => handleAddChordSlotToLine(section.id, line.id)}
                           style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-                          className="px-4 h-13 sm:h-14 min-h-[44px] bg-[#F7F4EB] hover:bg-[#EDE8DA] hover:scale-105 active:scale-95 rounded-md text-[#171310] font-mono font-bold text-lg flex items-center justify-center transition-all duration-150 shrink-0 cursor-pointer border-2 border-[#171310]"
+                          className="w-13 h-13 sm:w-14 sm:h-14 min-w-[52px] min-h-[48px] bg-[#F7F4EB] hover:bg-[#EDE8DA] hover:scale-105 active:scale-95 rounded-md text-[#171310] font-mono font-bold text-xl flex items-center justify-center transition-all duration-150 flex-shrink-0 cursor-pointer border-2 border-[#171310]"
                           title="Add chord slot"
                         >
                           +
@@ -574,7 +592,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                           value={line.lyrics}
                           onChange={(e) => handleUpdateLyrics(section.id, line.id, e.target.value)}
                           placeholder="Lyrics for this line (optional)..."
-                          className="w-full bg-transparent border-none text-xs sm:text-sm font-medium text-[#171310] placeholder:text-[#171310]/40 focus:outline-none focus:bg-white rounded px-2 py-1 min-w-0"
+                          className="w-full bg-transparent border-none text-xs sm:text-sm font-medium text-[#171310] placeholder:text-[#171310]/40 focus:outline-none focus:bg-white rounded px-2 py-1.5 min-w-0"
                         />
                         {section.lines.length > 1 && (
                           <button
@@ -595,7 +613,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
           })}
         </div>
 
-        {/* Add Section Button with 44px min height */}
+        {/* Add Section Button with 48px touch target */}
         <div className="flex justify-center pt-2">
           <button
             type="button"
