@@ -284,7 +284,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
 
   return (
     <div className={`min-h-screen pb-72 relative w-full max-w-full overflow-x-hidden transition-colors duration-200 ${
-      isDarkMode ? 'chart-grid-bg-dark text-[#F7F4EB]' : 'chart-grid-bg-light text-[#171310]'
+      isDarkMode ? 'chart-grid-bg-dark bg-[#100D0A] text-[#F7F4EB]' : 'chart-grid-bg-light bg-[#F7F4EB] text-[#171310]'
     }`}>
       
       {/* Sticky Top Header: Streamlined for mobile with maximum room for song title & global theme switch */}
@@ -635,8 +635,8 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                         : 'bg-[#FBF9F2] border-[#171310]/30'
                     }`}>
                       
-                      {/* Strictly Inline Chord Row */}
-                      <div className="flex items-center gap-2.5 w-full max-w-full overflow-x-auto pb-1 pt-1 scrollbar-thin">
+                      {/* Wrapping Chord Row: Naturally wraps chords onto subsequent lines without clipping or scrollbars */}
+                      <div className="flex flex-wrap items-center gap-2.5 w-full max-w-full pb-1 pt-1">
                         {line.chords.map((chord, cIdx) => {
                           const isSelected =
                             selectedSlot?.sectionId === section.id &&
@@ -646,13 +646,13 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                           return (
                             <div
                               key={cIdx}
-                              className="relative group/slot flex-shrink-0"
+                              className="relative group/slot flex-none"
                             >
                               <button
                                 type="button"
                                 onClick={() => handleSelectChordSlot(section.id, line.id, cIdx)}
                                 style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-                                className={`min-w-[56px] sm:min-w-[68px] px-3 h-13 sm:h-14 min-h-[48px] rounded-md flex items-center justify-center font-mono font-bold select-none transition-all duration-150 cursor-pointer border-2 ${getChordTextSize(chord)} ${
+                                className={`min-w-[54px] sm:min-w-[64px] px-3.5 h-12 sm:h-14 min-h-[44px] rounded-md flex items-center justify-center font-mono font-bold select-none transition-all duration-150 cursor-pointer border-2 ${getChordTextSize(chord)} ${
                                   isSelected 
                                     ? 'bg-[#E8432E] text-[#F7F4EB] hover:bg-[#E8432E] scale-105 border-[#E8432E]' 
                                     : isDarkMode
@@ -670,7 +670,9 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                                     e.stopPropagation();
                                     handleDeleteChordSlot(section.id, line.id, cIdx);
                                   }}
-                                  className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-[#171310] hover:bg-[#E8432E] text-[#F7F4EB] text-xs font-bold rounded-full items-center justify-center hidden group-hover/slot:flex z-10 transition-colors"
+                                  className={`absolute -top-1.5 -right-1.5 w-6 h-6 hover:bg-[#E8432E] text-[#F7F4EB] text-xs font-bold rounded-full items-center justify-center hidden group-hover/slot:flex z-10 transition-colors ${
+                                    isDarkMode ? 'bg-[#3D332A]' : 'bg-[#171310]'
+                                  }`}
                                   title="Delete chord"
                                 >
                                   ×
@@ -680,12 +682,12 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                           );
                         })}
 
-                        {/* Plus button strictly inline right beside the last chord slot */}
+                        {/* Plus button wraps inline alongside chords without blowing up to full width */}
                         <button
                           type="button"
                           onClick={() => handleAddChordSlotToLine(section.id, line.id)}
                           style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
-                          className={`w-13 h-13 sm:w-14 sm:h-14 min-w-[52px] min-h-[48px] rounded-md font-mono font-bold text-xl flex items-center justify-center transition-all duration-150 flex-shrink-0 cursor-pointer border-2 hover:scale-105 active:scale-95 ${
+                          className={`w-12 h-12 sm:w-14 sm:h-14 min-w-[44px] min-h-[44px] rounded-md font-mono font-bold text-xl flex items-center justify-center transition-all duration-150 flex-none cursor-pointer border-2 hover:scale-105 active:scale-95 ${
                             isDarkMode 
                               ? 'bg-[#2E2520] hover:bg-[#3D332A] text-[#F7F4EB] border-[#3D332A]' 
                               : 'bg-[#F7F4EB] hover:bg-[#EDE8DA] text-[#171310] border-[#171310]'

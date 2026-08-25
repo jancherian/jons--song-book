@@ -27,6 +27,9 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg-app);
+    color: var(--fg-primary);
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   code, pre, kbd, samp {
@@ -50,20 +53,36 @@
 }
 
 /* =============================================
-   "Chart Paper" Design Tokens
+   "Chart Paper" Design Tokens (Light & Dark)
    ============================================= */
 
 :root {
   --bg-app: #F7F4EB;        /* Off-white chart paper */
-  --bg-dark: #100D0A;       /* Warm near-black stage backdrop */
+  --bg-header: rgba(247, 244, 235, 0.95);
   --fg-primary: #171310;    /* Warm near-black printed ink */
-  --fg-dark: #F7F4EB;       /* Inverted paper tone text for stage */
-  --accent: #E8432E;        /* Vermilion / stage-tape red */
-  --accent-hover: #D03522;
-  --secondary: #D9A62E;     /* Mustard gold for section sequences */
+  --fg-secondary: #7A6E62;
   --surface-card: #FBF9F2;  /* Flat card surface */
   --surface-card-alt: #FFFFFF;
   --border-ink: #171310;    /* Solid ink border */
+  --border-subtle: rgba(23, 19, 16, 0.15);
+  --accent: #E8432E;        /* Vermilion / stage-tape red */
+  --accent-hover: #D03522;
+  --secondary: #D9A62E;     /* Mustard gold for section sequences */
+}
+
+.dark,
+[data-theme="dark"] {
+  --bg-app: #100D0A;        /* Warm near-black stage backdrop */
+  --bg-header: rgba(16, 13, 10, 0.95);
+  --fg-primary: #F7F4EB;    /* Inverted paper tone text for stage */
+  --fg-secondary: #A89C8E;
+  --surface-card: #1A1512;  /* Dark flat card surface */
+  --surface-card-alt: #241D17;
+  --border-ink: #3A332C;    /* Warm-toned dark mode border */
+  --border-subtle: #2A2420;
+  --accent: #E8432E;
+  --accent-hover: #D03522;
+  --secondary: #D9A62E;
 }
 
 /* Confident focus outline */
