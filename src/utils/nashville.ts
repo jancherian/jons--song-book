@@ -1,13 +1,13 @@
 // Nashville Number System Utilities
 
 export const SECTION_TYPES: { type: import('../types/song').SectionType; label: string; color: string }[] = [
-  { type: 'INTRO', label: 'Intro', color: 'bg-neutral-100 text-black border-black' },
-  { type: 'VERSE', label: 'Verse', color: 'bg-neutral-100 text-black border-black' },
-  { type: 'PRE-CHORUS', label: 'Pre-Chorus', color: 'bg-neutral-100 text-black border-black' },
-  { type: 'CHORUS', label: 'Chorus', color: 'bg-neutral-100 text-black border-black' },
-  { type: 'BRIDGE', label: 'Bridge', color: 'bg-neutral-100 text-black border-black' },
-  { type: 'TAG', label: 'Tag', color: 'bg-neutral-100 text-black border-black' },
-  { type: 'OUTRO', label: 'Outro', color: 'bg-neutral-100 text-black border-black' },
+  { type: 'INTRO', label: 'Intro', color: 'bg-zinc-100 text-zinc-800' },
+  { type: 'VERSE', label: 'Verse', color: 'bg-zinc-100 text-zinc-800' },
+  { type: 'PRE-CHORUS', label: 'Pre-Chorus', color: 'bg-zinc-100 text-zinc-800' },
+  { type: 'CHORUS', label: 'Chorus', color: 'bg-zinc-100 text-zinc-800' },
+  { type: 'BRIDGE', label: 'Bridge', color: 'bg-zinc-100 text-zinc-800' },
+  { type: 'TAG', label: 'Tag', color: 'bg-zinc-100 text-zinc-800' },
+  { type: 'OUTRO', label: 'Outro', color: 'bg-zinc-100 text-zinc-800' },
 ];
 
 export const MAJOR_KEYS = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'] as const;

@@ -7,7 +7,7 @@ interface LogoMarkProps {
 }
 
 export const LogoMark: React.FC<LogoMarkProps> = ({
-  size = 36,
+  size = 32,
   className = '',
   theme = 'light',
 }) => {
@@ -18,11 +18,16 @@ export const LogoMark: React.FC<LogoMarkProps> = ({
   return (
     <img
       src={imgSrc}
-      alt="CHORDSET Logo"
+      alt="Chordset Logo"
       className={`inline-block shrink-0 object-contain select-none ${className}`}
-      style={{ width: size, height: size }}
+      style={{
+        width: size,
+        height: size,
+        minWidth: size,
+        minHeight: size,
+      }}
       loading="eager"
-      title="CHORDSET"
+      title="Chordset"
     />
   );
 };

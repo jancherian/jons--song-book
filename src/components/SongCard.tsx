@@ -6,10 +6,11 @@ import {
   ArrowRight
 } from 'lucide-react';
 import type { Song } from '../types/song';
+import { triggerHaptic } from '../utils/haptics';
 
 interface SongCardProps {
   song: Song;
-  index: number;
+  index?: number;
   onSelectSong: (song: Song) => void;
   onPerformSong: (song: Song) => void;
   onToggleFavorite: (songId: string) => void;
@@ -18,112 +19,135 @@ interface SongCardProps {
 
 export const SongCard: React.FC<SongCardProps> = ({
   song,
-  index,
   onSelectSong,
   onPerformSong,
   onToggleFavorite,
   onRequestDelete,
 }) => {
   const totalSections = song.sections.length;
-  const formattedIndex = String(index + 1).padStart(2, '0');
 
   return (
     <div
-      onClick={() => onSelectSong(song)}
-      className="swiss-card relative p-5 flex flex-col gap-4 cursor-pointer"
+      onClick={() => {
+        triggerHaptic(15);
+        onSelectSong(song);
+      }}
+      className={`p-5 sm:p-6 rounded-md flex flex-col gap-4 cursor-pointer transition-all duration-150 hover:scale-[1.012] active:scale-[0.99] group select-none border-2 border-[#171310] ${
+        song.favorite 
+          ? 'bg-[#FDF6E8] hover:bg-[#F8ECD2]' 
+          : 'bg-[#FBF9F2] hover:bg-[#F3EFE3]'
+      }`}
     >
-      {/* Top Row: Index + Title + Star Favorite */}
+      {/* Top Row: Left-Anchored Monospace Title + Favorite Star */}
       <div className="flex items-start justify-between gap-4">
-        <div className="flex items-baseline gap-3 min-w-0">
-          <span className="font-mono text-xs font-black text-[#FF3000] shrink-0">
-            {formattedIndex}
-          </span>
+        <div className="min-w-0 flex-1">
+          {/* Song Title as Primary Anchor strictly in Bold Monospace */}
+          <h4 
+            className="font-mono font-bold text-xl sm:text-2xl text-[#171310] tracking-tight truncate group-hover:text-[#E8432E] transition-colors"
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+          >
+            {song.title}
+          </h4>
           
-          <div className="min-w-0">
-            <h4 className="text-xl sm:text-2xl font-black text-black tracking-tight uppercase truncate">
-              {song.title}
-            </h4>
-            
-            {/* Metadata Line */}
-            <div className="flex items-center gap-3 text-xs font-mono text-neutral-600 mt-1 uppercase font-bold tracking-wider">
-              <span>{totalSections} {totalSections === 1 ? 'Section' : 'Sections'}</span>
-              <span className="w-1 h-1 bg-black" />
-              {song.key && (
-                <>
-                  <span className="text-black font-extrabold">Key {song.key}</span>
-                  <span className="w-1 h-1 bg-black" />
-                </>
-              )}
-              {song.bpm && (
-                <>
-                  <span>{song.bpm} BPM</span>
-                  <span className="w-1 h-1 bg-black" />
-                </>
-              )}
-              <span className="truncate">{song.artist || 'Traditional'}</span>
-            </div>
+          {/* Tighter, Smaller Metadata Cluster Beneath in Sans-Serif */}
+          <div className="flex items-center gap-2.5 text-xs text-[#171310]/70 mt-1.5 font-medium flex-wrap font-sans">
+            <span className="text-[#171310] font-bold">{totalSections} {totalSections === 1 ? 'sec' : 'secs'}</span>
+            <span className="w-1 h-1 rounded-full bg-[#171310]/30" />
+            {song.key && (
+              <>
+                <span className="text-[#171310] font-bold">Key {song.key}</span>
+                <span className="w-1 h-1 rounded-full bg-[#171310]/30" />
+              </>
+            )}
+            {song.bpm && (
+              <>
+                <span className="font-semibold">{song.bpm} BPM</span>
+                <span className="w-1 h-1 rounded-full bg-[#171310]/30" />
+              </>
+            )}
+            <span className="truncate text-[#171310]/70 font-medium">{song.artist || 'Traditional'}</span>
           </div>
         </div>
 
-        {/* Favorite Star Button */}
+        {/* Favorite Star Button with 44x44px Touch Target */}
         <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
+            triggerHaptic(15);
             onToggleFavorite(song.id);
           }}
-          className="p-2 -mr-1 -mt-1 hover:bg-black hover:text-white transition-colors duration-150 shrink-0"
+          className={`w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-all duration-150 hover:scale-110 active:scale-95 shrink-0 border ${
+            song.favorite
+              ? 'bg-[#E8432E] text-[#F7F4EB] border-[#171310]'
+              : 'bg-white text-[#171310]/40 hover:text-[#E8432E] hover:bg-[#FDF6E8] border-[#171310]/30'
+          }`}
           title={song.favorite ? 'Remove from favorites' : 'Add to favorites'}
         >
           <Star
-            size={20}
-            className={
-              song.favorite
-                ? 'text-[#FF3000] fill-[#FF3000]'
-                : 'text-neutral-400 hover:text-white'
-            }
+            size={18}
+            className={song.favorite ? 'fill-[#F7F4EB]' : ''}
           />
         </button>
       </div>
 
-      {/* Section Flow Tags Row */}
-      <div className="flex items-center gap-2 flex-wrap border-t border-neutral-300 pt-3">
-        <span className="text-[10px] font-mono font-black uppercase text-neutral-500 tracking-widest mr-1">
-          Flow:
-        </span>
-        {song.sections.map((sec, idx) => (
-          <React.Fragment key={sec.id}>
-            <span className="text-xs font-mono font-bold text-black uppercase tracking-wider">
-              {sec.type}
-            </span>
-            {idx < song.sections.length - 1 && (
-              <span className="text-neutral-400 font-mono text-xs">→</span>
-            )}
-          </React.Fragment>
-        ))}
-      </div>
+      {/* Section Flow Monospace Tags Row */}
+      {song.sections.length > 0 && (
+        <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+          <span 
+            className="text-[11px] text-[#171310]/60 font-bold uppercase tracking-wider mr-1 font-mono"
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+          >
+            Flow:
+          </span>
+          {song.sections.map((sec, idx) => (
+            <React.Fragment key={sec.id}>
+              <span 
+                className="font-mono text-xs font-bold text-[#171310] bg-white px-2 py-0.5 rounded border border-[#171310]/30 uppercase tracking-wide"
+                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              >
+                {sec.type}
+              </span>
+              {idx < song.sections.length - 1 && (
+                <span 
+                  className="text-[#171310]/40 text-xs font-bold font-mono"
+                  style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                >
+                  →
+                </span>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      )}
 
       {/* Action Row at Bottom */}
-      <div className="border-t-2 border-black pt-3 flex items-center justify-between gap-3">
+      <div className="pt-1 flex items-center justify-between gap-3 border-t border-[#171310]/15">
         <div className="flex items-center gap-2">
-          {/* Quick Stage Perform Button */}
+          {/* Solid Vermilion Perform CTA with 44px Touch Target */}
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
+              triggerHaptic(20);
               onPerformSong(song);
             }}
-            className="px-4 py-1.5 bg-[#FF3000] text-white hover:bg-black text-xs font-mono font-black uppercase tracking-wider flex items-center gap-1.5 transition-colors duration-150"
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            className="px-4 py-2.5 min-h-[44px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono font-bold text-xs rounded-md flex items-center gap-2 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wide border border-[#171310]"
           >
-            <Play size={12} className="fill-current" />
-            <span>Perform</span>
+            <Play size={13} className="fill-current" />
+            <span>PERFORM</span>
           </button>
 
-          {/* Delete Button */}
+          {/* Delete Button with 44x44px Touch Target */}
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
+              triggerHaptic(15);
               onRequestDelete(song.id);
             }}
-            className="p-1.5 border border-transparent hover:border-black hover:bg-black hover:text-white text-neutral-500 transition-colors duration-150"
+            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white hover:bg-red-50 text-[#171310]/40 hover:text-[#E8432E] transition-all duration-150 hover:scale-110 active:scale-95 flex items-center justify-center border border-[#171310]/20"
             title="Delete Song"
           >
             <Trash2 size={15} />
@@ -131,9 +155,12 @@ export const SongCard: React.FC<SongCardProps> = ({
         </div>
 
         {/* Open Chart Indicator */}
-        <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-black">
-          <span>Edit Chart</span>
-          <ArrowRight size={15} className="text-[#FF3000]" />
+        <div 
+          className="flex items-center gap-1 font-mono text-xs font-bold text-[#171310]/70 group-hover:text-[#E8432E] transition-colors uppercase"
+          style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+        >
+          <span>EDIT CHART</span>
+          <ArrowRight size={13} className="text-[#E8432E] group-hover:translate-x-0.5 transition-transform" />
         </div>
       </div>
     </div>

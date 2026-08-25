@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Plus } from 'lucide-react';
 import { MAJOR_KEYS } from '../utils/nashville';
+import { triggerHaptic } from '../utils/haptics';
 
 interface NewSongModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
+    triggerHaptic(20);
     onCreate(title.trim(), artist.trim(), selectedKey, bpm);
     setTitle('');
     setArtist('');
@@ -30,62 +32,86 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-      <div className="w-full max-w-md p-6 swiss-dialog text-black relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+      <div className="w-full max-w-md p-6 bg-[#FBF9F2] rounded-md text-[#171310] relative space-y-5 border-2 border-[#171310]">
         <button
-          onClick={onClose}
-          className="absolute top-5 right-5 text-black hover:bg-black hover:text-white p-1.5 transition-colors"
+          type="button"
+          onClick={() => {
+            triggerHaptic(10);
+            onClose();
+          }}
+          className="absolute top-4 right-4 text-[#171310]/50 hover:text-[#171310] hover:bg-white p-2 min-w-[36px] min-h-[36px] rounded-md transition-colors border border-transparent hover:border-[#171310] flex items-center justify-center"
         >
           <X size={18} />
         </button>
 
-        <div className="border-b-2 border-black pb-4 mb-6">
-          <span className="text-[10px] font-mono font-black text-[#FF3000] uppercase tracking-[0.25em] block mb-1">
-            New Repertoire Chart
+        <div>
+          <span 
+            className="font-mono text-xs font-bold uppercase tracking-wider text-[#E8432E] block mb-1"
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+          >
+            New Chart
           </span>
-          <h3 className="text-2xl font-black tracking-tight text-black uppercase font-sans">
-            CREATE SONG
+          <h3 
+            className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-[#171310]"
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+          >
+            Create Song
           </h3>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5 font-mono text-xs">
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="text-black block mb-1 font-black uppercase tracking-wider text-[11px]">
-              Song Title <span className="text-[#FF3000]">*</span>
+            <label 
+              className="font-mono text-[#171310] block mb-1.5 font-bold text-xs uppercase tracking-wider"
+              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            >
+              Song title <span className="text-[#E8432E]">*</span>
             </label>
             <input
               type="text"
               autoFocus
               required
-              placeholder="E.G. AMAZING GRACE, STAND BY ME"
+              placeholder="e.g. Amazing Grace, Stand By Me"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3 py-2.5 bg-neutral-100 border-b-2 border-black text-sm text-black uppercase font-bold placeholder:text-neutral-400 focus:outline-none focus:border-[#FF3000] transition-colors"
+              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              className="w-full px-3.5 py-2.5 min-h-[44px] bg-white rounded-md text-sm text-[#171310] font-mono font-bold placeholder:text-[#171310]/40 placeholder:font-normal placeholder:font-sans focus:outline-none focus:ring-2 focus:ring-[#E8432E] border-2 border-[#171310] transition-all duration-150"
             />
           </div>
 
           <div>
-            <label className="text-black block mb-1 font-black uppercase tracking-wider text-[11px]">
-              Artist / Band (Optional)
+            <label 
+              className="font-mono text-[#171310] block mb-1.5 font-bold text-xs uppercase tracking-wider"
+              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            >
+              Artist / Band (optional)
             </label>
             <input
               type="text"
-              placeholder="E.G. JOHN NEWTON, BEN E. KING"
+              placeholder="e.g. John Newton, Ben E. King"
               value={artist}
               onChange={(e) => setArtist(e.target.value)}
-              className="w-full px-3 py-2.5 bg-neutral-100 border-b-2 border-black text-sm text-black uppercase font-bold placeholder:text-neutral-400 focus:outline-none focus:border-[#FF3000] transition-colors"
+              className="w-full px-3.5 py-2.5 min-h-[44px] bg-white rounded-md text-sm text-[#171310] font-sans font-medium placeholder:text-[#171310]/40 focus:outline-none focus:ring-2 focus:ring-[#E8432E] border-2 border-[#171310] transition-all duration-150"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3 font-mono">
             <div>
-              <label className="text-black block mb-1 font-black uppercase tracking-wider text-[11px]">
-                Default Key
+              <label 
+                className="text-[#171310] block mb-1.5 font-bold text-xs uppercase tracking-wider"
+                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              >
+                Default key
               </label>
               <select
                 value={selectedKey}
-                onChange={(e) => setSelectedKey(e.target.value)}
-                className="w-full px-3 py-2.5 bg-neutral-100 border-b-2 border-black text-sm text-black uppercase font-bold focus:outline-none focus:border-[#FF3000] cursor-pointer transition-colors"
+                onChange={(e) => {
+                  triggerHaptic(10);
+                  setSelectedKey(e.target.value);
+                }}
+                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                className="w-full px-3.5 py-2.5 min-h-[44px] bg-white rounded-md text-sm text-[#171310] font-bold focus:outline-none focus:ring-2 focus:ring-[#E8432E] border-2 border-[#171310] cursor-pointer transition-all duration-150"
               >
                 {MAJOR_KEYS.map((k) => (
                   <option key={k} value={k}>Key of {k}</option>
@@ -94,7 +120,10 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
             </div>
 
             <div>
-              <label className="text-black block mb-1 font-black uppercase tracking-wider text-[11px]">
+              <label 
+                className="text-[#171310] block mb-1.5 font-bold text-xs uppercase tracking-wider"
+                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              >
                 Tempo (BPM)
               </label>
               <input
@@ -103,26 +132,32 @@ export const NewSongModal: React.FC<NewSongModalProps> = ({
                 max={250}
                 value={bpm}
                 onChange={(e) => setBpm(Number(e.target.value))}
-                className="w-full px-3 py-2.5 bg-neutral-100 border-b-2 border-black text-sm text-black uppercase font-bold focus:outline-none focus:border-[#FF3000] transition-colors"
+                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                className="w-full px-3.5 py-2.5 min-h-[44px] bg-white rounded-md text-sm text-[#171310] font-bold focus:outline-none focus:ring-2 focus:ring-[#E8432E] border-2 border-[#171310] transition-all duration-150"
               />
             </div>
           </div>
 
-          <div className="pt-4 border-t-2 border-black flex justify-end gap-2">
+          <div className="pt-3 border-t-2 border-[#171310]/15 flex justify-end gap-2 font-mono">
             <button
               type="button"
-              onClick={onClose}
-              className="swiss-btn-outline px-4 py-2.5 text-xs"
+              onClick={() => {
+                triggerHaptic(10);
+                onClose();
+              }}
+              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              className="px-4 py-2.5 min-h-[44px] bg-white hover:bg-[#F3EFE3] text-[#171310] text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 border-2 border-[#171310]"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={!title.trim()}
-              className="swiss-btn-accent px-5 py-2.5 text-xs flex items-center gap-1.5"
+              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              className="px-5 py-2.5 min-h-[44px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] text-xs font-bold rounded-md flex items-center justify-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 disabled:opacity-50 cursor-pointer uppercase tracking-wider border-2 border-[#171310]"
             >
-              <Plus size={14} />
-              <span>Create Chart</span>
+              <Plus size={15} />
+              <span>CREATE CHART</span>
             </button>
           </div>
         </form>

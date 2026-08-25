@@ -5,17 +5,17 @@ interface SplashLoaderProps {
   message?: string;
 }
 
-export const SplashLoader: React.FC<SplashLoaderProps> = ({ message = 'INITIALIZING CHARTS...' }) => {
+export const SplashLoader: React.FC<SplashLoaderProps> = ({ message = 'Loading charts...' }) => {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black text-white p-6 swiss-dots select-none">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#100D0A] text-[#F7F4EB] p-6 select-none font-mono">
       <div className="flex flex-col items-center gap-6 animate-pulse">
-        <LogoMark size={80} />
+        <LogoMark size={72} theme="dark" />
         
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-black tracking-tight text-white uppercase font-sans">
-            CHORDSET
+        <div className="text-center space-y-1.5">
+          <h2 className="text-3xl font-bold tracking-tight text-[#F7F4EB]">
+            Chordset
           </h2>
-          <p className="text-xs font-mono font-bold text-[#FF3000] uppercase tracking-[0.2em]">
+          <p className="text-xs font-bold uppercase tracking-widest text-[#E8432E]">
             {message}
           </p>
         </div>

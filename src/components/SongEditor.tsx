@@ -15,6 +15,7 @@ import { MAJOR_KEYS } from '../utils/nashville';
 import { SectionTypePickerModal } from './SectionTypePickerModal';
 import { NashvilleNumberPad } from './NashvilleNumberPad';
 import { LogoMark } from './LogoMark';
+import { triggerHaptic } from '../utils/haptics';
 
 interface SongEditorProps {
   song: Song;
@@ -42,6 +43,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
 
   // Section Management
   const handleAddSection = (type: SectionType, defaultLabel: string) => {
+    triggerHaptic(20);
     const countOfType = song.sections.filter(s => s.type === type).length;
     const label = countOfType > 0 ? `${defaultLabel} ${countOfType + 1}` : defaultLabel;
     
@@ -68,6 +70,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
     if (direction === 'up' && index === 0) return;
     if (direction === 'down' && index === song.sections.length - 1) return;
 
+    triggerHaptic(20);
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
     const reordered = [...song.sections];
     const [moved] = reordered.splice(index, 1);
@@ -77,6 +80,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
   };
 
   const handleDeleteSection = (sectionId: string) => {
+    triggerHaptic(20);
     mutateSong(s => ({
       ...s,
       sections: s.sections.filter(sec => sec.id !== sectionId)
@@ -88,6 +92,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
 
   // Line Management
   const handleAddLine = (sectionId: string) => {
+    triggerHaptic(15);
     const newLine: SongLine = {
       id: `line-${Date.now()}`,
       chords: ['1', '5', '6m', '4'],
@@ -106,6 +111,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
   };
 
   const handleDeleteLine = (sectionId: string, lineId: string) => {
+    triggerHaptic(15);
     mutateSong(s => ({
       ...s,
       sections: s.sections.map(sec => {
@@ -143,6 +149,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
 
   // Chord Slot Management
   const handleSelectChordSlot = (sectionId: string, lineId: string, chordIndex: number) => {
+    triggerHaptic(15);
     setSelectedSlot({ sectionId, lineId, chordIndex });
   };
 
@@ -172,6 +179,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
   };
 
   const handleAddChordSlotToLine = (sectionId: string, lineId: string) => {
+    triggerHaptic(15);
     mutateSong(s => ({
       ...s,
       sections: s.sections.map(sec => {
@@ -203,6 +211,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
   };
 
   const handleDeleteChordSlot = (sectionId: string, lineId: string, chordIndex: number) => {
+    triggerHaptic(15);
     mutateSong(s => ({
       ...s,
       sections: s.sections.map(sec => {
@@ -229,6 +238,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
 
   // Number Pad slot navigation
   const navigateSlot = (direction: 'next' | 'prev') => {
+    triggerHaptic(10);
     if (!selectedSlot) return;
     const { sectionId, lineId, chordIndex } = selectedSlot;
     const sec = song.sections.find(s => s.id === sectionId);
@@ -259,45 +269,66 @@ export const SongEditor: React.FC<SongEditorProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans swiss-grid pb-72 relative w-full max-w-full overflow-x-hidden">
+    <div className="min-h-screen chart-grid-bg text-[#171310] font-sans pb-72 relative w-full max-w-full overflow-x-hidden">
       
-      {/* Sticky Header (Constrained for 375px+ Viewports) */}
-      <header className="sticky top-0 z-40 bg-white border-b-2 border-black px-4 sm:px-6 h-16 flex items-center justify-between gap-2 w-full max-w-full">
+      {/* Sticky Header */}
+      <header className="sticky top-0 z-40 bg-[#F7F4EB]/95 border-b-2 border-[#171310] px-4 sm:px-6 h-16 flex items-center justify-between gap-2 w-full max-w-full">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
-            onClick={onBack}
-            className="p-1.5 sm:p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150 shrink-0"
+            type="button"
+            onClick={() => {
+              triggerHaptic(15);
+              onBack();
+            }}
+            className="p-2 min-w-[44px] min-h-[44px] rounded-md hover:bg-white text-[#171310] transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border-2 border-[#171310] flex items-center justify-center"
             title="Back to Songs"
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={18} />
           </button>
 
-          <LogoMark size={28} className="hidden sm:inline-block" />
+          <LogoMark size={28} />
 
-          <h1 className="text-base sm:text-lg font-black uppercase text-black tracking-tight truncate">
-            CHORDSET <span className="text-[#FF3000]">//</span> <span className="hidden xs:inline">EDITOR</span>
+          <h1 
+            className="font-mono text-base sm:text-lg font-bold text-[#171310] tracking-tight truncate"
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+          >
+            Chordset <span className="text-[#171310]/40 font-normal">/</span> <span className="text-[#171310] font-black">Editor</span>
           </h1>
         </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 font-mono">
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Favorite Circle Button */}
           <button
-            onClick={() => onToggleFavorite(song.id)}
-            className="p-1.5 sm:p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150"
-            title={song.favorite ? 'Favorite' : 'Add to favorites'}
+            type="button"
+            onClick={() => {
+              triggerHaptic(15);
+              onToggleFavorite(song.id);
+            }}
+            className={`w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-all duration-150 hover:scale-110 active:scale-95 border-2 border-[#171310] ${
+              song.favorite 
+                ? 'bg-[#E8432E] text-[#F7F4EB]' 
+                : 'bg-white text-[#171310]/40 hover:text-[#E8432E]'
+            }`}
+            title={song.favorite ? 'Remove from favorites' : 'Add to favorites'}
           >
             <Star
-              size={16}
-              className={song.favorite ? 'text-[#FF3000] fill-[#FF3000]' : 'text-neutral-400'}
+              size={18}
+              className={song.favorite ? 'fill-[#F7F4EB]' : ''}
             />
           </button>
 
-          {/* Launch Stage Performance Mode */}
+          {/* Solid Vermilion Perform CTA */}
           <button
-            onClick={onLaunchPerformance}
-            className="swiss-btn-accent px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-xs"
+            type="button"
+            onClick={() => {
+              triggerHaptic(20);
+              onLaunchPerformance();
+            }}
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            className="px-4 py-2.5 min-h-[44px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono font-bold text-xs rounded-md flex items-center gap-1.5 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 border-[#171310]"
           >
-            <Play size={12} className="fill-current mr-1 sm:mr-1.5" />
-            <span>STAGE</span>
+            <Play size={13} className="fill-current mr-0.5" />
+            <span>PERFORM</span>
           </button>
         </div>
       </header>
@@ -305,28 +336,38 @@ export const SongEditor: React.FC<SongEditorProps> = ({
       {/* Main Content Canvas */}
       <main className="max-w-4xl mx-auto px-4 sm:px-8 pt-6 sm:pt-8 flex flex-col gap-6 sm:gap-8 w-full max-w-full overflow-x-hidden">
         
-        {/* Editable Song Title (Underlined Swiss Input) */}
-        <div className="border-b-4 border-black pb-4">
-          <label className="text-[10px] font-mono font-black uppercase tracking-[0.25em] text-[#FF3000] block mb-1">
+        {/* Editable Song Title in Bold Monospace */}
+        <div className="space-y-1">
+          <label 
+            className="font-mono text-xs font-bold uppercase tracking-wider text-[#171310]/60 block"
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+          >
             Chart Title
           </label>
           <input
             type="text"
             value={song.title}
             onChange={(e) => mutateSong(s => ({ ...s, title: e.target.value }))}
-            placeholder="ENTER CHART TITLE..."
-            className="text-3xl sm:text-5xl font-black uppercase text-black bg-transparent w-full focus:outline-none tracking-tight font-sans"
+            placeholder="Enter chart title..."
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            className="font-mono text-2xl sm:text-4xl font-bold text-[#171310] bg-transparent w-full focus:outline-none tracking-tight placeholder:text-[#171310]/30"
           />
         </div>
 
         {/* Metadata Controls Strip */}
-        <div className="flex flex-wrap items-center gap-3 font-mono text-xs border-b-2 border-black pb-4">
-          <div className="flex items-center gap-2 bg-[#F2F2F2] border border-black px-3 py-1.5 font-bold">
-            <span className="text-neutral-500 uppercase">Key:</span>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div 
+            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3.5 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+          >
+            <span className="text-[#171310]/60 uppercase">Key:</span>
             <select
               value={song.key || 'G'}
-              onChange={(e) => mutateSong(s => ({ ...s, key: e.target.value }))}
-              className="bg-transparent font-black text-black uppercase focus:outline-none cursor-pointer"
+              onChange={(e) => {
+                triggerHaptic(10);
+                mutateSong(s => ({ ...s, key: e.target.value }));
+              }}
+              className="bg-transparent font-mono font-bold text-[#171310] focus:outline-none cursor-pointer"
             >
               {MAJOR_KEYS.map(k => (
                 <option key={k} value={k}>Key of {k}</option>
@@ -334,24 +375,33 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             </select>
           </div>
 
-          <div className="flex items-center gap-2 bg-[#F2F2F2] border border-black px-3 py-1.5 font-bold">
-            <span className="text-neutral-500 uppercase">BPM:</span>
+          <div 
+            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3.5 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+          >
+            <span className="text-[#171310]/60 uppercase">BPM:</span>
             <input
               type="number"
               min={30}
               max={250}
               value={song.bpm || 80}
               onChange={(e) => mutateSong(s => ({ ...s, bpm: Number(e.target.value) }))}
-              className="w-12 bg-transparent font-black text-black focus:outline-none"
+              className="w-12 bg-transparent font-mono font-bold text-[#171310] focus:outline-none"
             />
           </div>
 
-          <div className="flex items-center gap-2 bg-[#F2F2F2] border border-black px-3 py-1.5 font-bold">
-            <span className="text-neutral-500 uppercase">Time:</span>
+          <div 
+            className="flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3.5 py-2 min-h-[44px] text-xs font-mono font-bold text-[#171310]"
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+          >
+            <span className="text-[#171310]/60 uppercase">Time:</span>
             <select
               value={song.timeSignature || '4/4'}
-              onChange={(e) => mutateSong(s => ({ ...s, timeSignature: e.target.value }))}
-              className="bg-transparent font-black text-black focus:outline-none cursor-pointer"
+              onChange={(e) => {
+                triggerHaptic(10);
+                mutateSong(s => ({ ...s, timeSignature: e.target.value }));
+              }}
+              className="bg-transparent font-mono font-bold text-[#171310] focus:outline-none cursor-pointer"
             >
               <option value="4/4">4/4</option>
               <option value="3/4">3/4</option>
@@ -360,14 +410,19 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             </select>
           </div>
 
-          <div className="w-full sm:w-auto sm:flex-1 min-w-0 flex items-center gap-2 bg-[#F2F2F2] border border-black px-3 py-1.5 font-bold">
-            <span className="text-neutral-500 uppercase shrink-0">Artist:</span>
+          <div className="w-full sm:w-auto sm:flex-1 min-w-0 flex items-center gap-1.5 bg-white border-2 border-[#171310] rounded-md px-3.5 py-2 min-h-[44px] text-xs font-medium text-[#171310]">
+            <span 
+              className="font-mono text-[#171310]/60 font-bold uppercase shrink-0"
+              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            >
+              Artist:
+            </span>
             <input
               type="text"
               value={song.artist || ''}
               onChange={(e) => mutateSong(s => ({ ...s, artist: e.target.value }))}
-              placeholder="OPTIONAL ARTIST..."
-              className="w-full bg-transparent font-black text-black uppercase placeholder:text-neutral-400 focus:outline-none min-w-0"
+              placeholder="Artist or band (optional)..."
+              className="w-full bg-transparent font-sans font-medium text-[#171310] placeholder:text-[#171310]/40 focus:outline-none min-w-0"
             />
           </div>
         </div>
@@ -380,18 +435,23 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             return (
               <section
                 key={section.id}
-                className="bg-[#F2F2F2] border-2 border-black p-5 flex flex-col gap-4"
+                className="bg-white border-2 border-[#171310] rounded-md p-5 sm:p-6 flex flex-col gap-4 transition-all duration-150"
               >
-                {/* Section Header with Swiss Index Prefix */}
-                <div className="flex justify-between items-center border-b-2 border-black pb-3 w-full max-w-full">
-                  <div className="flex items-baseline gap-2 min-w-0">
-                    <span className="font-mono text-sm font-black text-[#FF3000] shrink-0">
+                {/* Section Header with Mustard Monospace Sequence Number */}
+                <div className="flex justify-between items-center w-full max-w-full flex-wrap gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span 
+                      className="font-mono text-xs font-black bg-[#D9A62E] text-[#171310] px-2 py-0.5 rounded border border-[#171310] shrink-0"
+                      style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 900 }}
+                    >
                       {formattedSecIndex}
                     </span>
-                    <span className="font-mono text-xs font-black uppercase text-black tracking-widest shrink-0">
+                    <span 
+                      className="font-mono text-xs font-bold bg-[#171310] text-[#F7F4EB] px-2.5 py-1 rounded uppercase tracking-wider shrink-0"
+                      style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                    >
                       {section.type}
                     </span>
-                    <span className="text-neutral-400 text-xs font-mono shrink-0">—</span>
                     <input
                       type="text"
                       value={section.label || ''}
@@ -402,121 +462,128 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                           sections: s.sections.map((sec, i) => i === secIdx ? { ...sec, label: val } : sec)
                         }));
                       }}
-                      placeholder="CUSTOM LABEL"
-                      className="text-xs font-mono font-bold text-black uppercase bg-transparent border-b border-transparent hover:border-black focus:border-[#FF3000] focus:outline-none min-w-0 truncate"
+                      placeholder="Custom label"
+                      style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                      className="font-mono text-sm font-bold text-[#171310] bg-transparent hover:bg-[#F7F4EB] focus:bg-[#F7F4EB] rounded px-2 py-0.5 focus:outline-none transition-colors min-w-0 truncate border border-transparent focus:border-[#171310]"
                     />
                   </div>
 
-                  <div className="flex items-center gap-1 shrink-0">
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <button
+                      type="button"
                       onClick={() => handleMoveSection(secIdx, 'up')}
                       disabled={secIdx === 0}
-                      className="p-1 border border-black bg-white hover:bg-black hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-black"
+                      className="p-2 min-w-[36px] min-h-[36px] rounded-md bg-[#F7F4EB] hover:bg-[#EDE8DA] text-[#171310] disabled:opacity-30 disabled:hover:bg-[#F7F4EB] transition-all duration-150 hover:scale-105 active:scale-95 border border-[#171310] flex items-center justify-center"
                       title="Move Up"
                     >
-                      <ChevronUp size={14} />
+                      <ChevronUp size={16} />
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleMoveSection(secIdx, 'down')}
                       disabled={secIdx === song.sections.length - 1}
-                      className="p-1 border border-black bg-white hover:bg-black hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-black"
+                      className="p-2 min-w-[36px] min-h-[36px] rounded-md bg-[#F7F4EB] hover:bg-[#EDE8DA] text-[#171310] disabled:opacity-30 disabled:hover:bg-[#F7F4EB] transition-all duration-150 hover:scale-105 active:scale-95 border border-[#171310] flex items-center justify-center"
                       title="Move Down"
                     >
-                      <ChevronDown size={14} />
+                      <ChevronDown size={16} />
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleAddLine(section.id)}
-                      className="swiss-btn-outline px-2.5 py-0.5 text-[11px] ml-1"
+                      style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                      className="px-3 py-2 min-h-[36px] rounded-md bg-[#F7F4EB] hover:bg-[#EDE8DA] text-[#171310] font-mono text-xs font-bold transition-all duration-150 hover:scale-105 active:scale-95 ml-1 uppercase border border-[#171310] flex items-center justify-center"
                     >
-                      + Line
+                      + LINE
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleDeleteSection(section.id)}
-                      className="p-1 border border-transparent hover:border-black hover:bg-[#FF3000] hover:text-white text-neutral-500 transition-colors ml-1"
+                      className="p-2 min-w-[36px] min-h-[36px] rounded-md text-[#171310]/50 hover:text-[#E8432E] hover:bg-red-50 transition-all duration-150 hover:scale-105 active:scale-95 ml-0.5 flex items-center justify-center"
                       title="Delete Section"
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 </div>
 
-                {/* Section Lines */}
-                <div className="space-y-4 pt-1 w-full max-w-full">
+                {/* Section Lines Container */}
+                <div className="space-y-3 pt-1 w-full max-w-full">
                   {section.lines.map((line) => (
-                    <div key={line.id} className="space-y-2 relative group/line bg-white border-2 border-black p-3 sm:p-4 w-full max-w-full overflow-hidden">
+                    <div key={line.id} className="space-y-2.5 relative group/line bg-[#FBF9F2] rounded-md p-3.5 sm:p-4 w-full max-w-full border border-[#171310]/30">
                       
                       {/* Responsive Flexible Chord Cells Container */}
-                      <div className="w-full max-w-full overflow-hidden border-2 border-black bg-white">
-                        <div className="flex flex-wrap items-stretch w-full max-w-full bg-white">
-                          {line.chords.map((chord, cIdx) => {
-                            const isSelected =
-                              selectedSlot?.sectionId === section.id &&
-                              selectedSlot?.lineId === line.id &&
-                              selectedSlot?.chordIndex === cIdx;
+                      <div className="flex flex-wrap items-stretch gap-2 w-full max-w-full">
+                        {line.chords.map((chord, cIdx) => {
+                          const isSelected =
+                            selectedSlot?.sectionId === section.id &&
+                            selectedSlot?.lineId === line.id &&
+                            selectedSlot?.chordIndex === cIdx;
 
-                            return (
-                              <div
-                                key={cIdx}
-                                className="relative group/slot flex-1 min-w-[56px] sm:min-w-[68px] border-r-2 border-b-2 sm:border-b-0 border-black bg-white"
+                          return (
+                            <div
+                              key={cIdx}
+                              className="relative group/slot flex-1 min-w-[56px] sm:min-w-[68px]"
+                            >
+                              <button
+                                type="button"
+                                onClick={() => handleSelectChordSlot(section.id, line.id, cIdx)}
+                                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                                className={`w-full h-13 sm:h-14 min-h-[44px] rounded-md flex items-center justify-center font-mono font-bold text-xl sm:text-2xl select-none transition-all duration-150 min-w-0 truncate px-1 cursor-pointer border-2 ${
+                                  isSelected 
+                                    ? 'bg-[#E8432E] text-[#F7F4EB] hover:bg-[#E8432E] scale-105 border-[#171310]' 
+                                    : 'bg-white text-[#171310] hover:bg-[#F3EFE3] hover:scale-105 active:scale-95 border-[#171310]'
+                                }`}
                               >
+                                {chord || <span className="text-[#171310]/30 font-normal">_</span>}
+                              </button>
+
+                              {line.chords.length > 1 && (
                                 <button
                                   type="button"
-                                  onClick={() => handleSelectChordSlot(section.id, line.id, cIdx)}
-                                  className={`w-full h-12 sm:h-14 flex items-center justify-center font-sans font-black text-lg sm:text-xl select-none transition-colors duration-100 min-w-0 truncate px-1 ${
-                                    isSelected 
-                                      ? 'bg-[#FF3000] text-white' 
-                                      : 'bg-white text-black hover:bg-neutral-100'
-                                  }`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteChordSlot(section.id, line.id, cIdx);
+                                  }}
+                                  className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-[#171310] hover:bg-[#E8432E] text-[#F7F4EB] text-xs font-bold rounded-full items-center justify-center hidden group-hover/slot:flex z-10 transition-colors"
+                                  title="Delete chord"
                                 >
-                                  {chord || <span className="text-neutral-400 font-normal">_</span>}
+                                  ×
                                 </button>
+                              )}
+                            </div>
+                          );
+                        })}
 
-                                {line.chords.length > 1 && (
-                                  <button
-                                    type="button"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleDeleteChordSlot(section.id, line.id, cIdx);
-                                    }}
-                                    className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-black text-white text-[10px] items-center justify-center hidden group-hover/slot:flex border border-white z-10"
-                                    title="Delete chord"
-                                  >
-                                    ×
-                                  </button>
-                                )}
-                              </div>
-                            );
-                          })}
-
-                          {/* Plus button to append slot */}
-                          <button
-                            type="button"
-                            onClick={() => handleAddChordSlotToLine(section.id, line.id)}
-                            className="px-3.5 sm:px-4 h-12 sm:h-14 bg-neutral-100 hover:bg-black hover:text-white font-mono font-black text-base text-black flex items-center justify-center transition-colors duration-100 shrink-0 border-b-2 sm:border-b-0 border-black"
-                            title="Add chord slot"
-                          >
-                            +
-                          </button>
-                        </div>
+                        {/* Plus button to append slot */}
+                        <button
+                          type="button"
+                          onClick={() => handleAddChordSlotToLine(section.id, line.id)}
+                          style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                          className="px-4 h-13 sm:h-14 min-h-[44px] bg-[#F7F4EB] hover:bg-[#EDE8DA] hover:scale-105 active:scale-95 rounded-md text-[#171310] font-mono font-bold text-lg flex items-center justify-center transition-all duration-150 shrink-0 cursor-pointer border-2 border-[#171310]"
+                          title="Add chord slot"
+                        >
+                          +
+                        </button>
                       </div>
 
-                      {/* Inline Lyrics Line directly beneath chord grid */}
-                      <div className="flex items-center gap-2 border-b border-black pt-2 pb-1 w-full max-w-full">
-                        <AlignLeft size={14} className="text-neutral-400 shrink-0" />
+                      {/* Inline Lyrics Line */}
+                      <div className="flex items-center gap-2 pt-1 w-full max-w-full font-sans">
+                        <AlignLeft size={16} className="text-[#171310]/50 shrink-0" />
                         <input
                           type="text"
                           value={line.lyrics}
                           onChange={(e) => handleUpdateLyrics(section.id, line.id, e.target.value)}
-                          placeholder="ENTER LYRICS FOR THIS MEASURE..."
-                          className="w-full bg-transparent border-none text-xs font-mono font-bold uppercase text-neutral-800 placeholder:text-neutral-400 focus:outline-none min-w-0"
+                          placeholder="Lyrics for this line (optional)..."
+                          className="w-full bg-transparent border-none text-xs sm:text-sm font-medium text-[#171310] placeholder:text-[#171310]/40 focus:outline-none focus:bg-white rounded px-2 py-1 min-w-0"
                         />
                         {section.lines.length > 1 && (
                           <button
+                            type="button"
                             onClick={() => handleDeleteLine(section.id, line.id)}
-                            className="p-1 text-neutral-400 hover:text-[#FF3000] transition-colors shrink-0"
+                            className="p-1.5 min-w-[32px] min-h-[32px] rounded-md text-[#171310]/50 hover:text-[#E8432E] hover:bg-red-50 transition-colors shrink-0 flex items-center justify-center"
                             title="Delete Line"
                           >
-                            <X size={14} />
+                            <X size={16} />
                           </button>
                         )}
                       </div>
@@ -528,13 +595,18 @@ export const SongEditor: React.FC<SongEditorProps> = ({
           })}
         </div>
 
-        {/* Add Section Button */}
+        {/* Add Section Button with 44px min height */}
         <div className="flex justify-center pt-2">
           <button
-            onClick={() => setIsSectionPickerOpen(true)}
-            className="swiss-btn px-6 py-3 text-xs"
+            type="button"
+            onClick={() => {
+              triggerHaptic(15);
+              setIsSectionPickerOpen(true);
+            }}
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            className="px-6 py-3.5 min-h-[48px] bg-[#171310] hover:bg-[#2E2520] text-[#F7F4EB] font-mono text-xs sm:text-sm font-bold rounded-md inline-flex items-center justify-center gap-2 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 border-[#171310]"
           >
-            <Plus size={16} className="mr-2" />
+            <Plus size={16} />
             <span>ADD SECTION</span>
           </button>
         </div>
@@ -547,12 +619,15 @@ export const SongEditor: React.FC<SongEditorProps> = ({
         onSelectType={handleAddSection}
       />
 
-      {/* Swiss Dot-Matrix Nashville Keypad when a chord slot is selected */}
+      {/* Bold Flat Nashville Keypad Drawer */}
       {selectedSlot && (
         <NashvilleNumberPad
           currentChord={activeChordValue}
           onChangeChord={handleUpdateActiveChord}
-          onClose={() => setSelectedSlot(null)}
+          onClose={() => {
+            triggerHaptic(15);
+            setSelectedSlot(null);
+          }}
           onNextSlot={() => navigateSlot('next')}
           onPrevSlot={() => navigateSlot('prev')}
           onAddNewSlot={() => handleAddChordSlotToLine(selectedSlot.sectionId, selectedSlot.lineId)}

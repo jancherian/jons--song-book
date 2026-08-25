@@ -116,7 +116,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans selection:bg-[#FF3000] selection:text-white">
+    <div className="min-h-screen chart-grid-bg bg-[#F7F4EB] text-[#171310] font-sans selection:bg-[#E8432E] selection:text-[#F7F4EB]">
       {currentView === 'home' && (
         <HomeScreen
           songs={songs}

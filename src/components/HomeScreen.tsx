@@ -3,12 +3,14 @@ import {
   Search, 
   Plus, 
   Music, 
-  Trash2
+  Trash2,
+  X
 } from 'lucide-react';
 import type { Song } from '../types/song';
 import { NewSongModal } from './NewSongModal';
 import { SongCard } from './SongCard';
 import { LogoMark } from './LogoMark';
+import { triggerHaptic } from '../utils/haptics';
 
 interface HomeScreenProps {
   songs: Song[];
@@ -40,189 +42,245 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     return matchesSearch && matchesFilter;
   });
 
+  const handleToggleFav = (songId: string) => {
+    triggerHaptic(15);
+    onToggleFavorite(songId);
+  };
+
+  const handlePerform = (song: Song) => {
+    triggerHaptic(20);
+    onPerformSong(song);
+  };
+
+  const handleOpenCreateModal = () => {
+    triggerHaptic(15);
+    setIsNewSongModalOpen(true);
+  };
+
   return (
-    <div className="min-h-screen bg-white text-black font-sans swiss-grid pb-32 relative w-full max-w-full overflow-x-hidden">
+    <div className="min-h-screen chart-grid-bg text-[#171310] font-sans relative w-full max-w-full overflow-x-hidden">
       
-      {/* Top Header Rule */}
-      <header className="sticky top-0 z-40 bg-white border-b-2 border-black px-4 sm:px-6 h-16 flex items-center justify-between gap-3 w-full max-w-full">
+      {/* Top Header */}
+      <header className="sticky top-0 z-30 bg-[#F7F4EB]/95 border-b-2 border-[#171310] px-4 sm:px-6 h-16 flex items-center justify-between gap-3 w-full max-w-full">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <LogoMark size={36} />
-          <h1 className="text-lg sm:text-xl font-black tracking-tight text-black uppercase font-sans truncate">
-            CHORDSET
+          <LogoMark size={32} />
+          <h1 
+            className="font-mono text-lg sm:text-xl font-bold tracking-tight text-[#171310] truncate"
+            style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+          >
+            Chordset
           </h1>
-          <span className="hidden sm:inline text-xs font-mono font-bold text-neutral-500 uppercase tracking-widest pl-2 border-l border-neutral-300 truncate">
+          <span className="hidden sm:inline font-mono text-xs text-[#171310]/60 font-semibold uppercase tracking-wider pl-2 border-l-2 border-[#171310]/20 truncate">
             Nashville Number System
           </span>
         </div>
-
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => setIsNewSongModalOpen(true)}
-            className="swiss-btn px-3 sm:px-4 py-1.5 sm:py-2 text-xs"
-          >
-            <Plus size={14} className="mr-1 sm:mr-1.5" />
-            <span>New Song</span>
-          </button>
-        </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-8 pt-6 sm:pt-10 flex flex-col gap-6 sm:gap-8 w-full max-w-full overflow-x-hidden">
+      {/* Main Content Area with generous bottom padding to prevent FAB overlap */}
+      <main className="max-w-4xl mx-auto px-4 sm:px-8 pt-6 sm:pt-8 pb-36 sm:pb-40 flex flex-col gap-6 sm:gap-8 w-full max-w-full overflow-x-hidden">
         
-        {/* Swiss Asymmetric Hero Header */}
-        <div className="border-b-4 border-black pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        {/* Bold Condensed Display Headline (Chart Paper Poster Identity) — NO hairline divider underneath */}
+        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
           <div>
-            <span className="text-xs font-mono font-black text-[#FF3000] uppercase tracking-[0.25em] block mb-1">
-              Objective Chord Charts // 2026
-            </span>
-            <h2 className="text-4xl sm:text-6xl font-black text-black uppercase tracking-tight leading-none font-sans">
-              REPERTOIRE
+            <h2 
+              className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-[#171310] tracking-tight leading-none uppercase"
+              style={{ fontFamily: "'Big Shoulders Display', Anton, 'Archivo Black', sans-serif", fontWeight: 900 }}
+            >
+              My Songs
             </h2>
           </div>
 
-          <div className="text-left sm:text-right font-mono text-xs text-neutral-600">
-            <span className="font-bold text-black block">{songs.length} TOTAL CHARTS</span>
-            <span>STANDARD TUNING // NASHVILLE</span>
+          <div className="text-left sm:text-right font-mono text-xs font-bold">
+            <span 
+              className="bg-white text-[#171310] px-3 py-1 rounded-md inline-block border-2 border-[#171310]"
+              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+            >
+              {songs.length} {songs.length === 1 ? 'CHART' : 'CHARTS'}
+            </span>
           </div>
         </div>
 
-        {/* Swiss Search Bar (Underlined input per Swiss convention) */}
+        {/* Flat White Search Bar with Solid 2px Ink Border */}
         <div className="relative w-full">
-          <div className="flex items-center border-b-2 border-black focus-within:border-[#FF3000] transition-colors duration-150 py-2">
-            <Search size={20} className="text-black mr-3 shrink-0" />
+          <div className="flex items-center bg-white rounded-md px-4 py-3 min-h-[48px] text-sm text-[#171310] focus-within:ring-2 focus-within:ring-[#E8432E] border-2 border-[#171310] transition-all duration-150">
+            <Search size={18} className="text-[#171310]/50 mr-3 shrink-0" />
             <input
               type="text"
-              placeholder="FILTER BY TITLE OR ARTIST..."
+              placeholder="Search by title or artist..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent text-base sm:text-lg font-mono font-bold uppercase placeholder:text-neutral-400 focus:outline-none tracking-wider"
+              className="w-full bg-transparent text-sm sm:text-base font-sans font-medium text-[#171310] placeholder:text-[#171310]/40 focus:outline-none"
             />
             {searchQuery && (
               <button
-                onClick={() => setSearchQuery('')}
-                className="px-2 py-0.5 text-xs font-mono font-bold bg-neutral-200 hover:bg-black hover:text-white transition-colors"
+                type="button"
+                onClick={() => {
+                  triggerHaptic(10);
+                  setSearchQuery('');
+                }}
+                className="p-2 rounded-full hover:bg-[#F7F4EB] text-[#171310]/70 transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center"
+                title="Clear search"
               >
-                CLEAR
+                <X size={16} />
               </button>
             )}
           </div>
         </div>
 
-        {/* Section Header: "MY SONGS" + Filter Controls */}
-        <div className="flex items-center justify-between gap-4 border-b-2 border-black pb-3">
+        {/* Filter Controls */}
+        <div className="flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-baseline gap-2">
-            <h3 className="text-sm font-mono font-black text-black uppercase tracking-widest">
-              MY SONGS
-            </h3>
-            <span className="text-xs font-mono font-black text-[#FF3000]">
-              [{filteredSongs.length}]
+            <span 
+              className="font-mono text-xs font-bold text-[#171310]/70 uppercase tracking-wider"
+              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace" }}
+            >
+              Showing {filteredSongs.length} of {songs.length}
             </span>
           </div>
 
           {/* Filter Pills */}
-          <div className="flex items-center gap-1 font-mono text-xs">
+          <div className="flex items-center gap-2 text-xs font-mono">
             <button
-              onClick={() => setActiveFilter('all')}
-              className={`px-3 py-1 border border-black font-black uppercase transition-colors duration-150 ${
+              type="button"
+              onClick={() => {
+                triggerHaptic(10);
+                setActiveFilter('all');
+              }}
+              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              className={`px-3.5 py-2 min-h-[44px] rounded-md font-bold transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer border-2 border-[#171310] flex items-center justify-center ${
                 activeFilter === 'all'
-                  ? 'bg-black text-white'
-                  : 'bg-white text-black hover:bg-neutral-100'
+                  ? 'bg-[#171310] text-[#F7F4EB]'
+                  : 'bg-white text-[#171310] hover:bg-[#F3EFE3]'
               }`}
             >
-              All ({songs.length})
+              ALL ({songs.length})
             </button>
             <button
-              onClick={() => setActiveFilter('favorites')}
-              className={`px-3 py-1 border border-black font-black uppercase transition-colors duration-150 flex items-center gap-1 ${
+              type="button"
+              onClick={() => {
+                triggerHaptic(10);
+                setActiveFilter('favorites');
+              }}
+              style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              className={`px-3.5 py-2 min-h-[44px] rounded-md font-bold transition-all duration-150 hover:scale-105 active:scale-95 flex items-center justify-center gap-1 cursor-pointer border-2 border-[#171310] ${
                 activeFilter === 'favorites'
-                  ? 'bg-[#FF3000] text-white border-[#FF3000]'
-                  : 'bg-white text-black hover:bg-neutral-100'
+                  ? 'bg-[#E8432E] text-[#F7F4EB]'
+                  : 'bg-white text-[#171310] hover:bg-[#F3EFE3]'
               }`}
             >
-              <span>★ Favs ({songs.filter(s => s.favorite).length})</span>
+              <span>★ FAVORITES ({songs.filter(s => s.favorite).length})</span>
             </button>
           </div>
         </div>
 
-        {/* Song Cards List */}
-        <div className="space-y-4">
+        {/* Song Cards List (No decorative arbitrary numbers) */}
+        <div className="space-y-3.5">
           {filteredSongs.length === 0 ? (
-            <div className="p-12 border-2 border-dashed border-neutral-400 text-center space-y-4 bg-[#F2F2F2]">
-              <div className="w-12 h-12 border-2 border-black bg-white mx-auto flex items-center justify-center text-black">
-                <Music size={24} />
+            <div className="p-10 rounded-md text-center space-y-4 bg-white border-2 border-[#171310]">
+              <div className="w-12 h-12 rounded-full bg-[#F7F4EB] mx-auto flex items-center justify-center text-[#171310] border-2 border-[#171310]">
+                <Music size={22} />
               </div>
-              <div>
-                <h4 className="text-base font-black uppercase tracking-tight text-black">No charts match your filter</h4>
-                <p className="text-xs text-neutral-600 font-mono mt-1 uppercase">
+              <div className="space-y-1">
+                <h4 
+                  className="font-mono font-bold text-base text-[#171310]"
+                  style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                >
+                  No charts match your filter
+                </h4>
+                <p className="text-xs text-[#171310]/60 font-sans font-medium">
                   {searchQuery ? 'Try adjusting your search criteria' : 'Create your first Nashville Number chart to begin'}
                 </p>
               </div>
               <button
-                onClick={() => setIsNewSongModalOpen(true)}
-                className="swiss-btn px-4 py-2 text-xs"
+                type="button"
+                onClick={handleOpenCreateModal}
+                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                className="px-5 py-3 min-h-[44px] bg-[#E8432E] text-[#F7F4EB] hover:bg-[#D03522] font-mono text-xs font-bold rounded-md inline-flex items-center justify-center gap-2 transition-all duration-150 hover:scale-105 active:scale-95 cursor-pointer uppercase tracking-wider border-2 border-[#171310]"
               >
-                <Plus size={14} className="mr-1.5" />
-                <span>Create First Chart</span>
+                <Plus size={15} />
+                <span>CREATE FIRST CHART</span>
               </button>
             </div>
           ) : (
-            filteredSongs.map((song, idx) => (
+            filteredSongs.map((song) => (
               <SongCard
                 key={song.id}
                 song={song}
-                index={idx}
-                onSelectSong={onSelectSong}
-                onPerformSong={onPerformSong}
-                onToggleFavorite={onToggleFavorite}
-                onRequestDelete={setSongToDelete}
+                onSelectSong={(s) => {
+                  triggerHaptic(15);
+                  onSelectSong(s);
+                }}
+                onPerformSong={handlePerform}
+                onToggleFavorite={handleToggleFav}
+                onRequestDelete={(id) => {
+                  triggerHaptic(15);
+                  setSongToDelete(id);
+                }}
               />
             ))
           )}
         </div>
       </main>
 
-      {/* Floating Action Button (Swiss Red square with 2px border) */}
+      {/* Floating Action Button */}
       <button
-        onClick={() => setIsNewSongModalOpen(true)}
-        className="fixed bottom-8 right-8 z-40 w-14 h-14 bg-[#FF3000] text-white border-2 border-black shadow-[4px_4px_0px_#000000] hover:bg-black hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-150 flex items-center justify-center"
-        title="Create New Song"
+        type="button"
+        onClick={handleOpenCreateModal}
+        className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-40 w-14 h-14 min-w-[56px] min-h-[56px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] rounded-full hover:scale-110 active:scale-95 transition-all duration-150 flex items-center justify-center cursor-pointer border-2 border-[#171310]"
+        title="Create new song"
+        aria-label="Create new song"
       >
-        <Plus size={28} />
+        <Plus size={26} strokeWidth={2.5} />
       </button>
 
       {/* New Song Modal */}
       <NewSongModal
         isOpen={isNewSongModalOpen}
         onClose={() => setIsNewSongModalOpen(false)}
-        onCreate={onCreateSong}
+        onCreate={(title, artist, key, bpm) => {
+          triggerHaptic(20);
+          onCreateSong(title, artist, key, bpm);
+        }}
       />
 
       {/* Delete Confirmation Modal */}
       {songToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-          <div className="w-full max-w-sm p-6 swiss-dialog space-y-4">
-            <div className="flex items-center gap-2 text-[#FF3000]">
-              <Trash2 size={20} />
-              <h3 className="text-lg font-black uppercase text-black">Delete Chart?</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+          <div className="w-full max-w-sm p-6 bg-[#FBF9F2] rounded-md space-y-4 border-2 border-[#171310]">
+            <div className="flex items-center gap-2.5 text-[#E8432E]">
+              <div className="w-10 h-10 rounded-full bg-red-100 text-[#E8432E] flex items-center justify-center shrink-0 border border-[#171310]">
+                <Trash2 size={20} />
+              </div>
+              <h3 
+                className="font-mono text-lg font-bold text-[#171310]"
+                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+              >
+                Delete chart?
+              </h3>
             </div>
-            <p className="text-xs text-neutral-600 font-mono uppercase">
+            <p className="text-xs text-[#171310]/70 font-sans font-medium leading-relaxed">
               Are you sure you want to remove this chart from your repertoire? This action cannot be undone.
             </p>
-            <div className="flex justify-end gap-2 pt-3 border-t-2 border-black">
+            <div className="flex justify-end gap-2 pt-2">
               <button
+                type="button"
                 onClick={() => setSongToDelete(null)}
-                className="swiss-btn-outline px-4 py-2 text-xs"
+                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                className="px-4 py-2.5 min-h-[44px] bg-white hover:bg-[#F3EFE3] text-[#171310] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 border-2 border-[#171310]"
               >
                 Cancel
               </button>
               <button
+                type="button"
                 onClick={() => {
+                  triggerHaptic(25);
                   onDeleteSong(songToDelete);
                   setSongToDelete(null);
                 }}
-                className="swiss-btn-accent px-4 py-2 text-xs"
+                style={{ fontFamily: "'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace", fontWeight: 700 }}
+                className="px-4 py-2.5 min-h-[44px] bg-[#E8432E] hover:bg-[#D03522] text-[#F7F4EB] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 uppercase tracking-wider border-2 border-[#171310]"
               >
-                Confirm Delete
+                Confirm delete
               </button>
             </div>
           </div>
