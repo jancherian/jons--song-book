@@ -45,14 +45,14 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
   };
 
   return (
-    <div className={`fixed bottom-0 left-0 w-full px-3 sm:px-8 pb-6 sm:pb-8 pt-3 border-t-2 z-50 select-none max-w-full overflow-x-hidden pb-safe shadow-2xl transition-colors ${
+    <div className={`fixed bottom-0 left-0 w-full max-h-[85dvh] overflow-y-auto px-3 sm:px-8 pb-6 sm:pb-8 pt-3 border-t-2 z-50 select-none max-w-full overflow-x-hidden pb-safe shadow-2xl transition-colors ${
       isDarkMode 
         ? 'bg-[#100D0A] border-[#3A332C] text-[#F7F4EB]' 
         : 'bg-[#F7F4EB] border-[#171310] text-[#171310]'
     }`}>
       
       {/* Top Preview Bar & Controls */}
-      <div className={`max-w-4xl mx-auto flex items-center justify-between gap-2 sm:gap-4 mb-3 p-2.5 sm:p-3 rounded-md font-mono border-2 ${
+      <div className={`max-w-4xl mx-auto flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-4 mb-3 p-2.5 sm:p-3 rounded-md font-mono border-2 ${
         isDarkMode 
           ? 'bg-[#1A1512] border-[#3A332C]' 
           : 'bg-white border-[#171310]'
@@ -82,7 +82,7 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
         </div>
 
         {/* Navigation & Slot Controls */}
-        <div className="flex items-center gap-1.5 text-xs shrink-0 font-mono font-bold">
+        <div className="flex items-center justify-between gap-1.5 text-xs shrink-0 font-mono font-bold">
           {onPrevSlot && (
             <button
               type="button"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Search, 
   Plus, 
@@ -22,6 +22,7 @@ interface HomeScreenProps {
   onSelectSong: (song: Song) => void;
   onPerformSong: (song: Song) => void;
   onToggleFavorite: (songId: string) => void;
+  onSetPerformanceDate: (song: Song, date: string | undefined) => void;
   onCreateSong: (title: string, artist: string, key: string, bpm: number) => void;
   onDeleteSong: (songId: string) => void;
 }
@@ -33,6 +34,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onSelectSong,
   onPerformSong,
   onToggleFavorite,
+  onSetPerformanceDate,
   onCreateSong,
   onDeleteSong,
 }) => {
@@ -41,6 +43,24 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const [activeFilter, setActiveFilter] = useState<'all' | 'favorites'>('all');
   const [isNewSongModalOpen, setIsNewSongModalOpen] = useState(false);
   const [songToDelete, setSongToDelete] = useState<string | null>(null);
+  const [today, setToday] = useState(() => new Date().toDateString());
+
+  useEffect(() => {
+    const updateDate = () => setToday(new Date().toDateString());
+    const timer = window.setInterval(updateDate, 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const todaySongs = songs
+    .filter(song => song.performanceDate === today)
+    .sort((first, second) => first.title.localeCompare(second.title, undefined, { sensitivity: 'base' }));
+
+  const toggleToday = (song: Song) => {
+    triggerHaptic(15);
+    const date = new Date().toDateString();
+    setToday(date);
+    onSetPerformanceDate(song, song.performanceDate === date ? undefined : date);
+  };
 
   const filteredSongs = songs.filter((song) => {
     const matchesSearch = 
@@ -141,6 +161,43 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </span>
           </div>
         </div>
+
+        <section aria-labelledby="today-performance" className={`rounded-md border-2 p-4 sm:p-5 space-y-3 ${
+          isDarkMode ? 'bg-[#1A1512] border-[#3A332C]' : 'bg-[#FBF9F2] border-[#171310]'
+        }`}>
+          <h3 id="today-performance" className="font-display text-3xl sm:text-4xl font-black tracking-tight leading-none uppercase" style={{ fontFamily: DISPLAY_FONT_STACK, fontWeight: 900 }}>
+            Today’s Performance
+          </h3>
+          {todaySongs.length === 0 ? (
+            <p className={`text-xs font-sans font-medium ${isDarkMode ? 'text-[#A89C8E]' : 'text-[#171310]/60'}`}>Use Add to Today on a song to build your set.</p>
+          ) : (
+            <ul className="divide-y divide-current/15">
+              {todaySongs.map(song => (
+                <li key={song.id} className="flex items-center gap-2 py-1">
+                  <span className="grow min-w-0 break-words font-mono text-sm sm:text-base font-bold tracking-tight" style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}>{song.title}</span>
+                  <button
+                    type="button"
+                    onClick={() => handlePerform(song)}
+                    aria-label={`Perform ${song.title}`}
+                    style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
+                    className="min-h-[44px] shrink-0 rounded-md bg-[#E8432E] px-3 font-mono text-xs font-bold uppercase tracking-wide text-[#F7F4EB]"
+                  >
+                    Perform
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => toggleToday(song)}
+                    aria-label={`Remove ${song.title} from Today’s Performance`}
+                    title="Remove from Today’s Performance"
+                    className="grid min-h-[44px] min-w-[44px] shrink-0 place-items-center rounded-md border border-current/30"
+                  >
+                    <X size={16} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
 
         {/* Flat Search Bar with Solid 2px Border */}
         <div className="relative w-full">
@@ -277,6 +334,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 key={song.id}
                 song={song}
                 theme={theme}
+                inTodaysPerformance={song.performanceDate === today}
+                onToggleToday={() => toggleToday(song)}
                 onSelectSong={(s) => {
                   triggerHaptic(15);
                   onSelectSong(s);

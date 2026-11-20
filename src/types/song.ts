@@ -28,6 +28,7 @@ export interface Song {
   bpm?: number;
   timeSignature?: string; // e.g. "4/4", "3/4", "6/8"
   favorite: boolean;
+  performanceDate?: string;
   sections: SongSection[];
   createdAt: number;
   updatedAt: number;

@@ -1,6 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
+@media (pointer: coarse) {
+  button, select {
+    min-height: 44px;
+  }
+
+  button:hover, button:active, .group:hover, .group:active {
+    scale: 1;
+  }
+
+  input, textarea, select {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
 @theme {
   --font-mono: 'JetBrains Mono', 'IBM Plex Mono', 'Cascadia Code', 'Segoe UI Mono', Consolas, 'Roboto Mono', 'SF Mono', ui-monospace, monospace;
   --font-display: 'Big Shoulders Display', Anton, 'Archivo Black', sans-serif;

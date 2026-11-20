@@ -94,44 +94,7 @@ export default function App() {
       favorite: false,
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      sections: [
-        {
-          id: `sec-${Date.now()}-1`,
-          type: 'INTRO',
-          label: 'Intro',
-          lines: [
-            {
-              id: `line-${Date.now()}-1`,
-              chords: ['1', '4', '1', '5'],
-              lyrics: '(Instrumental Intro)',
-            }
-          ]
-        },
-        {
-          id: `sec-${Date.now()}-2`,
-          type: 'VERSE',
-          label: 'Verse 1',
-          lines: [
-            {
-              id: `line-${Date.now()}-2`,
-              chords: ['1', '5', '6m', '4'],
-              lyrics: '',
-            }
-          ]
-        },
-        {
-          id: `sec-${Date.now()}-3`,
-          type: 'CHORUS',
-          label: 'Chorus',
-          lines: [
-            {
-              id: `line-${Date.now()}-3`,
-              chords: ['1', '5', '6m', '4'],
-              lyrics: '',
-            }
-          ]
-        }
-      ]
+      sections: [],
     };
 
     const updated = saveSong(newSong);
@@ -177,6 +140,9 @@ export default function App() {
           onSelectSong={handleSelectSong}
           onPerformSong={handlePerformSongFromHome}
           onToggleFavorite={handleToggleFavorite}
+          onSetPerformanceDate={(song, performanceDate) => {
+            setSongs(saveSong({ ...song, performanceDate }));
+          }}
           onCreateSong={handleCreateSong}
           onDeleteSong={handleDeleteSong}
         />

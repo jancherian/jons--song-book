@@ -62,7 +62,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
       lines: [
         {
           id: `line-${Date.now()}-1`,
-          chords: ['1', '4', '5', '1'],
+          chords: [],
           lyrics: '',
         }
       ]
@@ -103,7 +103,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
     triggerHaptic(15);
     const newLine: SongLine = {
       id: `line-${Date.now()}`,
-      chords: ['1', '5', '6m', '4'],
+      chords: [],
       lyrics: '',
     };
 
@@ -196,7 +196,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             ...sec,
             lines: sec.lines.map(line => {
               if (line.id === lineId) {
-                return { ...line, chords: [...line.chords, '1'] };
+                return { ...line, chords: [...line.chords, ''] };
               }
               return line;
             })
@@ -229,7 +229,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
             lines: sec.lines.map(line => {
               if (line.id === lineId) {
                 const nextChords = line.chords.filter((_, idx) => idx !== chordIndex);
-                return { ...line, chords: nextChords.length > 0 ? nextChords : ['1'] };
+                return { ...line, chords: nextChords };
               }
               return line;
             })
@@ -239,9 +239,12 @@ export const SongEditor: React.FC<SongEditorProps> = ({
       })
     }));
 
-    if (selectedSlot?.chordIndex === chordIndex) {
-      setSelectedSlot(null);
-    }
+    setSelectedSlot(slot => {
+      if (slot?.sectionId !== sectionId || slot.lineId !== lineId) return slot;
+      if (slot.chordIndex === chordIndex) return null;
+      if (slot.chordIndex > chordIndex) return { ...slot, chordIndex: slot.chordIndex - 1 };
+      return slot;
+    });
   };
 
   // Number Pad slot navigation
@@ -284,7 +287,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
   };
 
   return (
-    <div className={`min-h-screen pb-72 relative w-full max-w-full overflow-x-hidden transition-colors duration-200 ${
+    <div className={`min-h-screen pb-[26rem] relative w-full max-w-full overflow-x-hidden transition-colors duration-200 ${
       isDarkMode ? 'chart-grid-bg-dark bg-[#100D0A] text-[#F7F4EB]' : 'chart-grid-bg-light bg-[#F7F4EB] text-[#171310]'
     }`}>
       
@@ -647,10 +650,11 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                           return (
                             <div
                               key={cIdx}
-                              className="relative group/slot flex-none"
+                              className="inline-flex items-center gap-1.5 flex-none"
                             >
                               <button
                                 type="button"
+                                aria-label={chord || `Empty chord slot ${cIdx + 1}`}
                                 onClick={() => handleSelectChordSlot(section.id, line.id, cIdx)}
                                 style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                                 className={`min-w-[54px] sm:min-w-[64px] px-3.5 h-12 sm:h-14 min-h-[44px] rounded-md flex items-center justify-center font-mono font-bold select-none transition-all duration-150 cursor-pointer border-2 ${getChordTextSize(chord)} ${
@@ -661,24 +665,22 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                                       : 'bg-white text-[#171310] hover:bg-[#F3EFE3] hover:scale-105 active:scale-95 border-[#171310]'
                                 }`}
                               >
-                                {chord || <span className={`${isDarkMode ? 'text-[#A89C8E]/40' : 'text-[#171310]/30'} font-normal`}>_</span>}
+                                {chord}
                               </button>
 
-                              {line.chords.length > 1 && (
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteChordSlot(section.id, line.id, cIdx);
-                                  }}
-                                  className={`absolute -top-1.5 -right-1.5 w-6 h-6 hover:bg-[#E8432E] text-[#F7F4EB] text-xs font-bold rounded-full items-center justify-center hidden group-hover/slot:flex z-10 transition-colors ${
-                                    isDarkMode ? 'bg-[#3D332A]' : 'bg-[#171310]'
-                                  }`}
-                                  title="Delete chord"
-                                >
-                                  ×
-                                </button>
-                              )}
+                              {isSelected && <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteChordSlot(section.id, line.id, cIdx);
+                                }}
+                                className={`w-11 h-11 min-w-[44px] min-h-[44px] hover:bg-[#E8432E] text-[#F7F4EB] text-xs font-bold rounded-md items-center justify-center flex transition-colors ${
+                                  isDarkMode ? 'bg-[#3D332A]' : 'bg-[#171310]'
+                                }`}
+                                title="Delete chord"
+                              >
+                                ×
+                              </button>}
                             </div>
                           );
                         })}

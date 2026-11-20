@@ -13,6 +13,8 @@ interface SongCardProps {
   song: Song;
   theme?: 'light' | 'dark';
   index?: number;
+  inTodaysPerformance: boolean;
+  onToggleToday: () => void;
   onSelectSong: (song: Song) => void;
   onPerformSong: (song: Song) => void;
   onToggleFavorite: (songId: string) => void;
@@ -22,6 +24,8 @@ interface SongCardProps {
 export const SongCard: React.FC<SongCardProps> = ({
   song,
   theme = 'light',
+  inTodaysPerformance,
+  onToggleToday,
   onSelectSong,
   onPerformSong,
   onToggleFavorite,
@@ -39,7 +43,7 @@ export const SongCard: React.FC<SongCardProps> = ({
         triggerHaptic(15);
         onSelectSong(song);
       }}
-      className={`p-5 sm:p-6 rounded-md flex flex-col gap-4 cursor-pointer transition-all duration-150 hover:scale-[1.012] active:scale-[0.99] group select-none border-2 ${
+      className={`p-4 sm:p-5 rounded-md flex flex-col gap-4 cursor-pointer transition-all duration-150 hover:scale-[1.012] active:scale-[0.99] group select-none border-2 ${
         isDarkMode
           ? song.favorite
             ? 'bg-[#221B14] hover:bg-[#2A2219] border-[#4A3F35]'
@@ -54,7 +58,7 @@ export const SongCard: React.FC<SongCardProps> = ({
         <div className="min-w-0 flex-1">
           {/* Song Title as Primary Anchor strictly in Bold Sans-Serif Monospace */}
           <h4 
-            className={`font-mono font-bold text-xl sm:text-2xl tracking-tight truncate group-hover:text-[#E8432E] transition-colors ${
+            className={`font-mono font-bold text-lg sm:text-xl tracking-tight break-words group-hover:text-[#E8432E] transition-colors ${
               isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
             }`}
             style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
@@ -159,10 +163,10 @@ export const SongCard: React.FC<SongCardProps> = ({
       )}
 
       {/* Action Row at Bottom */}
-      <div className={`pt-1 flex items-center justify-between gap-3 border-t ${
+      <div className={`pt-3 flex flex-wrap items-center justify-between gap-3 border-t ${
         isDarkMode ? 'border-[#3A332C]' : 'border-[#171310]/15'
       }`}>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 w-full">
           {/* Solid Vermilion Perform CTA with 44px Touch Target */}
           <button
             type="button"
@@ -178,6 +182,24 @@ export const SongCard: React.FC<SongCardProps> = ({
           >
             <Play size={13} className="fill-current" />
             <span>PERFORM</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleToday();
+            }}
+            aria-pressed={inTodaysPerformance}
+            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
+            title={inTodaysPerformance ? 'Remove from Today’s Performance' : 'Add to Today’s Performance'}
+            className={`min-h-[44px] rounded-md border px-3 font-mono text-xs font-bold uppercase tracking-wide ${
+              inTodaysPerformance
+                ? 'bg-[#D9A62E] text-[#100D0A] border-[#D9A62E]'
+                : 'border-current/30'
+            }`}
+          >
+            {inTodaysPerformance ? 'In Today’s Set' : 'Add to Today'}
           </button>
 
           {/* Delete Button with 44x44px Touch Target */}

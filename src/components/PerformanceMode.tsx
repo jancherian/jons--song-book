@@ -5,6 +5,7 @@ import {
   Play, 
   Pause, 
   ArrowLeft,
+  Timer,
   Sun,
   Moon
 } from 'lucide-react';
@@ -34,9 +35,58 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const [scrollSpeed, setScrollSpeed] = useState(1);
   const [activeLineId, setActiveLineId] = useState<string | null>(null);
+  const [metronomeOn, setMetronomeOn] = useState(false);
+  const [metronomeError, setMetronomeError] = useState(false);
+  const metronomeContext = useRef<AudioContext | null>(null);
+  const bpm = song.bpm && Number.isFinite(song.bpm) && song.bpm > 0 ? song.bpm : 80;
 
   const scrollIntervalRef = useRef<number | null>(null);
   const lineElementsRef = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  useEffect(() => () => {
+    const context = metronomeContext.current;
+    metronomeContext.current = null;
+    if (context) void context.close();
+  }, []);
+
+  const toggleMetronome = async () => {
+    triggerHaptic(10);
+    const running = metronomeContext.current;
+    if (running) {
+      metronomeContext.current = null;
+      setMetronomeOn(false);
+      await running.close();
+      return;
+    }
+
+    setMetronomeError(false);
+    let context: AudioContext | undefined;
+    try {
+      context = new AudioContext();
+      metronomeContext.current = context;
+      const beat = context.createBuffer(1, Math.round(context.sampleRate * 60 / bpm), context.sampleRate);
+      const samples = beat.getChannelData(0);
+      const clickLength = Math.min(Math.round(context.sampleRate * 0.035), samples.length);
+      for (let index = 0; index < clickLength; index++) {
+        const time = index / context.sampleRate;
+        samples[index] = Math.sin(2 * Math.PI * 1000 * time) * (1 - index / clickLength) ** 2 * 0.22;
+      }
+
+      const click = context.createBufferSource();
+      click.buffer = beat;
+      click.loop = true;
+      click.connect(context.destination);
+      click.start();
+      setMetronomeOn(true);
+      await context.resume();
+    } catch {
+      if (context && metronomeContext.current !== context) return;
+      metronomeContext.current = null;
+      if (context) void context.close();
+      setMetronomeOn(false);
+      setMetronomeError(true);
+    }
+  };
 
   // Detect active line based on viewport position during auto-scroll
   const updateActiveLine = useCallback(() => {
@@ -106,16 +156,16 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
   };
 
   return (
-    <div className={`min-h-screen font-sans select-none pb-48 scroll-pt-36 relative w-full max-w-full overflow-x-hidden transition-colors duration-200 ${
+    <div className={`min-h-screen font-sans select-none pb-48 scroll-pt-36 relative w-full max-w-full overflow-x-clip transition-colors duration-200 ${
       isDarkMode ? 'bg-[#100D0A] text-[#F7F4EB]' : 'bg-[#F7F4EB] text-[#171310]'
     }`}>
       
       {/* Fixed Stage Toolbar */}
-      <header className={`fixed top-0 left-0 w-full z-50 px-3.5 sm:px-6 py-2.5 sm:py-0 sm:h-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4 max-w-full border-b-2 shadow-sm transition-colors duration-200 ${
+      <header className={`sticky top-0 w-full z-50 px-3.5 sm:px-6 py-3 flex flex-col gap-2.5 sm:gap-4 max-w-full border-b-2 shadow-sm transition-colors duration-200 ${
         isDarkMode ? 'bg-[#100D0A] border-[#241D17]' : 'bg-[#F7F4EB] border-[#D9D2C0]'
       }`}>
         {/* Row 1 / Left Info Area */}
-        <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-3 min-w-0 w-full sm:w-auto">
+        <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-3 min-w-0 w-full">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <button
               type="button"
@@ -144,33 +194,49 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                 isDarkMode ? 'text-[#A89C8E]' : 'text-[#7A6E62]'
               }`}>
                 <span className="text-[#E8432E]">Key {stageKey}</span>
-                {song.bpm && <span>• {song.bpm} BPM</span>}
+                <span>• {bpm} BPM</span>
                 {song.timeSignature && <span className="hidden xs:inline">• {song.timeSignature}</span>}
               </div>
             </div>
           </div>
 
-          {/* Mobile Direct "Done" Button */}
-          <button
-            type="button"
-            onClick={() => {
-              triggerHaptic(15);
-              onExit();
-            }}
-            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
-            className={`sm:hidden px-3.5 py-1.5 min-h-[40px] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border flex items-center justify-center ${
-              isDarkMode 
-                ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
-                : 'bg-white hover:bg-[#F3EFE3] text-[#171310] border-[#D9D2C0]'
-            }`}
-            title="Done"
-          >
-            DONE
-          </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => void toggleMetronome()}
+              aria-label={`Metronome at ${bpm} BPM`}
+              aria-pressed={metronomeOn}
+              title={metronomeOn ? 'Stop metronome' : 'Start metronome'}
+              className={`p-2 min-w-[40px] min-h-[40px] rounded-md border flex items-center justify-center ${
+                metronomeOn
+                  ? 'bg-[#E8432E] text-[#F7F4EB] border-[#E8432E]'
+                  : isDarkMode ? 'bg-[#241D17] border-[#3D332A]' : 'bg-white border-[#D9D2C0]'
+              }`}
+            >
+              <Timer size={18} />
+            </button>
+            {/* Mobile Direct "Done" Button */}
+            <button
+              type="button"
+              onClick={() => {
+                triggerHaptic(15);
+                onExit();
+              }}
+              style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
+              className={`px-3.5 py-1.5 min-h-[40px] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border flex items-center justify-center ${
+                isDarkMode
+                  ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]'
+                  : 'bg-white hover:bg-[#F3EFE3] text-[#171310] border-[#D9D2C0]'
+              }`}
+              title="Done"
+            >
+              DONE
+            </button>
+          </div>
         </div>
 
         {/* Row 2 on Mobile / Right Tools on Desktop */}
-        <div className="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2 text-xs w-full sm:w-auto overflow-x-auto pb-0.5 sm:pb-0 font-mono font-bold">
+        <div className="flex flex-wrap items-center gap-2 text-xs w-full font-mono font-bold">
           {/* Global Light / Dark Mode Toggle */}
           {onToggleTheme && (
             <button
@@ -294,28 +360,12 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
             <span>{isAutoScrolling ? 'PAUSE' : 'SCROLL'}</span>
           </button>
 
-          {/* Desktop "Done" Button */}
-          <button
-            type="button"
-            onClick={() => {
-              triggerHaptic(15);
-              onExit();
-            }}
-            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
-            className={`hidden sm:inline-flex px-4 py-2 min-h-[40px] font-mono text-xs font-bold rounded-md transition-all duration-150 hover:scale-105 active:scale-95 shrink-0 border items-center justify-center ${
-              isDarkMode 
-                ? 'bg-[#241D17] hover:bg-[#332A22] text-[#F7F4EB] border-[#3D332A]' 
-                : 'bg-white hover:bg-[#F3EFE3] text-[#171310] border-[#D9D2C0]'
-            }`}
-            title="Done (Exit Stage Mode)"
-          >
-            DONE
-          </button>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-10 pt-36 sm:pt-28 md:pt-24 w-full max-w-full overflow-x-hidden">
+      <main className="max-w-4xl mx-auto px-4 sm:px-10 pt-6 sm:pt-8 w-full max-w-full overflow-x-hidden">
+        {metronomeError && <p role="status" className="mb-4 text-sm">Couldn’t start metronome audio.</p>}
         <div className={`relative pl-4 sm:pl-7 border-l ml-1 sm:ml-3 space-y-8 sm:space-y-10 transition-colors ${
           isDarkMode ? 'border-[#2A2420]' : 'border-[#D9D2C0]'
         }`}>
@@ -350,6 +400,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                   {section.lines.map((line) => {
                     const lineKey = `${section.id}-${line.id}`;
                     const isActive = isAutoScrolling && activeLineId === lineKey;
+                    const chords = line.chords.filter(Boolean);
 
                     return (
                       <div
@@ -370,7 +421,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                             ? 'border-b-2 border-b-[#E8432E]' 
                             : isDarkMode ? 'border-b border-[#2A2420]' : 'border-b border-[#D9D2C0]'
                         }`}>
-                          {line.chords.map((chord, cIdx) => {
+                          {chords.map((chord, cIdx) => {
                             const displayChord = displayMode === 'letters'
                               ? convertNashvilleToLetter(chord, stageKey)
                               : chord;
@@ -396,7 +447,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                                 </span>
 
                                 {/* Thin Barline Tick between individual chords */}
-                                {cIdx < line.chords.length - 1 && (
+                                {cIdx < chords.length - 1 && (
                                   <span
                                     className={`self-center h-4 sm:h-6 w-[1px] opacity-70 ${
                                       isActive

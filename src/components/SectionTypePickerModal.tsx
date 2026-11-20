@@ -23,7 +23,7 @@ export const SectionTypePickerModal: React.FC<SectionTypePickerModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-      <div className={`w-full max-w-md p-6 rounded-md relative space-y-4 border-2 ${
+      <div className={`max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain w-full max-w-md p-6 rounded-md relative space-y-4 border-2 ${
         isDarkMode 
           ? 'bg-[#1A1512] text-[#F7F4EB] border-[#3A332C]' 
           : 'bg-[#FBF9F2] text-[#171310] border-[#171310]'

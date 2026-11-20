@@ -72,7 +72,9 @@ export function convertNashvilleToLetter(nashvilleChord: string, keyName: string
     semitones = (semitones + 1) % 12;
   }
 
-  const useFlats = ['F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb'].includes(keyName);
+  const useFlats = prefixAccidental === 'b' || postfixAccidental === 'b' ||
+    (!(prefixAccidental === '#' || postfixAccidental === '#') &&
+      ['F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb'].includes(keyName));
   const noteName = useFlats ? CHROMATIC_FLATS[semitones] : CHROMATIC_SCALE[semitones];
 
   return `${noteName}${modifier}`;
@@ -101,11 +103,11 @@ export function applyKeypadInput(currentChord: string, inputKey: string): string
   // If input is a number 1-7
   if (/^[1-7]$/.test(inputKey)) {
     // If the slot is empty, set it to the number
-    if (!currentChord) {
-      return inputKey;
+    if (!currentChord || /^[b#]$/.test(currentChord)) {
+      return currentChord + inputKey;
     }
     // If it has a trailing slash, append as bass note
-    if (currentChord.endsWith('/')) {
+    if (/\/[b#]?$/.test(currentChord)) {
       return currentChord + inputKey;
     }
     // If it's already just a single number or starts with a number, replace the root number or start fresh if user wants
