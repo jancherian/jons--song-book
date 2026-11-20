@@ -1,6 +1,6 @@
 # CHORDSET — Nashville Number System Chord Chart App
 ### Comprehensive Project Documentation & Architecture Summary
-#### Design System: "Chart Paper" — Grid Identity, Baseline Chord Notation & Global Light/Dark Themes
+#### Design System: "Chart Paper" — Grid Identity, Universal Sans-Serif Monospace Font Stack & Global Theme
 
 ---
 
@@ -8,17 +8,21 @@
 
 **Chordset** is a modern, responsive web application engineered specifically for musicians, bandleaders, and worship leaders. It simplifies writing, arranging, and performing songs using the **Nashville Number System (NNS)** — a musical shorthand where chords are represented by scale degrees ($1, 4, 5, 6m$, etc.) rather than fixed key letters.
 
-### Core Features
-- **Key-Agnostic Lead Sheets**: Write a chart once in numbers, and transpose it instantly to any musical key during rehearsals or live stage performances.
+### Core Capabilities
+- **Key-Agnostic Lead Sheets**: Write charts in numbers, transpose instantly to any musical key during rehearsals or live performances.
+- **Universal Sans-Serif Monospace Typography**:
+  - Engineered with a multi-layered modern monospace stack: `'JetBrains Mono', 'IBM Plex Mono', 'Cascadia Code', 'Segoe UI Mono', Consolas, 'Roboto Mono', 'SF Mono', ui-monospace, monospace`.
+  - Completely purged any fallback to `Courier New` / serifed typewriter fonts across Windows, macOS, Android, and iOS.
+- **Robust Song Card Flow Previews**:
+  - Section badge + connector arrow units (`[INTRO] →`) bound together with `inline-flex shrink-0` to eliminate orphan arrows on line breaks.
+  - Graceful truncation after 4 sections (`+N more`) for clean mobile display.
 - **Site-Wide Global Light/Dark Theme**:
-  - **Shared Source of Truth**: Single global theme setting accessible from Home, Song Editor, and Performance Mode headers.
-  - **Light Mode (`#F7F4EB`)**: Warm off-white chart paper with visible ink ledger lines ($8\%$ opacity) and crisp ink borders.
-  - **Dark Stage Mode (`#100D0A`)**: Warm near-black stage backdrop with inverted warm ledger lines ($7.5\%$ opacity), `#1A1512` card surfaces, and `#3A332C` borders.
-  - **System & Persistence**: Defaults to user's OS preference (`prefers-color-scheme`) on first load and persists across sessions via `localStorage`.
-- **Stage-Ready Performance Mode**: 
-  - **Authentic Baseline Notation**: Unboxed chords sitting directly on shared horizontal baseline rules with musical barline ticks.
-  - **Live Stage Spotlight**: Active line during auto-scroll is highlighted with a 5px vermilion left rail and a glowing vermilion baseline rule.
-- **Tactile Haptic Feedback**: Short 10–20ms haptic pulses on chord selections, keypad buttons, perform launches, star favorites, and section reordering.
+  - Single source of truth synchronized across Home, Song Editor, Performance Mode, modals, and keypads.
+  - Inverted signature ledger grid lines ($24\text{px}\times 24\text{px}$) in both light (`#F7F4EB`) and dark (`#100D0A`) modes.
+- **Dynamic Origin Navigation**:
+  - Exiting Performance Mode returns dynamically to the origin screen (Home or Song Editor).
+- **Tactile Haptic Feedback**:
+  - Short 10–20ms haptic pulses across all key actions with fallback.
 
 ---
 
@@ -26,13 +30,13 @@
 
 | Layer | Technology | Description |
 | :--- | :--- | :--- |
-| **Framework** | **React 19** | Modern functional components, hooks (`useState`, `useEffect`, `useRef`, `useCallback`). |
-| **Language** | **TypeScript 5.9** | Strict type definitions for songs, sections, lines, chords, and keys. |
-| **Bundler & Tooling** | **Vite 8** | Ultra-fast HMR and production bundling. |
-| **Styling & CSS** | **Tailwind CSS v4 + Vanilla CSS Tokens** | Zero-shadow Flat Design system driven by centralized CSS variables & ledger grid patterns. |
-| **Typography** | **Google Fonts** | `Big Shoulders Display` (Headlines) + `JetBrains Mono` / `IBM Plex Mono` (Chords & Metadata) + `Inter` (Lyrics & Body). |
-| **Icons** | **Lucide React** | Consistent, lightweight SVG icon suite. |
-| **Data Persistence** | **LocalStorage API** | Offline-first browser persistence for song repertoire and global theme choice. |
+| **Framework** | **React 19** | Modern functional components and hooks. |
+| **Language** | **TypeScript 6.0** | Strict typing for songs, sections, lines, chords, and keys. |
+| **Bundler & Tooling** | **Vite 8** | Ultra-fast HMR and production bundle optimization. |
+| **Styling** | **Tailwind CSS v4 + Custom Tokens** | Flat design system driven by CSS variables and ledger grid textures. |
+| **Typography** | **Google Fonts + System Sans-Serif Mono** | `Big Shoulders Display` + `JetBrains Mono` / `Cascadia Code` / `Consolas` + `Inter`. |
+| **Icons** | **Lucide React** | Lightweight SVG icons. |
+| **Storage** | **LocalStorage API** | Offline-first browser persistence for song charts and theme preference. |
 
 ---
 
@@ -41,40 +45,85 @@
 ```
 my-project/
 ├── index.html                   # HTML entry point, SEO meta tags, and Google Fonts
-├── package.json                 # Project dependencies and build scripts
-├── tailwind.config.js           # Design token color mappings and typography config
+├── package.json                 # Project dependencies and scripts
+├── tailwind.config.js           # Modern sans-serif monospace font stack & tokens
 ├── tsconfig.json / tsconfig.app.json # TypeScript configuration
-├── public/                      # Static assets
-│   ├── chordset-logo-light-bg.png
-│   ├── chordset-logo-transparent.png
-│   ├── favicon.svg / favicon.ico
-│   └── manifest.json
+├── public/                      # Static assets and brand logos
 └── src/
     ├── main.tsx                 # React DOM mount point
-    ├── App.tsx                  # Global theme state controller & view router (Home / Editor / Performance)
-    ├── index.css                # Global design tokens, base resets & dual-theme ledger graph patterns
+    ├── App.tsx                  # Global theme & origin-aware navigation controller
+    ├── index.css                # Global tokens, resets & dual-theme ledger graph patterns
     ├── types/
-    │   └── song.ts              # TypeScript interfaces for Song, SongSection, SongLine, etc.
+    │   └── song.ts              # TypeScript interfaces for Song, Section, Line, etc.
     ├── utils/
-    │   ├── haptics.ts           # Tactile Web Vibration API helper with graceful fallback
-    │   ├── nashville.ts         # Nashville chord transposition math & keypad input parser
-    │   └── storage.ts           # LocalStorage CRUD operations & default seed repertoire
+    │   ├── typography.ts        # Universal MONO_FONT_STACK constants
+    │   ├── haptics.ts           # Web Vibration API helper
+    │   ├── nashville.ts         # Nashville transposition math & input parser
+    │   └── storage.ts           # LocalStorage CRUD operations
     └── components/
         ├── HomeScreen.tsx       # Song library, search, filtering, theme toggle, and FAB
-        ├── SongCard.tsx         # Flat lead-sheet song card with theme-aware borders & perform CTA
-        ├── SongEditor.tsx       # Chart builder with inline chord rows, section manager & theme toggle
+        ├── SongCard.tsx         # Flat song card with bonded flow badges & perform CTA
+        ├── SongEditor.tsx       # Chart builder with wrapping chord rows & section manager
         ├── NashvilleNumberPad.tsx # Tactile bottom drawer keypad for Nashville notations
-        ├── PerformanceMode.tsx  # Stage view with baseline notation, live line spotlight & auto-scroll
+        ├── PerformanceMode.tsx  # Stage view with baseline notation & live spotlight
         ├── NewSongModal.tsx     # Theme-aware modal dialog for creating new charts
         ├── SectionTypePickerModal.tsx # Theme-aware modal for choosing section types
-        ├── LogoMark.tsx         # Responsive brand logo component with light/dark variants
+        ├── LogoMark.tsx         # Responsive brand logo component
         └── SplashLoader.tsx     # Brand splash screen loader
 ```
 
 ---
 
-## 4. Verification & Build Status
+## 4. Latest Development Notes
 
-- **Build Check**: `npm run build` passes with code 0 (`dist/` production bundle compiled in 776ms).
-- **Responsive Audit**: Tested down to 375px mobile viewports.
-- **Git Status**: Changes committed and pushed to `main` (`9005ddd`).
+Updated November 20, 2026. Feature commit `45efe1a` is pushed to `origin/main`.
+
+### Today’s Performance
+
+- Home includes a daily set sorted alphabetically by song title, ignoring case.
+- Each song card has an Add to Today toggle. The daily list also has Perform and Remove actions.
+- Selection persists through the existing song storage using the optional `performanceDate` field.
+- The list follows the device’s local calendar date. Previous selections stay stored on songs but disappear from the daily view when the date changes.
+
+### Blank Chart Creation
+
+- New songs start with Add Section and an empty section list.
+- New sections and lines start with an Add Chord button. Added chord slots are blank.
+- Deleting the final chord leaves an empty row. Empty slots are omitted from the stage chord display.
+
+### Metronome
+
+- Performance Mode includes a start/stop metronome using Web Audio and the song’s BPM.
+- Missing, invalid, or nonpositive tempo values fall back to 80 BPM.
+- The audio context closes when the metronome stops or Performance Mode unmounts.
+
+### Mobile and Tablet UI
+
+- Stage controls wrap across rows, and the keypad toolbar uses two rows on phones.
+- Dialogs can scroll within the viewport. Song titles wrap, and card actions have more space.
+- Touch controls have larger targets, with reduced scaling on touch devices and support for reduced motion preferences.
+- Today’s Performance uses the existing display heading font, bold monospace labels, and sans-serif supporting text.
+- The chord-delete button appears beside the selected chord with a 44px touch target, avoiding overlap with notation.
+
+### Chord Entry Fixes
+
+- Accidentals entered before a degree retain their position, such as `b` followed by `7` producing `b7`.
+- Entering `5 / b 3` preserves the root and produces `5/b3`, displayed as `G/Eb` in C.
+- Explicit flats and sharps guide the displayed note spelling.
+- Regression coverage is in `tests/nashville.test.ts`.
+
+## 5. Verification
+
+- `npm run build` passed after the final UI fix.
+- `node --experimental-strip-types --test tests/nashville.test.ts` passed both regression tests using Node 24.13.0.
+- The latest lint run completed with existing warnings in the button component, new-song modal, and React state handling.
+- Live browser checks used phone widths of 320px and 375px and tablet widths of 768px and 1024px.
+- Checked daily-list sorting and refresh persistence, blank chart and section creation, accidental bass entry, chord deletion, light/dark themes, auto-scroll controls, and returning from stage to the originating screen.
+- Verified the corrected chord-delete button has no overlap with the chord and no horizontal page overflow at the tested phone width.
+- Metronome start/stop UI was exercised. Audible playback and physical phone/tablet testing remain to be verified.
+- The working preview during verification used `http://127.0.0.1:5180/`. LocalStorage belongs to each origin, so different preview ports have separate song libraries. This preview contains a UI verification chart.
+
+## 6. Pending Product Decisions
+
+- User accounts and sharing restricted to invited users remain pending. Confirm recipient permissions and the authentication/storage approach before implementation.
+- The keypad already supports slash chords. Clarification is still needed on whether the requested bass change means repositioning the slash key beside the flat key or adding a dedicated bass field.
