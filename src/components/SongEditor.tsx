@@ -12,6 +12,7 @@ import {
   Sun,
   Moon
 } from 'lucide-react';
+import { ChordText } from './ChordText';
 import type { Song, SongSection, SongLine, SectionType, SelectedChordSlot } from '../types/song';
 import { MAJOR_KEYS } from '../utils/nashville';
 import { SectionTypePickerModal } from './SectionTypePickerModal';
@@ -62,7 +63,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
       lines: [
         {
           id: `line-${Date.now()}-1`,
-          chords: [],
+          chords: ['', '', '', ''],
           lyrics: '',
         }
       ]
@@ -103,7 +104,7 @@ export const SongEditor: React.FC<SongEditorProps> = ({
     triggerHaptic(15);
     const newLine: SongLine = {
       id: `line-${Date.now()}`,
-      chords: [],
+      chords: ['', '', '', ''],
       lyrics: '',
     };
 
@@ -659,13 +660,13 @@ export const SongEditor: React.FC<SongEditorProps> = ({
                                 style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
                                 className={`min-w-[54px] sm:min-w-[64px] px-3.5 h-12 sm:h-14 min-h-[44px] rounded-md flex items-center justify-center font-mono font-bold select-none transition-all duration-150 cursor-pointer border-2 ${getChordTextSize(chord)} ${
                                   isSelected 
-                                    ? 'bg-[#E8432E] text-[#F7F4EB] hover:bg-[#E8432E] scale-105 border-[#E8432E]' 
+                                    ? 'bg-[var(--surface-card)] scale-105 border-[#E8432E]'
                                     : isDarkMode
                                       ? 'bg-[#1A1512] text-[#F7F4EB] hover:bg-[#2E2520] hover:scale-105 active:scale-95 border-[#3D332A]'
                                       : 'bg-white text-[#171310] hover:bg-[#F3EFE3] hover:scale-105 active:scale-95 border-[#171310]'
                                 }`}
                               >
-                                {chord}
+                                <ChordText chord={chord} />
                               </button>
 
                               {isSelected && <button

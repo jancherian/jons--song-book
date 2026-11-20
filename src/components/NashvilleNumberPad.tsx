@@ -7,6 +7,7 @@ import {
   Plus, 
   Trash2 
 } from 'lucide-react';
+import { ChordText } from './ChordText';
 import { applyKeypadInput } from '../utils/nashville';
 import { triggerHaptic } from '../utils/haptics';
 import { MONO_FONT_STACK } from '../utils/typography';
@@ -76,9 +77,18 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
               }`}
               style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
             >
-              {currentChord || <span className={`${isDarkMode ? 'text-[#A89C8E]/40' : 'text-[#171310]/30'} font-normal italic font-sans`}>(Empty)</span>}
+              {currentChord ? <ChordText chord={currentChord} /> : <span className={`${isDarkMode ? 'text-[#A89C8E]/40' : 'text-[#171310]/30'} font-normal italic font-sans`}>(Empty)</span>}
             </span>
           </div>
+          <button
+            type="button"
+            onClick={() => handleKeyClick('⌫')}
+            aria-label="Backspace"
+            title="Backspace"
+            className="ml-auto grid min-h-[44px] min-w-[44px] shrink-0 place-items-center rounded-md border-2 border-current/25 text-[#E8432E]"
+          >
+            <Delete size={18} />
+          </button>
         </div>
 
         {/* Navigation & Slot Controls */}
@@ -225,29 +235,15 @@ export const NashvilleNumberPad: React.FC<NashvilleNumberPadProps> = ({
           <button type="button" onClick={() => handleKeyClick('m7')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] hidden sm:flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>m7</button>
         </div>
 
-        {/* Row 3: Extensions & Backspace */}
-        <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5 sm:gap-2">
+        {/* Row 3: Extensions */}
+        <div className="grid grid-cols-4 sm:grid-cols-3 gap-1.5 sm:gap-2">
           <button type="button" onClick={() => handleKeyClick('M7')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs h-11 min-h-[44px] sm:hidden flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>M7</button>
           <button type="button" onClick={() => handleKeyClick('m7')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs h-11 min-h-[44px] sm:hidden flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>m7</button>
           <button type="button" onClick={() => handleKeyClick('sus4')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>sus4</button>
           <button type="button" onClick={() => handleKeyClick('sus2')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>sus2</button>
           <button type="button" onClick={() => handleKeyClick('2')} style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }} className={`rounded-md font-bold text-xs sm:text-sm h-11 min-h-[44px] hidden sm:flex items-center justify-center transition-all duration-150 border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${isDarkMode ? 'bg-[#241D17] hover:bg-[#2E2520] text-[#F7F4EB] border-[#3D332A]' : 'bg-[#FBF9F2] hover:bg-[#F3EFE3] text-[#171310] border-[#171310]'}`}>add9</button>
           
-          {/* Bold Backspace Key with 44px min height */}
-          <button
-            type="button"
-            onClick={() => handleKeyClick('⌫')}
-            style={{ fontFamily: MONO_FONT_STACK, fontWeight: 700 }}
-            className={`rounded-md col-span-2 sm:col-span-2 h-11 min-h-[44px] font-bold text-xs flex items-center justify-center gap-1.5 transition-all duration-150 cursor-pointer uppercase border-2 hover:scale-105 active:scale-95 active:bg-[#E8432E] active:text-[#F7F4EB] ${
-              isDarkMode 
-                ? 'bg-red-950/40 hover:bg-red-900/50 text-[#E8432E] border-[#3D332A]' 
-                : 'bg-red-50 hover:bg-red-100 text-[#E8432E] border-[#171310]'
-            }`}
-            title="Backspace"
-          >
-            <Delete size={18} />
-            <span>DELETE</span>
-          </button>
+
         </div>
       </div>
     </div>

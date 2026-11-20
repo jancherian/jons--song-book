@@ -9,6 +9,7 @@ import {
   Sun,
   Moon
 } from 'lucide-react';
+import { ChordText } from './ChordText';
 import type { Song } from '../types/song';
 import { MAJOR_KEYS, convertNashvilleToLetter } from '../utils/nashville';
 import { LogoMark } from './LogoMark';
@@ -443,7 +444,7 @@ export const PerformanceMode: React.FC<PerformanceModeProps> = ({
                                     isDarkMode ? 'text-[#F7F4EB]' : 'text-[#171310]'
                                   }`}
                                 >
-                                  {displayChord}
+                                  <ChordText chord={displayChord} />
                                 </span>
 
                                 {/* Thin Barline Tick between individual chords */}
